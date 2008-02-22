@@ -1,0 +1,49 @@
+#summary Status
+#labels Phase-Requirements
+
+= Introduction =
+
+Things that needs to be completed for PyWeek #6
+
+
+= Details =
+
+*Main Loop*: 100%
+  * *director*: a singleton that controls scenes and the main window
+    * fullscreen support
+  * *scenes*: A set of layers that controls a "scene"
+    * pop / push / replace scene
+  * *layer*: A "buffer" where you can place drawings, sprites, or what you want
+
+*Transitions*:
+  * Transitions between scenes: 20%
+    * Add more transitions like: fade in, fade out (use Keynote as inspiration)
+
+*Sprites*:
+  * *goto*: 100%
+  * *move*: 100%
+  * *rotate*: 100%
+  * *scale*: 100%
+  * *sequence*: 85% (needs more testing)
+  * *spawn*: 85% (needs more testing)
+  * *place*: 60% (needs testing)
+  * *call*: 60% (needs testing)
+  * *delay*: 60% (needs testing)
+  * *random_delay*: 60% (needs testing)
+  * *repeat*: 85% (needs more testing in composite animations)
+  * *random_repeat*: 85% (same as *repeat* )
+  * *timewarp*: 95% (needs more warpers)
+  * *reverse*: 80% (needs testing in composite animations)
+  * *sin*: 85% (needs testing in composite animations)
+  * *jump*: 85% (needs testing in composite animations)
+
+*Menus*:
+  * MenuItem: 100%
+  * MenuToggleItem: 100%
+  * Mouse and keyboard: 100%
+  * Alignment: 100%
+  * Multiplexing: 100%
+
+*Wishes*:
+  * Support camera with screen-coordinates-layer and world-coordinate-layers 
+  * OpenGL particles engine
