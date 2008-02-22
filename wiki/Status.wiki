@@ -36,6 +36,7 @@ Things that needs to be completed for PyWeek #6
   * *reverse*: 80% (needs testing in composite animations)
   * *sin*: 85% (needs testing in composite animations)
   * *jump*: 85% (needs testing in composite animations)
+  * *bezier*: 100%
 
 *Menus*:
   * MenuItem: 100%
