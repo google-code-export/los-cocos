@@ -3,7 +3,7 @@
 
 = Introduction =
 
-Things that needs to be completed for PyWeek #6
+Things that needs to be completed for !PyWeek #6
 
 
 = Details =
@@ -39,8 +39,8 @@ Things that needs to be completed for PyWeek #6
   * *bezier*: 100%
 
 *Menus*:
-  * MenuItem: 100%
-  * MenuToggleItem: 100%
+  * !MenuItem: 100%
+  * !MenuToggleItem: 100%
   * Mouse and keyboard: 100%
   * Alignment: 100%
   * Multiplexing: 100%
