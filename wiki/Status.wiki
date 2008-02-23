@@ -20,23 +20,23 @@ Things that needs to be completed for !PyWeek #6
     * Add more transitions like: fade in, fade out (use Keynote as inspiration)
 
 *Sprites*:
-  * *goto*: 100%
-  * *move*: 100%
-  * *rotate*: 100%
-  * *scale*: 100%
-  * *sequence*: 85% (needs more testing)
-  * *spawn*: 85% (needs more testing)
-  * *place*: 60% (needs testing)
-  * *call*: 60% (needs testing)
-  * *delay*: 60% (needs testing)
-  * *random_delay*: 60% (needs testing)
-  * *repeat*: 85% (needs more testing in composite animations)
-  * *random_repeat*: 85% (same as *repeat* )
-  * *timewarp*: 95% (needs more warpers)
-  * *reverse*: 80% (needs testing in composite animations)
-  * *sin*: 85% (needs testing in composite animations)
-  * *jump*: 85% (needs testing in composite animations)
-  * *bezier*: 100%
+  * Convert actions to clone() way
+     * ~~Goto~~
+     * ~~Move~~
+     * ~~Rotate~~
+     * ~~Scale~~
+     * ~~Sequence~~
+     * ~~Spawn~~
+     * *call*
+     * *delay*
+     * *random_delay*
+     * *timewarp*
+     * *jump*
+     * *sin*
+     * *bezier*
+     * *repeat (mode=!PingPong, !Linear)*
+     * *random_repeat*
+     * *reverse*
 
 *Menus*:
   * !MenuItem: 100%
