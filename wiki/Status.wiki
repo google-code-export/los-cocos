@@ -27,10 +27,10 @@ Things that needs to be completed for !PyWeek #6
      * ~~Scale~~
      * ~~Sequence~~
      * ~~Spawn~~
-     * ~~CallFunc~~
-     * ~~CallFuncS~~
+     * ~~!CallFunc~~
+     * ~~!CallFuncS~~
      * ~~Delay~~
-     * ~~RandomDelay~~
+     * ~~!RandomDelay~~
      * *timewarp*
      * ~~Jump~~
      * *sin*
