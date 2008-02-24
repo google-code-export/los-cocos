@@ -27,14 +27,15 @@ Things that needs to be completed for !PyWeek #6
      * ~~Scale~~
      * ~~Sequence~~
      * ~~Spawn~~
-     * *call*
-     * *delay*
-     * *random_delay*
+     * ~~CallFunc~~
+     * ~~CallFuncS~~
+     * ~~Delay~~
+     * ~~RandomDelay~~
      * *timewarp*
-     * *jump*
+     * ~~Jump~~
      * *sin*
      * *bezier*
-     * *repeat (mode=!PingPong, !Linear)*
+     * ~~Repeat~~
      * *random_repeat*
      * *reverse*
 
