@@ -26,18 +26,18 @@ Things that needs to be completed for !PyWeek #6
      * ~~Rotate~~
      * ~~Scale~~
      * ~~Sequence~~
+     * ~~Repeat~~
      * ~~Spawn~~
      * ~~!CallFunc~~
-     * ~~!CallFuncS~~
+     * ~~CallFuncS~~
      * ~~Delay~~
      * ~~!RandomDelay~~
-     * *timewarp*
+     * *!TimeWarp*
      * ~~Jump~~
-     * *sin*
-     * *bezier*
-     * ~~Repeat~~
-     * *random_repeat*
-     * *reverse*
+     * *Bezier*
+     * *Place*
+     * *Blink*
+     * *Fade*
 
 *Menus*:
   * !MenuItem: 100%
