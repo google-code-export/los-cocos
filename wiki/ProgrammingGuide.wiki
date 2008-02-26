@@ -2,18 +2,22 @@
 
 = Introduction =
 
-Add your content here.
-
+qué es, qué problemas intenta resolver
+conceptos esenciales
+requerimientos
+instalación, contacto
 
 = Details =
 
 == First Program ==
 
+helloworld
+1 layers
+n layers
 == Director, Scene, Layer ==
-
+n scenes
 == Sprites ==
 
 == Transitions ==
 
 == Menus ==
-
