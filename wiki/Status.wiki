@@ -32,16 +32,16 @@ Things that needs to be completed for !PyWeek #6
      * ~~CallFuncS~~
      * ~~Delay~~
      * ~~!RandomDelay~~
-     * *!TimeWarp*
+     * !TimeWarp
      * ~~Jump~~
      * ~~Bezier~~
      * ~~Place~~
-     * *Blink*
-     * *Fade*
-     * *Hide*
-     * *UnHide*
-     * *Animate*
-     * *Kill*
+     * Blink
+     * Fade
+     * Hide
+     * !UnHide
+     * Animate
+     * Kill
 
 *Menus*:
   * !MenuItem: 100%
