@@ -34,10 +34,14 @@ Things that needs to be completed for !PyWeek #6
      * ~~!RandomDelay~~
      * *!TimeWarp*
      * ~~Jump~~
-     * *Bezier*
-     * *Place*
+     * ~~Bezier~~
+     * ~~Place~~
      * *Blink*
      * *Fade*
+     * *Hide*
+     * *UnHide*
+     * *Animate*
+     * *Kill*
 
 *Menus*:
   * !MenuItem: 100%
