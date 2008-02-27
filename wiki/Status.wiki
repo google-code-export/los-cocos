@@ -36,10 +36,10 @@ Things that needs to be completed for !PyWeek #6
      * ~~Jump~~
      * ~~Bezier~~
      * ~~Place~~
-     * Blink
+     * ~~Blink~~
      * Fade
-     * Hide
-     * !UnHide
+     * ~~Hide~~
+     * ~~Show~~
      * Animate
      * Kill
 
