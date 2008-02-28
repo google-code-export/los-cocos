@@ -28,4 +28,9 @@ n scenes
 
 == Effects ==
 === Implementing New Effects ===
+
+= Packaged Layers =
+== Trivial Layers ==
+ColorLayer( *color ) creates a layer filled with color (RGBA)
+
 == Menus ==
