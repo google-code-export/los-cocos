@@ -14,10 +14,18 @@ instalación, contacto
 helloworld
 1 layers
 n layers
+
 == Director, Scene, Layer ==
+
 n scenes
+
 == Sprites ==
+=== Actions ===
+=== Implementing Actions ===
 
 == Transitions ==
+=== Implementing New Transitions ===
 
+== Effects ==
+=== Implementing New Effects ===
 == Menus ==
