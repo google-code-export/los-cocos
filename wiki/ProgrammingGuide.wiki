@@ -68,8 +68,14 @@ if __name__ == "__main__":
     sc.add( 5.5, Square((1,0,0,0.5), 150,150, 210 ), "big_one" )
     director.run( sc )
 }}}
-=== Scenes Stack ===
 === Events ===
+All layers are event handlers from the pyglet event framework. When a layer is being shown, it event handlers will be active.
+
+See:
+ -  http://www.pyglet.org/doc/programming_guide/the_pyglet_event_framework.html
+ 
+=== Scenes Stack ===
+
 
 == Sprites ==
 === Actions ===
