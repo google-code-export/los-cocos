@@ -35,6 +35,7 @@ if __name__ == "__main__":
 
 == Director, Scene, Layer ==
 === Multiple Layers ===
+
 === Scenes Stack ===
 === Events ===
 
@@ -49,7 +50,8 @@ if __name__ == "__main__":
 === Implementing New Effects ===
 
 = Packaged Layers =
-== Trivial Layers ==
+== Basic Layers ==
 `ColorLayer( *color )` creates a layer filled with color (RGBA)
+`MultiplexLayer( *layers )` A Composite layer that only enables one layer at the time
 
 == Menus ==
