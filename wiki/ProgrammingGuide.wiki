@@ -2,10 +2,27 @@
 
 = Introduction =
 
-qué es, qué problemas intenta resolver
-conceptos esenciales
-requerimientos
-instalación, contacto
+cocos is a framework for building games in pyglet. It provides some conventions and classes to help you structure a scene based application.
+
+a cocos aplication uses the director singleton, and some scenes. Each scene can have some layers that are the ones that draw to the screen, handle events and in general contain all of the game logic.
+
+== Install ==
+{{{
+cp -r cocos $PROJECT_HOME
+}}}
+
+or
+
+{{{
+export PYTHONPATH=$PYTHONPATH:/path/to/cocos
+}}}
+
+or 
+{{{
+import sys
+sys.path.insert(0, PATH_TO_COCOS))
+}}}
+
 
 = Details =
 
@@ -15,20 +32,28 @@ instalación, contacto
 {{{
 
 import cocos
+
+# director is the singleton that controls everything
 from cocos.director import director
 
 from pyglet import font
 
 class HelloWorld(cocos.layer.Layer):
     def __init__(self):
+        # see pyglet documentation for help on this lines
         ft = font.load('Arial', 36)
         self.text = font.Text(ft, 'Hello, World!', x=100, y=240)
         
     def step(self, dt):
+        # this funcition is called on every frame
+        # dt is the elapsed time betwen this frame and the last
         self.text.draw()
 
 if __name__ == "__main__":
+    # director init takes the same arguments as pyglet.window
     director.init()
+
+    # we start the application running a scene that contains the layer HelloWorld
     director.run( cocos.scene.Scene( HelloWorld() ) )
 }}}
 
@@ -41,6 +66,7 @@ from cocos.director import director
 
 from pyglet import gl
 
+# we ccreate our own layer
 class Square(cocos.layer.Layer):
     def __init__(self, color, x, y, size=50):
         self.x = x
@@ -49,6 +75,7 @@ class Square(cocos.layer.Layer):
         self.color = color
                 
     def step(self, dt):
+        # this layer just draws a square in self.color with self.size as it side
         gl.glColor4f(*self.color)
         x, y = self.x, self.y
         w = x+self.size; h=y+self.size
@@ -61,11 +88,21 @@ class Square(cocos.layer.Layer):
         gl.glColor4f(1,1,1,1) 
         
 if __name__ == "__main__":
+    # create the window
     director.init()
+
+    # create our scene with some layers. Layers in scene creation are automatically
+    # assigned a z-value from 0 to len(layers)-1
+    # this means the first layers will be in the bottom, the last one on top.
     sc = cocos.scene.Scene( 
         *[ Square((0.03*i,0.03*i,0.03*i,1) , i*20, i*20) for i in range(5,20) ]
         )
+
+    # we can add more layers after the scene has been created
+    # we specify z-value and a name, used as reference if we want to remove it later
     sc.add( 5.5, Square((1,0,0,0.5), 150,150, 210 ), "big_one" )
+
+    # run it
     director.run( sc )
 }}}
 === Events ===
