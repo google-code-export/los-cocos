@@ -16,7 +16,7 @@ Things that needs to be completed for !PyWeek #6
   * *layer*: A "buffer" where you can place drawings, sprites, or what you want
 
 *Transitions*:
-  * Transitions between scenes: 20%
+  * Transitions between scenes: 100%
     * Add more transitions like: fade in, fade out (use Keynote as inspiration)
 
 *Sprites*:
@@ -37,10 +37,11 @@ Things that needs to be completed for !PyWeek #6
      * ~~Bezier~~
      * ~~Place~~
      * ~~Blink~~
-     * Fade
+     * ~~FadeIn~~
+     * ~~FadeOut~~
      * ~~Hide~~
      * ~~Show~~
-     * Animate
+     * ~~Animate~~
      * Kill
 
 *Menus*:
@@ -52,4 +53,7 @@ Things that needs to be completed for !PyWeek #6
 
 *Wishes*:
   * Support camera with screen-coordinates-layer and world-coordinate-layers 
-  * OpenGL particles engine
+  * OpenGL particles engine:
+    * Fireworks engine: 100%
+    * Fire engine: 0%
+    * Fountain: 0%
