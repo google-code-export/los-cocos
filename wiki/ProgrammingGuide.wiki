@@ -47,48 +47,62 @@ These sprites supports actions. An Action is "something" that the sprite can do,
   * Actions that do something else
 
 ==== Transformation actions ====
-The "duration" parameter is specified in seconds. The x,y parameters are specified in pixels. The (0,0) point is the bottom-left point.
- * Move( (delta_x,delta_y,0), duration)
+The _duration_ parameter is specified in seconds. The x,y parameters are specified in pixels. The (0,0) point is the bottom-left point.
+ * *Move*( (delta_x,delta_y,0), duration)
    * Moves the sprite delta_x and delta_y pixels in duration time. 
- * Goto( (x,y,0), duration )
-   * Moves the sprite to the x and y coordinate. The difference between Move() and Goto() is that Move() moves the sprite delta coordinates, and Goto() moves the sprite to x,y.
- * Rotate( degrees, duration )
+ * *Goto*( (x,y,0), duration )
+   * Moves the sprite to the x,y coordinates.
+   * The difference between _Move()_ and _Goto()_ is that _Move()_ is relative to the current coordinates and _Goto()_ is absolute.
+ * *Rotate*( degrees, duration )
    * Rotates the sprites degrees in duration time. Positives degrees rotates the sprite counter-clockwise.
    * The rotation is relative to the current angle.
- * Scale( zoom_factor, duration )
+ * *Scale*( zoom_factor, duration )
    * Scales the sprites zoom_factor in duration time.
    * The scale is relative to the current zoom_factor.
- * Jump( height, x, number_of_jumps, duration )
-   * Moves the sprites x pixels in duration time.
+ * *Jump*( height, x, number_of_jumps, duration )
+   * Moves the sprites x pixels in duration time. x is relative to the current x position.
    * During that movement the sprite will do a number_of_jumps of height.
- * Bezier( bezier_configuration, duration )
-   * Moves the sprite using a bezier path in duration time.
- * Place( (x,y,0) )
-   * Places the sprite in the (x,y) coordinates.        
- * Animate( animation_name )
-   * Animates the sprite using an animation.
-   * Before running an animation, you need to create it (using the class Animation) , and you must add it to the sprite.
- * !FadeIn( duration )
+ * *Bezier*( bezier_configuration, duration )
+   * Moves the sprite using a bezier path in duration time. The movement is relative to the current position.
+ * *Place*( (x,y,0) )
+   * Places the sprite in the x,y coordinates.
+ * *Animate*( animation_name )
+   * Animates the sprite using an animation name.
+   * Before running an animation, you need to create an _Animation_, and you must add it to the sprite.
+ * *!FadeIn*( duration )
    * Fades the sprite in in duration time.
- * !FadeOut( duration )
+ * *!FadeOut*( duration )
    * Fades the sprite out in duration time.
- * Blink( times_to_blink, duration )
+ * *Blink*( times_to_blink, duration )
    * Blinks the sprite times_to_blink in duration time.
- * Show()
+ * *Show*()
    * Shows the sprite.
- * Hide()
+ * *Hide*()
    * Hides de sprite. To show it again, use the Show action.
 
 ==== Composite actions ====
- * Repeat( action )
- * Spawn( list_of_actions )
- * Sequence( list_of_actions )
+ * *Repeat*( action, times, mode=PingPongMode )
+   * Repeats an action.
+   * If _times_ is -1, then it will repeat the action forever. Default is -1
+   * If mode is PingPongMode (default mode) it will repeat the action forwards and backwards.
+   * If mode is !RepeatMode, then it will always repeat the actions forwards.
+ * *Sequence*( list_of_actions, dir=!ForwardDir ) _or_ action1 + action2 + action3...
+   * Runs a list of actions is sequential mode. First it runs the first action. When this action finished, it execute the next one until the last one is executed.
+ * *Spawn*( list_of_actions ) _or_ action1 | action2 | action3...
+   * Execute the list_of_actions at the same time
 
 ==== Misc Actions ====
- * !CallFunc( function )
- * !CallFuncS( function )
- * Delay( seconds )
- * !RandomDelay( lo_seconds, hi_seconds )
+ * *!CallFunc*( function )
+   * Calls a function. Just that.
+   * It is useful to when you want to trigger something.
+ * *CallFuncS*( function )
+   * It is the same is _!CallFunc_ with the difference that _function_ will receive the sprite as the 1st argument
+ * *Delay*( seconds )
+   * It will delay the execution some _seconds_
+ * *!RandomDelay*( lo_seconds, hi_seconds )
+   * It will delay the execution random seconds between _lo_seconds_ and _hi_seconds_
+
+You can find an excellent example in: _los-cocos/test/test_sprite.py_
 
 == Requirements ==
 
