@@ -4,7 +4,24 @@
 
 cocos is a framework for building games in pyglet. It provides some conventions and classes to help you structure a scene based application.
 
-a cocos aplication uses the director singleton, and some scenes. Each scene can have some layers that are the ones that draw to the screen, handle events and in general contain all of the game logic.
+a cocos application uses the director singleton, and some scenes. Each scene can have some layers that are the ones that draw to the screen, handle events and in general contain all of the game logic.
+
+Los Cocos is a library that extendes the [http://www.pyglet.org/ pyglet] library intended to make it easier to define a workflow for your game, compose scenes and reuse your code.
+
+== Basic concepts ==
+
+Let's first explain some basic concepts you may need for a better understanding of how it works.
+ * Scene: It contains one or more layers, all of them piled up. The scene class is used right away. At all times there's one scene active.
+ * Layer: It can display, fullscreen, some particular thing. It can be semi transparent, so the layers beyond the current layer can also be seen. Each of them is individually coded, and here is where you do most of the programming (as well as scenes content ans transitions between scenes). You end up having a family of layers, all subclassed from the layer class. The layer is who does the event handling, as far as the user cares. Each layer is capable of bouncing the event to the layers beyond it, until some layer stops the propagation. This library provides some commonly used layers, such as a menu layer.
+ * Director: The director is a shared object between who knows which scene is currently active and which is the complete list of scenes. Is the one who will actually change the scene, after a layer has asked for push, replacement or end of a particular scene.
+ * Effect: It can be applied to layers. They transform the layer look, for example, blurred, or moving, or semitransparent, etc.
+ * Action:
+ * Sprite:
+
+== Requirements ==
+
+ * Python 2.4 or later
+ * Pyglet 1.0 or 1.1
 
 == Install ==
 {{{
@@ -22,6 +39,12 @@ or
 import sys
 sys.path.insert(0, PATH_TO_COCOS))
 }}}
+
+== Contact us ==
+
+Website: http://code.google.com/p/los-cocos/
+
+If you find any bug, please report it at: http://code.google.com/p/los-cocos/issues/list
 
 
 = Details =
