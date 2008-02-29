@@ -2,21 +2,44 @@
 
 = Introduction =
 
-cocos is a framework for building games in pyglet. It provides some conventions and classes to help you structure a scene based application.
+"cocos" is a framework for building games, demos, and other graphical/interactive applications. It is built over [http://www.pyglet.org/ pyglet]. It provides some conventions and classes to help you structure a "scene based application".
 
-a cocos application uses the director singleton, and some scenes. Each scene can have some layers that are the ones that draw to the screen, handle events and in general contain all of the game logic.
+A cocos application consists in several scenes, and a workflow connecting the different scenes. It provides you a "director" (a singleton) which handles that workflow between scenes. Each scene is composed of an arbitrary number of layers; layers teake care about draw to the screen (using the pyglet and opengl APIs), handle events and in general contain all of the game/application logic.
 
-Los Cocos is a library that extendes the [http://www.pyglet.org/ pyglet] library intended to make it easier to define a workflow for your game, compose scenes and reuse your code.
+Los Cocos make easier for you, developer, to define a workflow for your game, compose scenes and scene components, reuse your code, and have a nice graphical presentation without too much work.
 
 == Basic concepts ==
 
-Let's first explain some basic concepts you may need for a better understanding of how it works.
- * Scene: It contains one or more layers, all of them piled up. The scene class is used right away. At all times there's one scene active.
- * Layer: It can display, fullscreen, some particular thing. It can be semi transparent, so the layers beyond the current layer can also be seen. Each of them is individually coded, and here is where you do most of the programming (as well as scenes content ans transitions between scenes). You end up having a family of layers, all subclassed from the layer class. The layer is who does the event handling, as far as the user cares. Each layer is capable of bouncing the event to the layers beyond it, until some layer stops the propagation. This library provides some commonly used layers, such as a menu layer.
- * Director: The director is a shared object between who knows which scene is currently active and which is the complete list of scenes. Is the one who will actually change the scene, after a layer has asked for push, replacement or end of a particular scene.
- * Effect: It can be applied to layers. They transform the layer look, for example, blurred, or moving, or semitransparent, etc.
- * Action:
- * Sprite:
+There are some basic concepts introduced in this library that you will need to know when developing a cocos application:
+
+ === Scenes & Transitions ===
+
+A scene is a more or less independent piece of the app workflow. Some people may call them "screens" or "stages". Your app can have many scenes, but only one of them is active at a given time.
+
+For example, you could have a game with the following scens: Intro, Menu, Level 1, Cutscene 1, Level 2, Winning cutscene, losing cutscene, High scores screen. You can define every of one of these scenes more or less as separate apps; there is a bit of glue between them containing the logic for connecting scenes (the intro goes to the menu when interrupted or finishing, Level 1 can lead you to the cutscene 1 if finished or to the losing cutscene if you lose, etc.).
+
+A cocos Scene is composed of one or more layers, all of them piled up. Layers give the scene an appearance and behaviour; the normal use case is to just make instances of Scene() with the layers that you want.
+
+There is also a family of Scene classes called "Transitions", which allow you to
+make transitions between two scenes (fade out/in, slide from a side, etc).
+
+ === Director ===
+
+The director is the component which takes care about going back and forth between scenes.
+
+The director is a shared (singleton) object. It knows which scene is currently active, and it handles a stack of scenes to allow things like "scene calls" (pausing a scene and putting it on hold while other enters, and then returning to the original). Is the one who will actually change the scene, after a layer has asked for push, replacement or end of the current scene.
+
+ === Layers & Effects ===
+
+A layer has as size the whole drawable area (window or screen), and knows how to draw itself. It can be semi transparent (having holes and/or partial transparency in some/all places), allowing to see other layers behind it. Layers are the ones defining appearance and behaviour, so most of your programming time will be spent coding Layer subclasses that do what you need. The layer is where you define event handlers. Events are propagated to layers (from front to back) until some layer catchs de event and accepts it.
+
+Even if any serious app will require you to define some layer classes, cocos provides a library of useful predefined layer (a simple menu, solid color, a multiplexor between other layers, and a layer to add animated sprites/particle effects)
+
+Besides that, you can apply an "effect" to a layer; effects transform the appearance of the whole layer. There are some classes to allow you to more or less easily define new effects. Cocos bring a couple of ready-to-use effects (colorization i.e. changing color or transparency of a layer, and repositioning i.e. moving or resizing a layers). Effects can be dynamically enabled/disabled/reconfigured; this allow to redefine the given effects to create effects as "flickering" or "shaking", and apply these effects to your layers.
+
+== Actions & Sprites ==
+
+ TODO
 
 == Requirements ==
 
