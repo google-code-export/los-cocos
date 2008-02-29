@@ -1,4 +1,5 @@
 #summary Programming Guide
+#labels Phase-Implementation
 
 = Introduction =
 
@@ -40,22 +41,43 @@ Besides that, you can apply an "effect" to a layer; effects transform the appear
 === Actions & Sprites ===
 
 A Cocos' sprite is like any other computer sprite. It is a 2D image that can be moved, rotated, scaled, etc.
-These sprites supports actions. An Action is "something" that the sprite can do. These actions are divided in 3 categories:
+These sprites supports actions. An Action is "something" that the sprite can do, and an sprite can do multiple actions at the same time. Also, 2 or more different sprites can run the same action at the same time. There are different kind of actions. There are 3 actions categories:
+  * Actions that lets you transform the sprite's properties
+  * Actions that combines other actions
+  * Actions that do something else
 
 ==== Transformation actions ====
- * Move( (x,y,0), duration)
+The "duration" parameter is specified in seconds. The x,y parameters are specified in pixels. The (0,0) point is the bottom-left point.
+ * Move( (delta_x,delta_y,0), duration)
+   * Moves the sprite delta_x and delta_y pixels in duration time. 
  * Goto( (x,y,0), duration )
+   * Moves the sprite to the x and y coordinate. The difference between Move() and Goto() is that Move() moves the sprite delta coordinates, and Goto() moves the sprite to x,y.
  * Rotate( degrees, duration )
+   * Rotates the sprites degrees in duration time. Positives degrees rotates the sprite counter-clockwise.
+   * The rotation is relative to the current angle.
  * Scale( zoom_factor, duration )
+   * Scales the sprites zoom_factor in duration time.
+   * The scale is relative to the current zoom_factor.
  * Jump( height, x, number_of_jumps, duration )
+   * Moves the sprites x pixels in duration time.
+   * During that movement the sprite will do a number_of_jumps of height.
  * Bezier( bezier_configuration, duration )
+   * Moves the sprite using a bezier path in duration time.
  * Place( (x,y,0) )
+   * Places the sprite in the (x,y) coordinates.        
  * Animate( animation_name )
+   * Animates the sprite using an animation.
+   * Before running an animation, you need to create it (using the class Animation) , and you must add it to the sprite.
  * !FadeIn( duration )
+   * Fades the sprite in in duration time.
  * !FadeOut( duration )
+   * Fades the sprite out in duration time.
  * Blink( times_to_blink, duration )
+   * Blinks the sprite times_to_blink in duration time.
  * Show()
+   * Shows the sprite.
  * Hide()
+   * Hides de sprite. To show it again, use the Show action.
 
 ==== Composite actions ====
  * Repeat( action )
