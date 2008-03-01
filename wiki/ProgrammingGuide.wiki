@@ -280,7 +280,6 @@ You can find an excellent example in: _los-cocos/test/test_sprite.py_
 === Implementing New Transitions ===
 
 == Effects ==
-Effects can be shared between layers
 
 === Implementing New Effects ===
 
