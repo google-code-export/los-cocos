@@ -4,5 +4,5 @@
 
 1. I get a "Floating point exception" when running the examples/when writing an app
 
-This is caused by a bug in some versions of the nvidia GL driver. Please upgrade your
-driver. If you still get the problem, or have a non-nvidia video card, open an issue indicating your vido card maker, model, chipset, and driver version.
+This is caused by a bug in some versions of the nvidia OpenGL driver. Please upgrade your
+driver. If you still get the problem, or have a non-nvidia video card, open an issue indicating your video card maker, model, chipset, and driver version.
