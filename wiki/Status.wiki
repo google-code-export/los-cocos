@@ -54,10 +54,9 @@ Things that needs to be completed for !PyWeek #6
     * Show
 
 *Effects*:
-  * Available effects in test_effects
-    * Greenish hue, 65% opacity
-    * Horizontally scaled 50%
-    * Dynamic color
+  * Available effects:
+    * Change color and/or transparency
+    * Change layer position and/or dimensions
 
 *Menus*:
   * Supported Menus:
