@@ -8,7 +8,7 @@ Things that needs to be completed for !PyWeek #6
 
 = Details =
 
-*Main Loop*: 100%
+*Main Loop*:
   * *director*: a singleton that controls scenes and the main window
     * fullscreen support
   * *scenes*: A set of layers that controls a "scene"
@@ -16,40 +16,56 @@ Things that needs to be completed for !PyWeek #6
   * *layer*: A "buffer" where you can place drawings, sprites, or what you want
 
 *Transitions*:
-  * Transitions between scenes: 100%
-    * Add more transitions like: fade in, fade out (use Keynote as inspiration)
+  * Supported transitions:
+    * Slide LR
+    * Slide RL
+    * Grow
+    * Fade
+    * Shrink and Grow
+    * Slide BT
+    * Slide TB
+    * Move In B
+    * Move in T
+    * Move in L
+    * Move in R
+    * Corner Move
 
 *Sprites*:
-  * Convert actions to clone() way
-     * ~~Goto~~
-     * ~~Move~~
-     * ~~Rotate~~
-     * ~~Scale~~
-     * ~~Sequence~~
-     * ~~Repeat~~
-     * ~~Spawn~~
-     * ~~!CallFunc~~
-     * ~~CallFuncS~~
-     * ~~Delay~~
-     * ~~!RandomDelay~~
-     * !TimeWarp
-     * ~~Jump~~
-     * ~~Bezier~~
-     * ~~Place~~
-     * ~~Blink~~
-     * ~~FadeIn~~
-     * ~~FadeOut~~
-     * ~~Hide~~
-     * ~~Show~~
-     * ~~Animate~~
-     * Kill
+  * Supported actions
+    * Goto
+    * Move
+    * Rotate
+    * Scale
+    * Jump
+    * Blink
+    * FadeIn
+    * FadeOut
+    * Bezier
+    * Animate
+    * Sequence
+    * Repeat
+    * Spawn
+    * !CallFunc
+    * CallFuncS
+    * Delay
+    * RandomDelay
+    * Place
+    * Hide
+    * Show
+
+*Effects*:
+  * Available effects in test_effects
+    * Greenish hue, 65% opacity
+    * Horizontally scaled 50%
+    * Dynamic color
 
 *Menus*:
-  * !MenuItem: 100%
-  * !MenuToggleItem: 100%
-  * Mouse and keyboard: 100%
-  * Alignment: 100%
-  * Multiplexing: 100%
+  * Supported Menus:
+    * !MenuItem
+    * !MenuToggleItem
+    * Mouse and keyboard
+    * Alignment
+    * Multiplexing
 
 *Wishes*:
   * Support camera with screen-coordinates-layer and world-coordinate-layers 
