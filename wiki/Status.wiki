@@ -38,8 +38,8 @@ Things that needs to be completed for !PyWeek #6
     * Scale
     * Jump
     * Blink
-    * FadeIn
-    * FadeOut
+    * !FadeIn
+    * !FadeOut
     * Bezier
     * Animate
     * Sequence
@@ -48,7 +48,7 @@ Things that needs to be completed for !PyWeek #6
     * !CallFunc
     * CallFuncS
     * Delay
-    * RandomDelay
+    * !RandomDelay
     * Place
     * Hide
     * Show
