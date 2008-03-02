@@ -1,4 +1,4 @@
-#summary [http://code.google.com/p/los-cocos/wiki/ProgrammingGuide Programming Guide]
+#summary Cocos Programming Guide
 #labels Phase-Implementation
 
 = Introduction =
@@ -52,7 +52,15 @@ These sprites supports actions. An Action is "something" that the sprite can do,
   * Actions that combines other actions
   * Actions that do something else
 
-The _Interval_Actions_, the ones that take place in a certain period of time, can be run forward, backwards or accelerated.
+There is another way to categorize the actions:
+  * Interval Actions
+  * Non-Interval Actions
+
+The _Interval_ _Actions_ are the ones that take place in a certain period of time and they have certain properties like:
+  * They can run **forward** in time
+  * They can run **backwards** in time
+  * They can be **accelerated**
+  * The flow of time can be transformed using a custom function
  
 == Requirements ==
 
@@ -258,10 +266,10 @@ The _duration_ parameter is specified in seconds. The x,y parameters are specifi
    * Hides de sprite. To show it again, use the Show action.
 
 ==== Composite actions ====
- * *Repeat*( action, times, mode=PingPongMode )
+ * *Repeat*( action, times, mode=!PingPongMode )
    * Repeats an action.
    * If _times_ is -1, then it will repeat the action forever. Default is -1
-   * If mode is PingPongMode (default mode) it will repeat the action forwards and backwards.
+   * If mode is !PingPongMode (default mode) it will repeat the action forwards and backwards.
    * If mode is !RepeatMode, then it will always repeat the actions forwards.
  * *Sequence*( list_of_actions, dir=!ForwardDir ) _or_ action1 + action2 + action3...
    * Runs a list of actions is sequential mode. First it runs the first action. When this action finished, it execute the next one until the last one is executed.
@@ -284,19 +292,19 @@ You can find examples here: _los-cocos/test/test_sprite.py_
 === Interval Actions ===
 An interval action is an action that takes place within a certain period of time. It has an start time and a ﬁnish time. The ﬁnish time is the parameter _duration_ plus the start time.
  
-These IntervalAction have some interesting properties, like: 
+These _Interval_ _Actions_ have some interesting properties, like: 
  * They can run Forward (default) 
  * They can run Backwards 
  * They can be accelerated. You can transform the time using a custom function.
 
-For example, if you run an action in a _Forward_ direction and the you run it again in a _Backward_ direction, then you are simulation a PingPong movement. 
+For example, if you run an action in a _Forward_ direction and the you run it again in a _Backward_ direction, then you are simulation a Ping-Pong movement. 
 
 These actions has 3 special parameters: 
- * _dir_ (direction): It can be ForwardDir or BackwardDir . Default is: ForwardDir 
- * _mode_ (repeat mode): It can be PingPongMode or RepeatMode . Default is : PingPongMode . 
+ * _dir_ (direction): It can be !ForwardDir or !BackwardDir . Default is: !ForwardDir 
+ * _mode_ (repeat mode): It can be !PingPongMode or !RepeatMode . Default is : !PingPongMode . 
  * _time_func_ (a function): A function that alters the speed of time
 
-Examples of _IntervalActions_:
+Examples of _Interval_ _Actions_:
 {{{
     move = Move( (200,0,0), 5 ) # Moves 200 pixels to the right in 5 seconds. 
                                 # Direction: ForwardDir (default) 
