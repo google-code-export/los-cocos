@@ -1,13 +1,18 @@
-#summary Programming Guide
+#summary [http://code.google.com/p/los-cocos/wiki/ProgrammingGuide Programming Guide]
 #labels Phase-Implementation
 
 = Introduction =
 
-"cocos" is a framework for building games, demos, and other graphical/interactive applications. It is built over [http://www.pyglet.org/ pyglet]. It provides some conventions and classes to help you structure a "scene based application".
+[http://code.google.com/p/los-cocos "Cocos"] is a framework for building games, demos, and other graphical/interactive applications. It is built over [http://www.pyglet.org/ pyglet]. It provides some conventions and classes to help you structure a "scene based application".
 
-A cocos application consists of several scenes, and a workflow connecting the different scenes. It provides you a "director" (a singleton) which handles that workflow between scenes. Each scene is composed of an arbitrary number of layers; layers take care about draw to the screen (using the pyglet and opengl APIs), handle events and in general contain all of the game/application logic.
+A cocos application consists of several scenes, and a workflow connecting the different scenes. It provides you a "director" (a singleton) which handles that workflow between scenes. Each scene is composed of an arbitrary number of layers; layers take care about drawing to the screen (using the pyglet and OpenGL APIs), handle events and in general contain all of the game/application logic.
 
-Los Cocos make easier for you, developer, to define a workflow for your game, compose scenes and scene components, reuse your code, and have a nice graphical presentation without too much work.
+Cocos simplifies the game development in this areas:
+  * Defining a workflow for your game
+  * Composing scenes and scene components
+  * Creating special effects & transitions
+  * Managing sprites
+  * Basic menus
 
 == Basic concepts ==
 
@@ -47,6 +52,8 @@ These sprites supports actions. An Action is "something" that the sprite can do,
   * Actions that combines other actions
   * Actions that do something else
 
+The _Interval_Actions_, the ones that take place in a certain period of time, can be run forward, backwards or accelerated.
+ 
 == Requirements ==
 
  * Python 2.4 or later
@@ -272,9 +279,50 @@ The _duration_ parameter is specified in seconds. The x,y parameters are specifi
  * *!RandomDelay*( lo_seconds, hi_seconds )
    * It will delay the execution random seconds between _lo_seconds_ and _hi_seconds_
 
-You can find an excellent example in: _los-cocos/test/test_sprite.py_
+You can find examples here: _los-cocos/test/test_sprite.py_
+
+=== Interval Actions ===
+An interval action is an action that takes place within a certain period of time. It has an start time and a ﬁnish time. The ﬁnish time is the parameter _duration_ plus the start time.
+ 
+These IntervalAction have some interesting properties, like: 
+ * They can run Forward (default) 
+ * They can run Backwards 
+ * They can be accelerated. You can transform the time using a custom function.
+
+For example, if you run an action in a _Forward_ direction and the you run it again in a _Backward_ direction, then you are simulation a PingPong movement. 
+
+These actions has 3 special parameters: 
+ * _dir_ (direction): It can be ForwardDir or BackwardDir . Default is: ForwardDir 
+ * _mode_ (repeat mode): It can be PingPongMode or RepeatMode . Default is : PingPongMode . 
+ * _time_func_ (a function): A function that alters the speed of time
+
+Examples of _IntervalActions_:
+{{{
+    move = Move( (200,0,0), 5 ) # Moves 200 pixels to the right in 5 seconds. 
+                                # Direction: ForwardDir (default) 
+                                # RepeatMode: PingPongMode (default) 
+                                # time_func: No alter function (default) 
+
+    rmove = Repeat( move )      # Will repeat the action *move* forever 
+                                # The repetitions are in PingPongMode 
+                                # times: -1 (default) 
+    
+    move2 = Move( (200,0,0), 5, time_func=accelerate ) 
+                                # Moves 200 pixels to the right in 5 seconds 
+                                # time_func=accelerate. This means that the 
+                                # speed is not linear. It will start to action 
+                                # very slowly, and it will increment the speed 
+                                # in each step. The total running time will be 
+                                # 5 seconds. 
+    move3 = Move( (200,0,0), 5, dir=BackwardDir ) 
+                                # Moves 200 pixels to the **left** in 5 seconds 
+                                # But when you use this direction (BackwardDir) 
+                                # the starting coords and the finishing coords 
+                                # are inverted 
+}}}
 
 === Implementing Actions ===
+
 
 == Transitions ==
 === Implementing New Transitions ===
