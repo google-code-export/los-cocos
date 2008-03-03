@@ -7,12 +7,13 @@
 
 A cocos application consists of several scenes, and a workflow connecting the different scenes. It provides you a "director" (a singleton) which handles that workflow between scenes. Each scene is composed of an arbitrary number of layers; layers take care about drawing to the screen (using the pyglet and OpenGL APIs), handle events and in general contain all of the game/application logic.
 
-Cocos simplifies the game development in this areas:
+Cocos simplifies the game development in these areas:
   * Defining a workflow for your game
   * Composing scenes and scene components
-  * Creating special effects & transitions
+  * Creating special effects & transitions in and between scenes
   * Managing sprites
   * Basic menus
+  * and more
 
 == Basic concepts ==
 
@@ -330,6 +331,38 @@ Examples of _Interval_ _Actions_:
 }}}
 
 === Implementing Actions ===
+Let's see in detail how the _Goto_ action is implemented:
+{{{
+class Goto( IntervalAction ):
+}}}
+It is a sublcass of _!IntervalAction_, since this an action that takes within a certain
+period of time
+
+{{{
+    def init(self, dst_coords, duration=5):
+
+        self.end_position = Point3( *dst_coords )
+        self.duration = duration
+}}}
+Define in the _init_ method the arguments that you action shall receive.
+_Goto_ receives a tuple, the destination coordinates, and a duration time specified in seconds. The coordinates are transformed in a Point3 structure.
+
+{{{
+    def start( self ):
+        self.start_position = self.target.translate
+
+}}}
+The _start_ method is called before the action starts. The difference with _init_ is that at this time you know the _target_ of your action, the target sprite.
+
+{{{
+    def step(self,dt):
+        delta = self.end_position-self.start_position
+        self.target.translate = (self.start_position +
+                    delta * (
+                        min(1,float(self.get_runtime() )/self.duration)
+                    ))
+}}}
+The calculation is done in the _step_ method. 
 
 
 == Transitions ==
