@@ -2,6 +2,7 @@
 #labels Phase-Implementation
 
 = Introduction =
+[http://pyglet-users.googlegroups.com/web/coco.png]
 
 [http://code.google.com/p/los-cocos "Cocos"] is a framework for building games, demos, and other graphical/interactive applications. It is built over [http://www.pyglet.org/ pyglet]. It provides some conventions and classes to help you structure a "scene based application".
 
@@ -408,15 +409,15 @@ period of time
         self.end_position = Point3( *dst_coords )
         self.duration = duration
 }}}
-Define in the _init_ method the arguments that you action shall receive.
-_Goto_ receives a tuple, the destination coordinates, and a duration time specified in seconds. The coordinates are transformed in a Point3 structure.
+In the `init()` method, you shall define the action's arguments.
+`Goto(coords,duration)` receives as arguments a tuple (the destination coordinates), and a duration time specified in seconds. The coordinates are transformed into a `Point3` structure to facilitate the arithmetics.
 
 {{{
     def start( self ):
         self.start_position = self.target.translate
 
 }}}
-The _start_ method is called before the action starts. The difference with _init_ is that at this time you know the _target_ of your action, the target sprite.
+The `start()` method is called before the action starts. The difference between `init()` and `start()` is that at the moment that `start()` is called `self.target` is initialized with the target sprite. So, in the `start()` method you shall initialize everything that depends on the target sprite.
 
 {{{
     def step(self,dt):
@@ -426,7 +427,9 @@ The _start_ method is called before the action starts. The difference with _init
                         min(1,float(self.get_runtime() )/self.duration)
                     ))
 }}}
-The calculation is done in the _step_ method. 
+The calculation is done in the `step(dt)` method. `dt` is the delta time.
+`self.get_runtime()` returns how many seconds have elapsed since the start of action.
+When `self.get_runtime() >= self.duration` the action finished.
 
 
 == Transitions ==
@@ -439,6 +442,7 @@ The calculation is done in the _step_ method.
 = Packaged Layers =
 == Basic Layers ==
 `ColorLayer( *color )` creates a layer filled with color (RGBA)
+
 `MultiplexLayer( *layers )` A Composite layer that only enables one layer at the time
 
 == Menus ==
