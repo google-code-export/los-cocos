@@ -168,17 +168,22 @@ if __name__ == "__main__":
     #      director.run( cocos.scene.Scene( HelloWorld() ) )
 }}}
 
+Try for example changing the window parameters (arguments passed to `director.init`) to change the window size or make a fulls creen app. Or try modifiying the step method to display something else.
 
 == Director, Scene, Layer ==
+
+This section shows how to make more complex apps, with more layers and scenes.
+
 === Multiple Layers ===
+
+In this demo, we will make a scene with several layers. We will create several instances of a single layer class for brevity, although of course you could use instances of different layer classes.
+
+We star the example defining a layer class which shows squares. Its constructors has arguments to change the square position, color and size:
+
 {{{
-import cocos
-from cocos.director import director
-
-from pyglet import gl
-
-# we ccreate our own layer
 class Square(cocos.layer.Layer):
+    """Square (color, c, y, size=50) : A layer drawing a square at (x,y) of
+    given color and size"""
     def __init__(self, color, x, y, size=50):
         self.x = x
         self.y = y
@@ -186,7 +191,65 @@ class Square(cocos.layer.Layer):
         self.color = color
                 
     def step(self, dt):
-        # this layer just draws a square in self.color with self.size as it side
+        gl.glColor4f(*self.color)
+        x, y = self.x, self.y
+        w = x+self.size; h=y+self.size
+        gl.glBegin(gl.GL_QUADS)
+        gl.glVertex2f( x, y )
+        gl.glVertex2f( x, h )
+        gl.glVertex2f( w, h )
+        gl.glVertex2f( w, y )
+        gl.glEnd()
+        gl.glColor4f(1,1,1,1) 
+}}}
+
+Making a scene with more than one layer is very easy: Just use multiple parameters when creating the `Scene` instance: `Scene (a_layer, another_layer, a_third layer)`. In our demo, we will create a large number of layers and put them into a list:
+
+{{{
+    layers = [ Square((0.03*i,0.03*i,0.03*i,1) , i*20, i*20) for i in range(5,20) ]
+}}}
+
+This list contains layers showing 15 overlapping squares, going from the bottom-left of your screen to the top-right and going from dark gray to light gray.
+
+Now, let's create a scene with all those layers inside:
+
+{{{
+    sc = cocos.scene.Scene(*layers)
+}}}
+
+Note that the layers are passed from bottom to top. That means that the last layer of the list in our example (the light gray top-right square) will be in front of every other layer. Every layer has a "z-value", a numeric value which is higher for "upper" layers. When you create a Scene, each layer is added with a "z-value" equal to its position in the argument list (0 to 14 in the example above).
+
+Sometimes you will need to add or remove layers from a scene after its creation. You can do that with the `add` and `remove` methods of the scene. For example, you can call:
+
+{{{
+    sc.add( 5.5, Square((1,0,0,0.5), 150,150, 210 ), "big_one" )
+}}}
+
+This adds a large, red, semitransparent square more or less at the middle of the screen. The first argument, "5.5" is the z-value of the new layer. 5.5 means that it will be over the first 6 small squares (the ones with z-value 0 to 5) and below the other 9 (the ones with zvalues 6 to 14). The last argument "big_one" is optional; it is a name you can give to the layer, to reference it later if you want to remove it. For example, if you later want to remove the big red square you can do it like this:
+
+{{{
+    sc.remove ("big_one")
+}}}
+
+This example is complete at `samples/multiple_layers.py`, and you can run it and play with it:
+
+{{{
+import cocos
+from cocos.director import director
+
+from pyglet import gl
+
+# Defining a new layer type...
+class Square(cocos.layer.Layer):
+    """Square (color, c, y, size=50) : A layer drawing a square at (x,y) of
+    given color and size"""
+    def __init__(self, color, x, y, size=50):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.color = color
+                
+    def step(self, dt):
         gl.glColor4f(*self.color)
         x, y = self.x, self.y
         w = x+self.size; h=y+self.size
@@ -199,23 +262,20 @@ class Square(cocos.layer.Layer):
         gl.glColor4f(1,1,1,1) 
         
 if __name__ == "__main__":
-    # create the window
     director.init()
-
-    # create our scene with some layers. Layers in scene creation are automatically
-    # assigned a z-value from 0 to len(layers)-1
-    # this means the first layers will be in the bottom, the last one on top.
-    sc = cocos.scene.Scene( 
-        *[ Square((0.03*i,0.03*i,0.03*i,1) , i*20, i*20) for i in range(5,20) ]
-        )
-
-    # we can add more layers after the scene has been created
-    # we specify z-value and a name, used as reference if we want to remove it later
+    # Create a large number of layers
+    layers = [ Square((0.03*i,0.03*i,0.03*i,1) , i*20, i*20) for i in range(5,20) ]
+    # Create a scene with all those layers
+    sc = cocos.scene.Scene(*layers)
+    # You can also add layers to a scene later:
     sc.add( 5.5, Square((1,0,0,0.5), 150,150, 210 ), "big_one" )
-
-    # run it
     director.run( sc )
 }}}
+
+Things you can try to do with this code:
+ * rearrange the layer order, 
+ * create the scene initially empty (`sc = cocos.scene.Scene()`), add all layers manually (with `sc.add` in a loop), and remove a few by name.
+
 === Events ===
 All layers are event handlers from the pyglet event framework. When a layer is being shown, it event handlers will be active.
 
