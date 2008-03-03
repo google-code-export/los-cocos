@@ -68,7 +68,7 @@ The director is a shared (singleton) object. It knows which scene is currently a
 
 === Layers & Effects ===
 
-A layer has as size the whole drawable area (window or screen), and knows how to draw itself. It can be semi transparent (having holes and/or partial transparency in some/all places), allowing to see other layers behind it. Layers are the ones defining appearance and behavior, so most of your programming time will be spent coding Layer subclasses that do what you need. The layer is where you define event handlers. Events are propagated to layers (from front to back) until some layer catchs the event and accepts it.
+A layer has as size the whole drawable area (window or screen), and knows how to draw itself. It can be semi transparent (having holes and/or partial transparency in some/all places), allowing to see other layers behind it. Layers are the ones defining appearance and behavior, so most of your programming time will be spent coding Layer subclasses that do what you need. The layer is where you define event handlers. Events are propagated to layers (from front to back) until some layer catches the event and accepts it.
 
 Even if any serious app will require you to define some layer classes, cocos provides a library of useful predefined layer (a simple menu, solid color, a multiplexor between other layers, and a layer to add animated sprites/particle effects)
 
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     #      director.run( cocos.scene.Scene( HelloWorld() ) )
 }}}
 
-Try for example changing the window parameters (arguments passed to `director.init`) to change the window size or make a fulls creen app. Or try modifiying the step method to display something else.
+Try for example changing the window parameters (arguments passed to `director.init`) to change the window size or make a full screen app. Or try modifying the step method to display something else.
 
 == Director, Scene, Layer ==
 
@@ -294,64 +294,62 @@ scenes, allowing sharing (this can be useful if you want to reuse a layer, speci
 you need it to keep state between scenes).
 
 == Sprites ==
-
 === Actions ===
-
 ==== Transformation actions ====
-The _duration_ parameter is specified in seconds. The x,y parameters are specified in pixels. The (0,0) point is the bottom-left point.
- * *Move*( (delta_x,delta_y,0), duration)
-   * Moves the sprite delta_x and delta_y pixels in duration time. 
- * *Goto*( (x,y,0), duration )
-   * Moves the sprite to the x,y coordinates.
-   * The difference between _Move()_ and _Goto()_ is that _Move()_ is relative to the current coordinates and _Goto()_ is absolute.
- * *Rotate*( degrees, duration )
-   * Rotates the sprites degrees in duration time. Positives degrees rotates the sprite counter-clockwise.
+The `duration` parameter is specified in seconds. The `x,y` parameters are specified in pixels. The (0,0) point is the bottom-left point.
+ * `Move( (delta_x,delta_y,0), duration)`
+   * Moves the sprite `delta_x` and `delta_y` pixels in `duration` time. 
+ * `Goto( (x,y,0), duration )`
+   * Moves the sprite to the `x,y` coordinates.
+   * The difference between `Move()` and `Goto()` is that `Move()` is relative to the current coordinates and `Goto()` is absolute.
+ * `Rotate( degrees, duration )`
+   * Rotates the sprites degrees in `duration` time. Positives degrees rotates the sprite counter-clockwise.
    * The rotation is relative to the current angle.
- * *Scale*( zoom_factor, duration )
-   * Scales the sprites zoom_factor in duration time.
+ * `Scale( zoom_factor, duration )`
+   * Scales the sprites `zoom_factor` in `duration` time.
    * The scale is relative to the current zoom_factor.
- * *Jump*( height, x, number_of_jumps, duration )
-   * Moves the sprites x pixels in duration time. x is relative to the current x position.
-   * During that movement the sprite will do a number_of_jumps of height.
- * *Bezier*( bezier_configuration, duration )
-   * Moves the sprite using a bezier path in duration time. The movement is relative to the current position.
- * *Place*( (x,y,0) )
-   * Places the sprite in the x,y coordinates.
- * *Animate*( animation_name )
-   * Animates the sprite using an animation name.
-   * Before running an animation, you need to create an _Animation_, and you must add it to the sprite.
- * *!FadeIn*( duration )
-   * Fades the sprite in in duration time.
- * *!FadeOut*( duration )
-   * Fades the sprite out in duration time.
- * *Blink*( times_to_blink, duration )
-   * Blinks the sprite times_to_blink in duration time.
- * *Show*()
+ * `Jump( height, x, number_of_jumps, duration )`
+   * Moves the sprites `x` pixels in `duration` time. `x` is relative to the current x position.
+   * During that movement the sprite will do a `number_of_jumps` of `height`.
+ * `Bezier( bezier_configuration, duration )`
+   * Moves the sprite using a bezier path in `duration` time. The movement is relative to the current position.
+ * `Place( (x,y,0) )`
+   * Places the sprite in the `x,y` coordinates.
+ * `Animate( animation_name )`
+   * Animates the sprite using an `animation_name`.
+   * Before running an animation, you need to create an `Animation()`, and you must add it to the sprite.
+ * `FadeIn( duration )`
+   * Fades the sprite in in `duration` time.
+ * `FadeOut( duration )`
+   * Fades the sprite out in `duration` time.
+ * `Blink( times_to_blink, duration )`
+   * Blinks the sprite `times_to_blink` in `duration` time.
+ * `Show()`
    * Shows the sprite.
- * *Hide*()
-   * Hides de sprite. To show it again, use the Show action.
+ * `Hide()`
+   * Hides the sprite. To show it again, use the `Show` action.
 
 ==== Composite actions ====
- * *Repeat*( action, times, mode=!PingPongMode )
+ * `Repeat( action, times, mode=PingPongMode )`
    * Repeats an action.
-   * If _times_ is -1, then it will repeat the action forever. Default is -1
-   * If mode is !PingPongMode (default mode) it will repeat the action forwards and backwards.
-   * If mode is !RepeatMode, then it will always repeat the actions forwards.
- * *Sequence*( list_of_actions, dir=!ForwardDir ) _or_ action1 + action2 + action3...
+   * If `times` is -1, then it will repeat the action forever. Default is -1
+   * If mode is `PingPongMode` (default mode) it will repeat the action forwards and backwards.
+   * If mode is `RepeatMode`, then it will always repeat the actions forwards.
+ * `Sequence( list_of_actions, dir=ForwardDir )` or `action1 + action2 + action3` ...
    * Runs a list of actions is sequential mode. First it runs the first action. When this action finished, it execute the next one until the last one is executed.
- * *Spawn*( list_of_actions ) _or_ action1 | action2 | action3...
+ * `Spawn( list_of_actions )` or `action1 | action2 | action3` ...
    * Execute the list_of_actions at the same time
 
 ==== Misc Actions ====
- * *!CallFunc*( function )
+ * `CallFunc( function )`
    * Calls a function. Just that.
    * It is useful to when you want to trigger something.
- * *CallFuncS*( function )
-   * It is the same is _!CallFunc_ with the difference that _function_ will receive the sprite as the 1st argument
- * *Delay*( seconds )
+ * `CallFuncS( function )`
+   * It is the same as `CallFunc` with the difference that `function` will receive the sprite as the 1st argument
+ * `Delay( seconds )`
    * It will delay the execution some _seconds_
- * *!RandomDelay*( lo_seconds, hi_seconds )
-   * It will delay the execution random seconds between _lo_seconds_ and _hi_seconds_
+ * `RandomDelay( lo_seconds, hi_seconds )`
+   * It will delay the execution random seconds between `lo_seconds` and `hi_seconds`
 
 You can find examples here: _los-cocos/test/test_sprite.py_
 
