@@ -15,6 +15,35 @@ Cocos simplifies the game development in these areas:
   * Basic menus
   * and more
 
+== Requirements ==
+
+ * Python 2.4 or later
+ * Pyglet 1.0 or 1.1
+
+== Install ==
+{{{
+cp -r cocos $PROJECT_HOME
+}}}
+
+or
+
+{{{
+export PYTHONPATH=$PYTHONPATH:/path/to/cocos
+}}}
+
+or 
+{{{
+import sys
+sys.path.insert(0, PATH_TO_COCOS))
+}}}
+
+== Contact us ==
+
+Website: http://code.google.com/p/los-cocos/
+
+If you find any bug, please report it at: http://code.google.com/p/los-cocos/issues/list
+
+
 == Basic concepts ==
 
 There are some basic concepts introduced in this library that you will need to know when developing a cocos application:
@@ -63,35 +92,6 @@ The _Interval_ _Actions_ are the ones that take place in a certain period of tim
   * They can be **accelerated**
   * The flow of time can be transformed using a custom function
  
-== Requirements ==
-
- * Python 2.4 or later
- * Pyglet 1.0 or 1.1
-
-== Install ==
-{{{
-cp -r cocos $PROJECT_HOME
-}}}
-
-or
-
-{{{
-export PYTHONPATH=$PYTHONPATH:/path/to/cocos
-}}}
-
-or 
-{{{
-import sys
-sys.path.insert(0, PATH_TO_COCOS))
-}}}
-
-== Contact us ==
-
-Website: http://code.google.com/p/los-cocos/
-
-If you find any bug, please report it at: http://code.google.com/p/los-cocos/issues/list
-
-
 = Details =
 
 == A First Program ==
