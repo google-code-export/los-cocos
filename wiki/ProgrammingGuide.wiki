@@ -273,6 +273,7 @@ if __name__ == "__main__":
 }}}
 
 Things you can try to do with this code:
+ * add an instance of ColorLayer (check documentation) to put a solid color background.
  * rearrange the layer order, 
  * create the scene initially empty (`sc = cocos.scene.Scene()`), add all layers manually (with `sc.add` in a loop), and remove a few by name.
 
