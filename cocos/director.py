@@ -156,13 +156,11 @@ class Director(event.EventDispatcher):
         self.scene = None
         self.replace( scene )
 
-        pyglet.clock.schedule( self.step )
+#        pyglet.clock.schedule( self.step )
         pyglet.app.run()
 
 
     def step( self, dt ):
-        if self.next_scene is not None:
-            self._set_scene( self.next_scene )
 
 #        if not self.scene_stack:
 #            app.EventLoop().has_exit = True
@@ -171,7 +169,12 @@ class Director(event.EventDispatcher):
         self.scene.step( dt )
 
     def on_draw( self ):
+
         self.window.clear()
+
+        if self.next_scene is not None:
+            self._set_scene( self.next_scene )
+
 
         # show the FPS
         if self.show_FPS:

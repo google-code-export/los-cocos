@@ -19,6 +19,7 @@ from pyglet.gl import *
 class PictureLayer(Layer):
 
     def __init__ (self, y):
+        super( PictureLayer, self ).__init__()
         self.x = 100
         self.y = y
         self.speed = 35
@@ -48,27 +49,30 @@ class DynamicColorizeEffect (ColorizeEffect):
 class ControlLayer(Layer):
 
     def on_enter( self ):
-        ft_title = font.load( None, 32 )
-        ft_subtitle = font.load( None, 18 )
-        ft_help = font.load( None, 16 )
 
-        self.text_title = font.Text(ft_title, "Effect Demos",
+        self.text_title = pyglet.text.Label("Effect Demos",
+            font_size=32,
             x=5,
-            y=480,
+            y=director.get_window_size()[1],
             halign=font.Text.LEFT,
-            valign=font.Text.TOP)
+            valign=font.Text.TOP,
+            batch=self.batch)
 
-        self.text_subtitle = font.Text(ft_subtitle, effects[current_effect][0],
+        self.text_subtitle = pyglet.text.Label(effects[current_effect][0],
+            font_size=18,
             x=5,
-            y=400,
+            y=director.get_window_size()[1] - 80,
             halign=font.Text.LEFT,
-            valign=font.Text.TOP)
-        
-        self.text_help = font.Text(ft_help,"Press LEFT / RIGHT for prev/next example",
-            x=320,
+            valign=font.Text.TOP,
+            batch=self.batch )
+
+        self.text_help = pyglet.text.Label("Press LEFT / RIGHT for prev/next test, ENTER to restart test",
+            font_size=16,
+            x=director.get_window_size()[0] /2,
             y=20,
             halign=font.Text.CENTER,
-            valign=font.Text.CENTER)
+            valign=font.Text.CENTER,
+            batch=self.batch )
 
     def step(self, dt):
         self.text_title.draw()

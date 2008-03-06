@@ -62,6 +62,10 @@ class SpriteLayer( Layer ):
         super(SpriteLayer, self ).__init__()
         self.index = index
 
+        self.sprite = None
+        self.sprite1 = None
+        self.sprite2 = None
+
         self.image = pyglet.resource.image('grossini.png')
         self.image.anchor_x = self.image.width / 2
         self.image.anchor_y = self.image.height / 2
@@ -90,6 +94,14 @@ class SpriteLayer( Layer ):
         if keys in (key.LEFT, key.RIGHT, key.ENTER):
             director.replace( get_sprite_test( self.index ) )
             return True
+
+    def on_exit( self ):
+        if self.sprite:
+            self.sprite.stop()
+        if self.sprite1:
+            self.sprite1.stop()
+        if self.sprite2:
+            self.sprite2.stop()
 
 class SpriteGoto( SpriteLayer ):
     def on_enter( self ):
@@ -289,6 +301,7 @@ class SpriteRepeatAlterTime( SpriteLayer ):
 
         self.sprite1.do( Repeat(move1) )
         self.sprite2.do( Repeat(move2) )
+
 
 # accelerate() is a function that is part of actions.py
 # It is really simple. Look at it:
