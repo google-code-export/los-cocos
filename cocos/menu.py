@@ -78,18 +78,18 @@ class Menu(Layer):
 
         # Title
         self.font_title = ''        #: Title's font name
-        self.font_title_size = 72   #: Title's font size. Default size is 72
-        self.font_title_color = ( 192, 192, 192, 255 ) #: Title's font color. Default color is (0.6, 0.6, 0.6, 1.0)
+        self.font_title_size = 56   #: Title's font size. Default size is 56
+        self.font_title_color = ( 192, 192, 192, 255 ) #: Title's font color. Default color is (192, 192, 192, 255)
 
         # Items
         self.font_items = ''            #: Item's font name
-        self.font_items_size = 48       #: Items' font size when unselected. Default size is 48
-        self.font_items_color = ( 192, 192, 192, 255 )   #: Items' font color when unselected. Default color is (0.6, 0.6, 0.6, 1.0)
-        self.font_items_selected_size = 64  #:Items' font size when selected. Default size is 64
-        self.font_items_selected_color = ( 255, 255, 255, 255)  #:Items' font color when selected. Default color is (1.0, 1.0, 1.0, 1.0)
+        self.font_items_size = 32       #: Items' font size when unselected. Default size is 32
+        self.font_items_color = ( 192, 192, 192, 255 )   #: Items' font color when unselected. Default color is (192, 192, 192, 255)
+        self.font_items_selected_size = 48  #:Items' font size when selected. Default size is 48
+        self.font_items_selected_color = ( 255, 255, 255, 255)  #:Items' font color when selected. Default color is (255, 255, 255, 255)
 
         # Sound
-        self.sound_filename = 'menuchange.wav'
+#        self.sound_filename = 'menuchange.wav'
 
         # Alignment
         self.menu_halign = CENTER   #: Horizontal alignment. Possible options: CENTER, RIGHT or LEFT. Default is CENTER
@@ -254,25 +254,28 @@ class MenuItem( object ):
 
         :rtype: (x1,x2,y1,y2)
         :returns: returns a tuple (a rectangle) that sets the boundaries of the menu item."""
-       
+
+        width = self.text.content_width
+        height = self.text.content_height
+
         if self.halign == CENTER:
-            x_diff = - self.text.width / 2
+            x_diff = - width / 2
         elif self.halign == RIGHT:
-            x_diff = - self.text.width
+            x_diff = - width
         elif self.halign == LEFT:
             x_diff = 0
 
         if self.valign == CENTER:
-            y_diff = - self.text.height/ 2
+            y_diff = - height/ 2
         elif self.valign == TOP:
-            y_diff = - self.text.height
+            y_diff = - height
         elif self.valign == BOTTOM:
             y_diff = 0
 
         x1 = self.text.x + x_diff
         y1 = self.text.y + y_diff
-        x2 = x1 + self.text.width
-        y2 = y1 + self.text.height
+        x2 = x1 + width
+        y2 = y1 + height
         return (x1,y1,x2,y2)
 
 

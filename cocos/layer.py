@@ -114,9 +114,6 @@ class MultiplexLayer( Layer ):
         director.window.push_handlers( self.layers[ self.enabled_layer ] )
         self.layers[ self.enabled_layer ].on_enter()
 
-    def step( self, dt):
-        self.layers[ self.enabled_layer ].step( dt )
-
     def on_enter( self ):
         director.window.push_handlers( self.layers[ self.enabled_layer ] )
         self.layers[ self.enabled_layer ].on_enter()
@@ -124,6 +121,9 @@ class MultiplexLayer( Layer ):
     def on_exit( self ):
         director.window.pop_handlers()
         self.layers[ self.enabled_layer ].on_exit()
+
+    def draw( self ):
+        self.layers[ self.enabled_layer ].on_draw()
 
 
 class AnimationLayer(Layer):
