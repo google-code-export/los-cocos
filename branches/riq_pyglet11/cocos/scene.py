@@ -69,7 +69,6 @@ class Scene(object):
         """
         Called every time the scene is shown. The scene also registers the layer's events.
         """        
-        print "scene: on_enter"
         for z,l in self.layers:
             director.window.push_handlers( l )
             l.on_enter()
