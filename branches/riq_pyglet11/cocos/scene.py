@@ -69,6 +69,7 @@ class Scene(object):
         """
         Called every time the scene is shown. The scene also registers the layer's events.
         """        
+        print "scene: on_enter"
         for z,l in self.layers:
             director.window.push_handlers( l )
             l.on_enter()
@@ -84,7 +85,6 @@ class Scene(object):
             l.on_exit()
             director.window.pop_handlers()
 
-            
     def step( self, dt ):
         """
         step(dt) -> None
@@ -96,7 +96,10 @@ class Scene(object):
         for i, l in self.layers:
             l._step(dt)
         
-        
+    def on_draw( self ):                
+        for i, l in self.layers:
+            l.on_draw()
+
 class TransitionScene(Scene):
     """
     A Scene that takes two scenes and makes a transition

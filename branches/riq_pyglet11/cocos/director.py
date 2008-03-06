@@ -130,14 +130,20 @@ class Director(event.EventDispatcher):
         self.enable_alpha_blending()
 
         # save resolution and aspect for resize / fullscreen
-        self.window.on_resize = self._on_resize
+        self.window.on_resize = self.on_resize
+        self.window.on_draw = self.on_draw
         self._window_original_width = self.window.width
         self._window_original_height = self.window.height
         self._window_aspect =  self.window.width / float( self.window.height )
         self._offset_x = 0
         self._offset_y = 0
-        
+
+
+        # init fps
+        self.fps_display = clock.ClockDisplay()
+
         return self.window
+
 
     def run(self, scene):
         """Runs a scene, entering in the Director's main loop.
@@ -146,43 +152,32 @@ class Director(event.EventDispatcher):
             `scene` : a Scene instance
                 It is the scene that will be run.
         """
-        fps_display = clock.ClockDisplay()
 
-        self.scene = scene
-        self.scene_stack.append( scene )
+        self.scene = None
+        self.replace( scene )
 
-        self.next_scene = None
+        pyglet.clock.schedule( self.step )
+        pyglet.app.run()
 
-        self.scene.on_enter()
 
-        while not self.window.has_exit:
+    def step( self, dt ):
+        if self.next_scene is not None:
+            self._set_scene( self.next_scene )
 
-            if self.next_scene is not None:
-                self._set_scene( self.next_scene )
+#        if not self.scene_stack:
+#            app.EventLoop().has_exit = True
+        
+        # step / tick / draw
+        self.scene.step( dt )
 
-            if not self.scene_stack:
-                break
-            
-            dt = clock.tick()
+    def on_draw( self ):
+        self.window.clear()
 
-            # dispatch pyglet events
-            self.window.dispatch_events()
-            media.dispatch_events()
-#            self.dispatch_events('on_push', 'on_pop')
+        # show the FPS
+        if self.show_FPS:
+            self.fps_display.draw()
 
-            # clear pyglets main window
-            self.window.clear()
-
-            # step / tick / draw
-            self.scene.step( dt )
-            
-            # show the FPS
-            if self.show_FPS:
-                fps_display.draw()
-
-            # show all the changes
-            self.window.flip()
-    
+        self.scene.on_draw()
     
     def push(self, scene):
         """Suspends the execution of the running scene, pushing it
@@ -284,7 +279,7 @@ class Director(event.EventDispatcher):
     #
     # window resize handler
     #
-    def _on_resize( self, width, height):
+    def on_resize( self, width, height):
         width_aspect = width
         height_aspect = int( width / self._window_aspect)
 
@@ -308,3 +303,5 @@ Don't instantiate Director(). Just use this singleton."""
 
 Director.register_event_type('on_push')
 Director.register_event_type('on_pop')
+Director.register_event_type('on_enter')
+Director.register_event_type('on_exit')

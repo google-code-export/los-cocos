@@ -16,8 +16,10 @@ the event and accepts it.
 
 __docformat__ = 'restructuredtext'
 
-from cocos.director import *
+import pyglet
 from pyglet import gl
+
+from cocos.director import *
 
 __all__ = [ 'Layer', 'MultiplexLayer', 'AnimationLayer' ]
 
@@ -25,6 +27,10 @@ class Layer(object):
     """Class that handles events and other important game's behaviors"""
 
     effects = ()
+
+    def __init__( self ):
+        self.batch = pyglet.graphics.Batch()
+
 
     def step(self, dt):
         """Called once per cycle. Use this method to draw/animate your objects"""
@@ -63,6 +69,13 @@ class Layer(object):
     def on_exit( self ):
         """Called every time the layer quits the scene"""
         pass 
+
+    def on_draw( self ):
+        self.batch.draw()
+        self.draw()
+
+    def draw( self ):        
+        pass           
 
 #
 # MultiplexLayer
