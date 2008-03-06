@@ -26,11 +26,6 @@ class MainMenu(Menu):
         self.font_title = 'KonQa Black'
         self.font_items = 'You Are Loved'
 
-        font.add_directory('.')
-
-        self.font_title = 'KonQa Black'
-        self.font_items = 'You Are Loved'
-
         # you can also override the font size and the colors. see menu.py for
         # more info
 
@@ -108,7 +103,14 @@ class ScoreMenu(Menu):
 
 
 if __name__ == "__main__":
+
+    pyglet.resource.path.append('.')
+    pyglet.resource.reindex()
+
+    pyglet.resource.add_font('KonQa Black.ttf')
+    pyglet.resource.add_font('You Are Loved.ttf')
+
     director.init( resizable=True)
-    director.run( Scene( 
-            MultiplexLayer( MainMenu(), OptionMenu(), ScoreMenu() )
-            ) ) 
+    director.run( Scene(  MainMenu() ) )
+#            MultiplexLayer( MainMenu(), OptionMenu(), ScoreMenu() )
+#            ) ) 
