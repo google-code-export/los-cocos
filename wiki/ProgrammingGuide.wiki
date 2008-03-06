@@ -103,7 +103,11 @@ The _Interval_ _Actions_ are the ones that take place in a certain period of tim
 
 == A First Program ==
 
-The most basic program (which does something) you can make, does the following:
+A very very simple program could look like this:
+
+http://lh6.google.com/rayentray/R9B_OWa0PGI/AAAAAAAAAXA/l4RnO2EBI4w/hello_world.py.png?imgmax=512
+
+To do so, follow the following steps:
 
  # Define a layer which shows something (For example, a "Hello world" string). To define a new layer class you inherit `cocos.layer.Layer`. In the `step' method you should define the code that paints the layer on screen (using pyglet or opengl functions):
 {{{
@@ -417,6 +421,12 @@ you need it to keep state between scenes).
 
 == Sprites ==
 === Actions ===
+
+http://lh6.google.com/rayentray/R9B_OWa0PHI/AAAAAAAAAXI/_sqPVsfKikQ/Sprite_test.png?imgmax=512
+
+You can find these examples here: _los-cocos/test/test_sprite.py_
+Run the file in order to see them working.
+
 ==== Transformation actions ====
 The `duration` parameter is specified in seconds. The `x,y` parameters are specified in pixels. The (0,0) point is the bottom-left point.
  * `Move( (delta_x,delta_y,0), duration)`
@@ -473,7 +483,6 @@ The `duration` parameter is specified in seconds. The `x,y` parameters are speci
  * `RandomDelay( lo_seconds, hi_seconds )`
    * It will delay the execution random seconds between `lo_seconds` and `hi_seconds`
 
-You can find examples here: _los-cocos/test/test_sprite.py_
 
 === Interval Actions ===
 An interval action is an action that takes place within a certain period of time. It has an start time and a ﬁnish time. The ﬁnish time is the parameter _duration_ plus the start time.
