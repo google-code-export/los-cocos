@@ -70,7 +70,11 @@ The director is a shared (singleton) object. It knows which scene is currently a
 
 === Layers & Effects ===
 
-A layer has as size the whole drawable area (window or screen), and knows how to draw itself. It can be semi transparent (having holes and/or partial transparency in some/all places), allowing to see other layers behind it. Layers are the ones defining appearance and behavior, so most of your programming time will be spent coding Layer subclasses that do what you need. The layer is where you define event handlers. Events are propagated to layers (from front to back) until some layer catches the event and accepts it.
+A layer has as size the whole drawable area (window or screen), and knows how to draw itself. It can be semi transparent (having holes and/or partial transparency in some/all places), allowing to see other layers behind it. Layers are the ones defining appearance and behavior, so most of your programming time will be spent coding Layer subclasses that do what you need. 
+
+http://lh6.google.com/rayentray/R9B7nWa0PFI/AAAAAAAAAW0/Rt4C1l8HYeY/layers.png?imgmax=640
+
+The layer is where you define event handlers. Events are propagated to layers (from front to back) until some layer catches the event and accepts it.
 
 Even if any serious app will require you to define some layer classes, cocos provides a library of useful predefined layer (a simple menu, solid color, a multiplexor between other layers, and a layer to add animated sprites/particle effects)
 
