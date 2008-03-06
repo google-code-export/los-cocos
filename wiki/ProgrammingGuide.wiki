@@ -55,6 +55,8 @@ An scene is a more or less an independent piece of the app workflow. Some people
 
 For example, you could have a game with the following scenes: Intro, Menu, Level 1, Cutscene 1, Level 2, Winning cutscene, losing cutscene, High scores screen. You can define every of one of these scenes more or less as separate apps; there is a bit of glue between them containing the logic for connecting scenes (the intro goes to the menu when interrupted or finishing, Level 1 can lead you to the cutscene 1 if finished or to the losing cutscene if you lose, etc.).
 
+http://lh6.google.com/rayentray/R9BQyWa0PDI/AAAAAAAAAWc/69_UexYon1k/image1.png?imgmax=720
+
 A cocos Scene is composed of one or more layers, all of them piled up. Layers give the scene an appearance and behavior; the normal use case is to just make instances of Scene() with the layers that you want. 
 
 There is also a family of Scene classes called "Transitions", which allow you to
