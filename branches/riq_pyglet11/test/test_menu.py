@@ -41,7 +41,6 @@ class MainMenu(Menu):
         # after adding all the items just call build_items()
         self.build_items()
 
-
     # Callbacks
     def on_new_game( self ):
 #        director.set_scene( StartGame() )
@@ -64,7 +63,7 @@ class OptionMenu(Menu):
         super( OptionMenu, self ).__init__("GROSSINI'S SISTERS" )
 
         self.font_title = 'KonQa Black'
-#        self.font_items = 'You Are Loved'
+        self.font_items = 'You Are Loved'
         self.menu_valign = BOTTOM
         self.menu_halign = RIGHT
 
@@ -111,6 +110,6 @@ if __name__ == "__main__":
     pyglet.resource.add_font('You Are Loved.ttf')
 
     director.init( resizable=True)
-    director.run( Scene(  MainMenu() ) )
-#            MultiplexLayer( MainMenu(), OptionMenu(), ScoreMenu() )
-#            ) ) 
+    director.run( Scene(
+            MultiplexLayer( MainMenu(), OptionMenu(), ScoreMenu() )
+            ) )
