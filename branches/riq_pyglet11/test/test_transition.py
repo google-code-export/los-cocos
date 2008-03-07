@@ -92,7 +92,7 @@ class GrossiniLayer2(Layer):
         image.anchor_y = image.height / 2
         g1 = ActionSprite( image, x=490, y=240 )
 
-        image = pyglet.resource.image('grossinis_sister1.png')
+        image = pyglet.resource.image('grossinis_sister2.png')
         image.anchor_x = image.width / 2
         image.anchor_y = image.height / 2
         g2 = ActionSprite( image, x=150, y=240 )
