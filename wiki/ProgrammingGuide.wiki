@@ -304,6 +304,8 @@ All layers are event handlers from the pyglet event framework. When a layer is b
 
 In this section we will build step by test the demo provided in `samples/event_demo.py`; this is a very simple cocos app which shows which keys are pressed, and reacts to mouse motion and clicks. Run the app before reading on te get a clearer idea of what we are trying to build.
 
+http://lh5.google.com/rayentray/R9CHIGa0PKI/AAAAAAAAAXk/cDrvKuUTy4o/event_demo.py.png?imgmax=512
+
 This demo has a scene with two layers; one shows which keys are currently pressed (none, one, or maybe several at the same time), the other one shows text with the mouse position, and clicking moves the text.
 
 We start defining the `KeyDisplay` layer class. As always, we put some initialization on
