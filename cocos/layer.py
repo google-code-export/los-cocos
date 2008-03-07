@@ -21,7 +21,7 @@ from pyglet import gl
 
 from cocos.director import *
 
-__all__ = [ 'Layer', 'MultiplexLayer', 'AnimationLayer' ]
+__all__ = [ 'Layer', 'MultiplexLayer', 'ColorLayer' ]
 
 class Layer(object):
     """Class that handles events and other important game's behaviors"""
@@ -31,6 +31,18 @@ class Layer(object):
     def __init__( self ):
         self.batch = pyglet.graphics.Batch()
         self.scheduled = False
+        self.objects = []
+
+    def add( self, *o ):
+        """Adds an object to the batch. The batch will draw it.
+
+        :Parameters:
+            `o` : list of objects
+                Object that supports the 'batch' property, like Sprites, Labels, etc.
+        """
+        for i in o:
+            self.objects.append( i )
+            i.batch = self.batch
 
     def set_effect (self, e):
         """
@@ -73,15 +85,19 @@ class Layer(object):
         pass 
 
     def step( self, dt ):
-        """Called every frame"""
+        """Called every frame when it is active.
+        See `enable_step` and `disable_step`
+        """
         pass
 
     # helper functions
     def disable_step( self ):
+        """Disables the step callback"""
         self.scheduled = False
         pyglet.clock.unschedule( self.step )
 
     def enable_step( self ):
+        """Enables the step callback. It calls the `step` method every frame"""
         if not self.scheduled:
             self.scheduled = True 
             pyglet.clock.schedule( self.step )
@@ -134,20 +150,6 @@ class MultiplexLayer( Layer ):
     def draw( self ):
         self.layers[ self.enabled_layer ].on_draw()
 
-
-class AnimationLayer(Layer):
-    """Useful class to handle animated (or alive) objects
-
-    Each cycle it forwards the *step* call to all of its objects.
-    """
-    def __init__( self ):
-        super( AnimationLayer, self ).__init__()
-
-        self.objects = []
-
-    def add( self, *o ):
-        for i in o:
-            self.objects.append( i )
 
 
 class ColorLayer(Layer):
