@@ -188,7 +188,7 @@ This section shows how to make more complex apps, with more layers and scenes.
 
 In this demo, we will make a scene with several layers. We will create several instances of a single layer class for brevity, although of course you could use instances of different layer classes.
 
-We star the example defining a layer class which shows squares. Its constructors has arguments to change the square position, color and size:
+We start the example defining a layer class which shows squares. Its constructors has arguments to change the square position, color and size:
 
 {{{
 class Square(cocos.layer.Layer):
@@ -224,6 +224,8 @@ Making a scene with more than one layer is very easy: Just use multiple paramete
 
 This list contains layers showing 15 overlapping squares, going from the bottom-left of your screen to the top-right and going from dark gray to light gray.
 
+http://lh5.google.com/rayentray/R9CFlGa0PII/AAAAAAAAAXU/yP2XPjIz1es/1multiple_layers.py.png?imgmax=512
+
 Now, let's create a scene with all those layers inside:
 
 {{{
@@ -238,7 +240,11 @@ Sometimes you will need to add or remove layers from a scene after its creation.
     sc.add( 5.5, Square((1,0,0,0.5), 150,150, 210 ), "big_one" )
 }}}
 
-This adds a large, red, semitransparent square more or less at the middle of the screen. The first argument, "5.5" is the z-value of the new layer. 5.5 means that it will be over the first 6 small squares (the ones with z-value 0 to 5) and below the other 9 (the ones with zvalues 6 to 14). The last argument "big_one" is optional; it is a name you can give to the layer, to reference it later if you want to remove it. For example, if you later want to remove the big red square you can do it like this:
+This adds a large, red, semitransparent square more or less at the middle of the screen. The first argument, "5.5" is the z-value of the new layer. 5.5 means that it will be over the first 6 small squares (the ones with z-value 0 to 5) and below the other 9 (the ones with zvalues 6 to 14). 
+
+http://lh5.google.com/rayentray/R9CFlGa0PJI/AAAAAAAAAXc/-rFi8V_2Ph8/multiple_layers.py.png?imgmax=512
+
+The last argument "big_one" is optional; it is a name you can give to the layer, to reference it later if you want to remove it. For example, if you later want to remove the big red square you can do it like this:
 
 {{{
     sc.remove ("big_one")
