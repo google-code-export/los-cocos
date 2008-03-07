@@ -8,9 +8,11 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from cocos.director import director
-from cocos.layer import Layer, ColorLayer
+from cocos.layer import Layer, ColorLayer 
 from cocos.scene import Scene
 from cocos.effect import TextureFilterEffect, ColorizeEffect, RepositionEffect
+from cocos.actions import *
+
 import pyglet
 from pyglet import font
 from pyglet.window import key
@@ -20,21 +22,29 @@ class PictureLayer(Layer):
 
     def __init__ (self, y):
         super( PictureLayer, self ).__init__()
-        self.x = 100
-        self.y = y
-        self.speed = 35
-        self.img = pyglet.image.load ('ball.png')
+        img0 = pyglet.image.load ('ball.png')
+        img1 = pyglet.image.load ('grossini.png')
+        img2 = pyglet.image.load ('grossinis_sister1.png')
+        img3 = pyglet.image.load ('grossinis_sister2.png')
 
-        self.enable_step()
-    
-    def step (self, dt):
-        self.x += self.speed * dt
-        if self.x > 200 and self.speed > 0: self.speed = -self.speed
-        if self.x < 100 and self.speed < 0: self.speed = -self.speed
+        sprite1 = ActionSprite( img0, x=20, y=40 )
+        sprite1.do( Repeat( Move( (500,0), 5 ) ) )
 
-    def draw( self ):
-        self.img.blit (self.x, self.y)
+        sprite2 = ActionSprite( img1, x=20, y=80 )
+        sprite2.do( Repeat( Move( (500,0), 4 ) ) )
 
+        sprite3 = ActionSprite( img2, x=20, y=180 )
+        sprite3.do( Repeat( Move( (500,0), 3 ) ) )
+
+        sprite4 = ActionSprite( img3, x=20, y=280 )
+        sprite4.do( Repeat( Move( (500,0), 2 ) ) )
+
+        self.add( sprite1, sprite2, sprite3, sprite4 )
+
+    def on_exit( self ):
+        for o in self.objects:
+            if hasattr(o, "stop"):
+                o.stop()
     
 class DynamicColorizeEffect (ColorizeEffect):
     def __init__ (self):
@@ -99,6 +109,7 @@ current_effect = 0
 
 if __name__ == "__main__":
     director.init()
+
     director.enable_alpha_blending()
 
     effects = [

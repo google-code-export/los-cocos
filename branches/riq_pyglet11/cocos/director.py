@@ -152,7 +152,7 @@ class Director(event.EventDispatcher):
         """
 
         self.scene = None
-        self.replace( scene )
+        self.push( scene )
 
         pyglet.app.run()
 
@@ -165,6 +165,12 @@ class Director(event.EventDispatcher):
 
         if self.next_scene is not None:
             self._set_scene( self.next_scene )
+
+        if not self.scene_stack:
+            # How should I terminate the EventLoop ?
+            # pyglet.app.EventLoop().exit()
+            import sys
+            sys.exit(0)
 
         # draw all the objects
         self.scene.on_draw()
@@ -300,5 +306,3 @@ Don't instantiate Director(). Just use this singleton."""
 
 Director.register_event_type('on_push')
 Director.register_event_type('on_pop')
-Director.register_event_type('on_enter')
-Director.register_event_type('on_exit')
