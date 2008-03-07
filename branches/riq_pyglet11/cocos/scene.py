@@ -84,18 +84,9 @@ class Scene(object):
             l.on_exit()
             director.window.pop_handlers()
 
-    def step( self, dt ):
-        """
-        step(dt) -> None
-        
-        Calls step(dt) in all the layers
-        """
-        for i, l in self.layers:
-            l._prepare(dt)
-        for i, l in self.layers:
-            l._step(dt)
-        
+
     def on_draw( self ):                
+        """Draw callback. Propagate it to the layers"""
         for i, l in self.layers:
             l.on_draw()
 

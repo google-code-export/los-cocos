@@ -126,8 +126,6 @@ class Director(event.EventDispatcher):
         self.scene_stack = []
         self.show_FPS = True
 
-        # alpha blending
-        self.enable_alpha_blending()
 
         # save resolution and aspect for resize / fullscreen
         self.window.on_resize = self.on_resize
@@ -156,31 +154,25 @@ class Director(event.EventDispatcher):
         self.scene = None
         self.replace( scene )
 
-#        pyglet.clock.schedule( self.step )
         pyglet.app.run()
 
 
-    def step( self, dt ):
-
-#        if not self.scene_stack:
-#            app.EventLoop().has_exit = True
-        
-        # step / tick / draw
-        self.scene.step( dt )
-
     def on_draw( self ):
-
+        """Callback to draw the window.
+        It propagaes the event to the running scene."""
+         
         self.window.clear()
 
         if self.next_scene is not None:
             self._set_scene( self.next_scene )
 
+        # draw all the objects
+        self.scene.on_draw()
 
-        # show the FPS
+        # finally show the FPS
         if self.show_FPS:
             self.fps_display.draw()
 
-        self.scene.on_draw()
     
     def push(self, scene):
         """Suspends the execution of the running scene, pushing it
@@ -251,11 +243,6 @@ class Director(event.EventDispatcher):
         """
         return ( self._window_original_width, self._window_original_height)
         
-    def enable_alpha_blending( self ):
-        """Enables alpha blending in OpenGL using the GL_ONE_MINUS_SRC_ALPHA algorithm.
-        """
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
     def get_virtual_coordinates( self, x, y ):
         """Transforms coordinates that belongs the *real* window size, to the
@@ -279,9 +266,7 @@ class Director(event.EventDispatcher):
 
         return ( int( x_diff * x) - adjust_x,   int( y_diff * y ) - adjust_y )
 
-    #
-    # window resize handler
-    #
+
     def on_resize( self, width, height):
         width_aspect = width
         height_aspect = int( width / self._window_aspect)
@@ -299,6 +284,15 @@ class Director(event.EventDispatcher):
         glOrtho(0, self._window_original_width, 0, self._window_original_height, -1, 1)
         glMatrixMode(gl.GL_MODELVIEW)
 
+        
+    #
+    # Misc functions
+    #
+    def enable_alpha_blending( self ):
+        """Enables alpha blending in OpenGL using the GL_ONE_MINUS_SRC_ALPHA algorithm. """
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+        
 
 director = Director()
 """The singleton; check `cocos.director.Director` for details on usage.

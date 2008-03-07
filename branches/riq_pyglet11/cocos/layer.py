@@ -30,12 +30,7 @@ class Layer(object):
 
     def __init__( self ):
         self.batch = pyglet.graphics.Batch()
-
-
-    def step(self, dt):
-        """Called once per cycle. Use this method to draw/animate your objects"""
-        pass
-
+        self.scheduled = False
 
     def set_effect (self, e):
         """
@@ -51,16 +46,23 @@ class Layer(object):
         else:
             self.effects = (e,)
 
-    def _prepare (self, dt):
-        for e in self.effects:
-            e.prepare (self, dt)
+    def on_draw( self ):
+        """Draws every object that is in the batch and possible custom objets"""
 
-    def _step(self, dt):
-        if not self.effects:
-            self.step (dt)
-        else:
+        if self.effects:
+            for e in self.effects:
+                e.prepare (self)
+
             for e in self.effects:
                 e.show ()
+        else:
+            self.batch.draw()
+            self.draw()
+
+
+    def draw( self ):        
+        """Subclasses shall override this method if they want to draw custom objets"""
+        pass           
 
     def on_enter( self ):
         """Called every time the layer enters into the scene"""
@@ -70,12 +72,19 @@ class Layer(object):
         """Called every time the layer quits the scene"""
         pass 
 
-    def on_draw( self ):
-        self.batch.draw()
-        self.draw()
+    def step( self, dt ):
+        """Called every frame"""
+        pass
 
-    def draw( self ):        
-        pass           
+    # helper functions
+    def disable_step( self ):
+        self.scheduled = False
+        pyglet.clock.unschedule( self.step )
+
+    def enable_step( self ):
+        if not self.scheduled:
+            self.scheduled = True 
+            pyglet.clock.schedule( self.step )
 
 #
 # MultiplexLayer
@@ -140,17 +149,14 @@ class AnimationLayer(Layer):
         for i in o:
             self.objects.append( i )
 
-    def step( self, dt ):
-        [ o.step(dt) for o in self.objects ]
-
 
 class ColorLayer(Layer):
     """Creates a layer of a certain color"""
     def __init__(self, *color):
         self.color = color
         super(ColorLayer, self).__init__()
-        
-    def step(self, dt):
+
+    def draw(self):
         gl.glColor4f(*self.color)
         x, y = director.get_window_size()
         gl.glBegin(gl.GL_QUADS)
@@ -160,4 +166,3 @@ class ColorLayer(Layer):
         gl.glVertex2f( x, 0 )
         gl.glEnd()
         gl.glColor4f(1,1,1,1)    
-
