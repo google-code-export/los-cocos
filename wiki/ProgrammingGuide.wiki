@@ -1,5 +1,7 @@
 #summary Cocos Programming Guide
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
+
+= Cocos Programming Guide =
 
 = Introduction =
 [http://pyglet-users.googlegroups.com/web/coco.png]
