@@ -10,40 +10,26 @@ and/or partial transparency in some/all places), allowing to see other layers
 behind it. Layers are the ones defining appearance and behavior, so most
 of your programming time will be spent coding Layer subclasses that do what
 you need. The layer is where you define event handlers.
-Events are propagated to layers (from front to back) until some layer catches
+Events are propagated to layers (from front to back) until some layer catchs
 the event and accepts it.
 """
 
 __docformat__ = 'restructuredtext'
 
-import pyglet
+from cocos.director import *
 from pyglet import gl
 
-from cocos.director import *
-
-__all__ = [ 'Layer', 'MultiplexLayer', 'ColorLayer' ]
+__all__ = [ 'Layer', 'MultiplexLayer', 'AnimationLayer' ]
 
 class Layer(object):
     """Class that handles events and other important game's behaviors"""
 
     effects = ()
 
-    def __init__( self ):
-        self.batch = pyglet.graphics.Batch()
-        self.scheduled = False
-        self.objects = []
+    def step(self, dt):
+        """Called once per cycle. Use this method to draw/animate your objects"""
+        pass
 
-    def add( self, *o ):
-        """Adds an object to the batch. The batch will draw it.
-
-        :Parameters:
-            `o` : list of objects
-                Object that supports the 'batch' property, like Sprites,
-                Labels, `ActionSprite` , etc.
-        """
-        for i in o:
-            self.objects.append( i )
-            i.batch = self.batch
 
     def set_effect (self, e):
         """
@@ -59,25 +45,16 @@ class Layer(object):
         else:
             self.effects = (e,)
 
-    def on_draw( self ):
-        """Draws every object that is in the batch.
-        It then calls ``self.draw()``. Subclassess shall override ``self.draw``
-        to draw custom objects."""
+    def _prepare (self, dt):
+        for e in self.effects:
+            e.prepare (self, dt)
 
-        if self.effects:
-            for e in self.effects:
-                e.prepare (self)
-
+    def _step(self, dt):
+        if not self.effects:
+            self.step (dt)
+        else:
             for e in self.effects:
                 e.show ()
-        else:
-            self.batch.draw()
-            self.draw()
-
-
-    def draw( self ):        
-        """Subclasses shall override this method if they want to draw custom objects"""
-        pass           
 
     def on_enter( self ):
         """Called every time the layer enters into the scene"""
@@ -86,29 +63,6 @@ class Layer(object):
     def on_exit( self ):
         """Called every time the layer quits the scene"""
         pass 
-
-    def step( self, dt ):
-        """Called every frame when it is active.
-        By default ``step`` is disabled.
-        See `enable_step` and `disable_step`
-        
-        :Parameters:
-            `dt` : float
-                Time that elapsed since the last time ``step`` was called.
-        """
-        pass
-
-    # helper functions
-    def disable_step( self ):
-        """Disables the step callback"""
-        self.scheduled = False
-        pyglet.clock.unschedule( self.step )
-
-    def enable_step( self ):
-        """Enables the step callback. It calls the `step()` method every frame"""
-        if not self.scheduled:
-            self.scheduled = True 
-            pyglet.clock.schedule( self.step )
 
 #
 # MultiplexLayer
@@ -147,6 +101,9 @@ class MultiplexLayer( Layer ):
         director.window.push_handlers( self.layers[ self.enabled_layer ] )
         self.layers[ self.enabled_layer ].on_enter()
 
+    def step( self, dt):
+        self.layers[ self.enabled_layer ].step( dt )
+
     def on_enter( self ):
         director.window.push_handlers( self.layers[ self.enabled_layer ] )
         self.layers[ self.enabled_layer ].on_enter()
@@ -155,24 +112,32 @@ class MultiplexLayer( Layer ):
         director.window.pop_handlers()
         self.layers[ self.enabled_layer ].on_exit()
 
-    def draw( self ):
-        self.layers[ self.enabled_layer ].on_draw()
 
+class AnimationLayer(Layer):
+    """Useful class to handle animated (or alive) objects
+
+    Each cycle it forwards the *step* call to all of its objects.
+    """
+    def __init__( self ):
+        super( AnimationLayer, self ).__init__()
+
+        self.objects = []
+
+    def add( self, *o ):
+        for i in o:
+            self.objects.append( i )
+
+    def step( self, dt ):
+        [ o.step(dt) for o in self.objects ]
 
 
 class ColorLayer(Layer):
-    """Creates a layer of a certain color.
-    The color shall be specified in the format (r,g,b,a).
-    
-    For example, to create green layer::
-    
-        l = ColorLayer( (0.0, 1.0, 0.0, 1.0 ) )
-    """
+    """Creates a layer of a certain color"""
     def __init__(self, *color):
         self.color = color
         super(ColorLayer, self).__init__()
-
-    def draw(self):
+        
+    def step(self, dt):
         gl.glColor4f(*self.color)
         x, y = director.get_window_size()
         gl.glBegin(gl.GL_QUADS)
@@ -182,3 +147,4 @@ class ColorLayer(Layer):
         gl.glVertex2f( x, 0 )
         gl.glEnd()
         gl.glColor4f(1,1,1,1)    
+

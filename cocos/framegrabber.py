@@ -1,7 +1,3 @@
-#
-# Los Cocos: An extension for Pyglet
-# http://code.google.com/p/los-cocos/
-#
 """Utility classes for rendering to a texture.
 
 It is mostly used for internal implementation of cocos, you normally shouldn't
