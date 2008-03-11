@@ -539,8 +539,7 @@ Let's see in detail how the _Goto_ action is implemented:
 {{{
 class Goto( IntervalAction ):
 }}}
-It is a sublcass of _!IntervalAction_, since this an action that takes within a certain
-period of time
+It is a sublcass of {{{IntervalAction}}}, since this is an action that takes place within a certain period of time
 
 {{{
     def init(self, dst_coords, duration=5):
