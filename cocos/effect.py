@@ -34,16 +34,17 @@ __all__ = ['Effect', 'TextureFilterEffect','ColorizeEffect', 'RepositionEffect']
 
 class Effect(object):
     """Abstract base class for effects. Effects are applied to layers (or
-    anything that is shown with a draw() method). Useful effects can
+    anything that is shown with a step (dt) method). Useful effects can
     inherit this one, which is just the identity effect"""
     
-    def prepare (self, target):
+    def prepare (self, target, dt):
         """Advance target in dt, preparing effect display."""
         self.target = target
+        self.dt = dt
     
     def show (self):
         """Show layer+effect on screen"""
-        self.target.draw()
+        self.target.step (self.dt)
 
 class TextureFilterEffect (Effect):
     """Base class for texture based effects. Prepare captures layer in
@@ -51,7 +52,9 @@ class TextureFilterEffect (Effect):
     with a window sized capture. Show just blits the texture, override to
     do more interesting things"""
     def __init__ (self):
-        w, h = director.get_window_size()
+#        w, h = director.get_window_size()
+        w = director.window.width
+        h = director.window.height
         self.texture = image.Texture.create_for_size(GL_TEXTURE_2D, 
             w, h, GL_RGBA)
         
@@ -60,10 +63,9 @@ class TextureFilterEffect (Effect):
         
         self.texture = self.texture.get_region(0, 0, w, h)
 
-    def prepare (self, target):
+    def prepare (self, target, dt):
         self._grabber.before_render(self.texture)
-        target.batch.draw()
-        target.draw()
+        target.step (dt)
         self._grabber.after_render(self.texture)
             
     def show (self):

@@ -55,11 +55,10 @@ class Menu(Layer):
     
     Normal usage is:
 
-     - create a subclass
-     - override __init__ to set all style attributes, 
-       then add items using `add_item()`,
-       and then call `build_items()`
-     - Finally you shall add the menu to a `Scene`
+     - create a descendent from this class
+     - override __init__ to set all style attributes, add items,
+       and call build_items
+     - add to a scene
     """
 
     def __init__( self, title = ''):
@@ -78,40 +77,51 @@ class Menu(Layer):
         #
 
         # Title
-        self.font_title = ''        #: Title's font name
-        self.font_title_size = 56   #: Title's font size. Default size is 56
-        self.font_title_color = ( 192, 192, 192, 255 ) #: Title's font color. Default color is (192, 192, 192, 255)
+        self.font_title = ''
+	"""Title's font name"""
+        self.font_title_size = 72
+	"""Title's font size. Default size is 72"""
+        self.font_title_color = ( 0.6, 0.6, 0.6, 1.0 )
+	"""Title's font color. Default color is (0.6, 0.6, 0.6, 1.0)"""
 
         # Items
-        self.font_items = ''            #: Item's font name
-        self.font_items_size = 32       #: Items' font size when unselected. Default size is 32
-        self.font_items_color = ( 192, 192, 192, 255 )   #: Items' font color when unselected. Default color is (192, 192, 192, 255)
-        self.font_items_selected_size = 48  #:Items' font size when selected. Default size is 48
-        self.font_items_selected_color = ( 255, 255, 255, 255)  #:Items' font color when selected. Default color is (255, 255, 255, 255)
+        self.font_items = ''            # Full font name
+	"""Items' font name"""
+        self.font_items_size = 48
+	"""Items' font size when unselected. Default size is 48"""
+        self.font_items_color = (0.6, 0.6, 0.6, 1.0 ) 
+	"""Items' font color when unselected. Default color is (0.6, 0.6, 0.6, 1.0)"""
+        self.font_items_selected_size = 64 
+	"""Items' font size when selected. Default size is 64"""
+        self.font_items_selected_color = (1.0, 1.0, 1.0, 1.0 )
+	"""Items' font color when selected. Default color is (1.0, 1.0, 1.0, 1.0)"""
 
         # Sound
-#        self.sound_filename = 'menuchange.wav'
+        self.sound_filename = 'menuchange.wav'
 
         # Alignment
-        self.menu_halign = CENTER   #: Horizontal alignment. Possible options: CENTER, RIGHT or LEFT. Default is CENTER
-        self.menu_valign = CENTER   #: Vertical alignment. Possible options: CENTER, TOP or BOTTOM. Default is CENTER
+        self.menu_halign = CENTER
+	"""Horizontal alignment. Possible options: CENTER, RIGHT or LEFT. Default is CENTER"""
+        self.menu_valign = CENTER
+	"""Vertical alignment. Possible options: CENTER, TOP or BOTTOM. Default is CENTER"""
 
      
     def _draw_title( self ):
         """ draws the title """
         width, height = director.get_window_size()
 
-        self.text = pyglet.text.Label( self.title,
-            font_name=self.font_title,
-            font_size=self.font_title_size,
+        ft = font.load( self.font_title, self.font_title_size )
+        ft_height = ft.ascent - ft.descent
+        text = font.Text(ft, self.title)
+
+        text = font.Text(ft, self.title,
             x=width / 2,
             y=height - 40,
-            halign=CENTER,
-            valign=CENTER,
-            batch = self.batch
-            )
+            halign=font.Text.CENTER,
+            valign=font.Text.CENTER)
+        text.color = self.font_title_color
 
-        self.text.color = self.font_title_color
+        self.title_text = text
 
     def _draw_items( self ):
 
@@ -139,30 +149,30 @@ class Menu(Layer):
             elif self.menu_valign == BOTTOM:
                 pos_y = 0 + fo_height * len(self.items) - (idx * fo_height )
 
-            item._init_font( pos_x, pos_y, self.font_items, self.font_items_selected_size, self.font_items_size )
+            item._init_font( fo, fo_selected, pos_x, pos_y )
 
 
     def add_item( self, item ):
         """Adds an item to the menu.
 
         The order of the list important since the
-        first one will be shown first.
+        one will be shonw first.
 
         :Parameters:
-            `item` : a `MenuItem`
-                The MenuItem that will part of the `Menu`
+            `item` : a MenuItem
+                The MenuItem
         """
         item.halign = self.menu_halign
         item.valign = self.menu_valign
         item.color = self.font_items_color
         item.selected_color = self.font_items_selected_color
-        item.batch = self.batch
-
         self.items.append( item )
 
-    def draw( self ):
+    # overriden method from Layer
+    def step( self, dt ):
+        self.title_text.draw()
         for i in self.items:
-            i.draw()
+            i.step(dt)
 
     def build_items( self ):
         """Initializes all the menu items
@@ -235,7 +245,6 @@ class MenuItem( object ):
             `activate_func` : function
                 The callback function
         """
-
         self.label = label
         self.activate_func = activate_func
 
@@ -255,32 +264,29 @@ class MenuItem( object ):
 
         :rtype: (x1,x2,y1,y2)
         :returns: returns a tuple (a rectangle) that sets the boundaries of the menu item."""
-
-        width = self.text.content_width
-        height = self.text.content_height
-
+       
         if self.halign == CENTER:
-            x_diff = - width / 2
+            x_diff = - self.text.width / 2
         elif self.halign == RIGHT:
-            x_diff = - width
+            x_diff = - self.text.width
         elif self.halign == LEFT:
             x_diff = 0
 
         if self.valign == CENTER:
-            y_diff = - height/ 2
+            y_diff = - self.text.height/ 2
         elif self.valign == TOP:
-            y_diff = - height
+            y_diff = - self.text.height
         elif self.valign == BOTTOM:
             y_diff = 0
 
         x1 = self.text.x + x_diff
         y1 = self.text.y + y_diff
-        x2 = x1 + width
-        y2 = y1 + height
+        x2 = x1 + self.text.width
+        y2 = y1 + self.text.height
         return (x1,y1,x2,y2)
 
 
-    def draw( self ):
+    def step( self, dt ):
         if self.selected:
             self.text_selected.draw()
         else:
@@ -291,13 +297,13 @@ class MenuItem( object ):
             self.activate_func()
             return True
 
-    def _init_font( self, x, y, font_name, size_sel, size_unsel ):
+    def _init_font( self, aFont, aFont_selected, x, y ):
         # Unselected option
-        self.text = pyglet.text.Label( self.label, font_name=font_name, font_size=size_unsel, x=x , y=y, halign=self.halign, valign=self.valign )
+        self.text = font.Text( aFont, self.label, x=x , y=y, halign=self.halign, valign=self.valign )
         self.text.color = self.color
 
         # Selected option
-        self.text_selected = pyglet.text.Label( self.label, font_name=font_name, font_size=size_sel, x=x , y=y, halign=self.halign, valign=self.valign )
+        self.text_selected = font.Text( aFont_selected, self.label, x=x, y=y, halign=self.halign, valign=self.valign )
         self.text_selected.color = self.selected_color
 
     def is_inside_box( self, x, y ):

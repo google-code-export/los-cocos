@@ -14,14 +14,12 @@ class Square(cocos.layer.Layer):
     """Square (color, c, y, size=50) : A layer drawing a square at (x,y) of
     given color and size"""
     def __init__(self, color, x, y, size=50):
-        super( Square, self ).__init__()
-
         self.x = x
         self.y = y
         self.size = size
         self.color = color
                 
-    def draw(self):
+    def step(self, dt):
         gl.glColor4f(*self.color)
         x, y = self.x, self.y
         w = x+self.size; h=y+self.size

@@ -18,19 +18,6 @@ from pyglet.window import key
 from pyglet.gl import *
 
 
-effects = [
-    ("ball = Layer(...)\n"
-        " No effect", None),
-    ("ball.set_effect (ColorizeEffect(color=(0.5,1,0.5,0.65)))\n"
-        " Greenish hue, 65% opacity", ColorizeEffect(color=(0.5,1,0.5,0.65))),
-    ("ball.set_effect (RepositionEffect(width=director.get_window_size()[0]/2))\n"
-        " Horizontally scaled 50%", RepositionEffect(width=director.get_window_size()[0]/2)),
-    ("ball.set_effect (DynamicColorizeEffect())\n"
-        " Dynamic colorize effect made inheriting ColorizeEffect\n"
-        " and redefining prepare() to change self.color each frame", DynamicColorizeEffect()),
-            ]
-
-
 class PictureLayer(Layer):
 
     def __init__ (self, y):
@@ -98,11 +85,11 @@ class DynamicColorizeEffect (ColorizeEffect):
 class ControlLayer(Layer):
 
     def on_enter( self ):
-        ft_title = font.load( None, 32 )
-        ft_subtitle = font.load( None, 18 )
+        ft_title = font.load( None, 48 )
+        ft_subtitle = font.load( None, 32 )
         ft_help = font.load( None, 16 )
 
-        self.text_title = font.Text(ft_title, "Effect Demos",
+        self.text_title = font.Text(ft_title, "Effects Examples",
             x=5,
             y=480,
             halign=font.Text.LEFT,
@@ -124,7 +111,7 @@ class ControlLayer(Layer):
         self.text_title.draw()
         self.text_subtitle.text = effects[current_effect][0]
         self.text_subtitle.draw()
-        self.text_help.draw()
+#        self.text_help.draw()
         
     def on_key_press( self, k , m ):
         global current_effect
@@ -134,9 +121,19 @@ class ControlLayer(Layer):
         if k == key.RIGHT:
             current_effect = (current_effect+1)%len(effects)
             ball.set_effect(effects[current_effect][1])
+        if k == key.ESCAPE:
+            director.scene.end()
+            return True
 
 
 current_effect = 0
+effects = [
+    ("Layer without effects ", None),
+    ("Layer translated and scaled", RepositionEffect(width=director.window.width/2) ),
+    ]
+
+
+ball = None
 
 if __name__ == "__main__":
     director.init()

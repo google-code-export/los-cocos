@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from cocos.director import director
-from cocos.layer import Layer, ColorLayer
+from cocos.layer import Layer, AnimationLayer, ColorLayer
 from cocos.scene import Scene
 from cocos.transitions import *
 from cocos.actions import ActionSprite, Rotate, Repeat
@@ -14,42 +14,43 @@ from pyglet.window import key
 
     
 class ControlLayer(Layer):
-    def __init__( self ):
+    def on_enter( self ):
+        ft_title = font.load( "Arial", 32 )
+        ft_subtitle = font.load( "Arial", 18 )
+        ft_help = font.load( "Arial", 16 )
 
-        super(ControlLayer, self).__init__()
-
-        self.text_title = pyglet.text.Label("Transition Demos",
-            font_size=32,
+        self.text_title = font.Text(ft_title, "Transition Demos",
             x=5,
-            y=director.get_window_size()[1],
+            y=480,
             halign=font.Text.LEFT,
-            valign=font.Text.TOP,
-            batch=self.batch)
+            valign=font.Text.TOP)
 
-        self.text_subtitle = pyglet.text.Label( transition_list[current_transition].__name__,
-            font_size=18,
+        self.text_subtitle = font.Text(ft_subtitle, transition_list[current_transition].__name__,
             x=5,
-            y=director.get_window_size()[1] - 80,
+            y=400,
             halign=font.Text.LEFT,
-            valign=font.Text.TOP,
-            batch=self.batch )
-
-        self.text_help = pyglet.text.Label("Press LEFT / RIGHT for prev/next test, ENTER to restart demo",
-            font_size=16,
-            x=director.get_window_size()[0] /2,
+            valign=font.Text.TOP)
+        
+        self.text_help = font.Text(ft_help,"Press LEFT / RIGHT for prev/next example, ENTER to restart example",
+            x=320,
             y=20,
             halign=font.Text.CENTER,
-            valign=font.Text.CENTER,
-            batch=self.batch )
+            valign=font.Text.CENTER)
 
+    def step( self, df ):
+        self.text_help.draw()
+
+        self.text_subtitle.text = transition_list[current_transition].__name__
+        self.text_subtitle.draw()
+        self.text_title.draw()
 
     def on_key_press( self, k , m ):
         global current_transition, control_p
         if k == key.LEFT:
             current_transition = (current_transition-1)%len(transition_list)
-        elif k == key.RIGHT:
+        if k == key.RIGHT:
             current_transition = (current_transition+1)%len(transition_list)
-        elif k == key.ENTER:
+        if k == key.ENTER:
             director.replace( transition_list[current_transition](
                         control_list[control_p],
                         (control_list[(control_p+1)%len(control_list)] ),
@@ -57,19 +58,16 @@ class ControlLayer(Layer):
                     )
             control_p = (control_p + 1) % len(control_list)
             return True
+        if k == key.ESCAPE:
+            director.scene.end()
 
-        if k in (key.LEFT, key.RIGHT ):
-            self.text_subtitle.text = transition_list[current_transition].__name__
-
-
-class GrossiniLayer(Layer):
+class GrossiniLayer(AnimationLayer):
     def __init__( self ):
         super( GrossiniLayer, self ).__init__()
 
-        image = pyglet.resource.image('grossini.png')
-        image.anchor_x = image.width / 2
-        image.anchor_y = image.height / 2
-        g = ActionSprite( image, x=320, y=240 )
+        g = ActionSprite('grossini.png')
+
+        g.place( (320,240,0) )
 
         self.add( g )
 
@@ -77,40 +75,35 @@ class GrossiniLayer(Layer):
 
         g.do( Repeat( rot ) )
 
-#    def on_exit( self ):
-#        for o in self.objects:
-#            o.stop()
-
-class GrossiniLayer2(Layer):
+class GrossiniLayer2(AnimationLayer):
     def __init__( self ):
         super( GrossiniLayer2, self ).__init__()
 
         rot = Rotate( 180, 5 )
 
-        image = pyglet.resource.image('grossinis_sister1.png')
-        image.anchor_x = image.width / 2
-        image.anchor_y = image.height / 2
-        g1 = ActionSprite( image, x=490, y=240 )
+        g = ActionSprite('grossini.png')
+        g.place( (490,240,0) )
+        self.add( g )
+        g.do( Repeat( rot ) )
 
-        image = pyglet.resource.image('grossinis_sister2.png')
-        image.anchor_x = image.width / 2
-        image.anchor_y = image.height / 2
-        g2 = ActionSprite( image, x=150, y=240 )
-
-        self.add( g1, g2 )
-
-        g1.do( Repeat( rot ) )
-        g2.do( Repeat( rot ) )
-
-#    def on_exit( self ):
-#        for o in self.objects:
-#            o.stop()
+        g = ActionSprite('grossini.png')
+        g.place( (150,240,0) )
+        self.add( g )
+        g.do( Repeat( rot ) )
 
 if __name__ == "__main__":
     director.init(resizable=True)
-    director.enable_alpha_blending()
-#    director.window.set_fullscreen(True)
-
+    director.window.set_fullscreen(True)
+    g = GrossiniLayer()
+    g2 = GrossiniLayer2()
+    c2 = ColorLayer(0.5,0.1,0.1,1)
+    c1 = ColorLayer(0,1,1,1)
+    control = ControlLayer()
+    controlScene1 = Scene(c2, g, control)
+    controlScene2 = Scene(c1, g2, control)
+    control_p = 0
+    control_list = [controlScene1, controlScene2]
+    
     transition_list = [
         SlideLRTransition,
         SlideRLTransition,
@@ -126,17 +119,6 @@ if __name__ == "__main__":
         CornerMoveTransition,
         ]
     current_transition = 0
-
-    g = GrossiniLayer()
-    g2 = GrossiniLayer2()
-    c2 = ColorLayer(0.5,0.1,0.1,1)
-    c1 = ColorLayer(0,1,1,1)
-    control = ControlLayer()
-    controlScene1 = Scene(c2, g, control)
-    controlScene2 = Scene(c1, g2, control)
-    control_p = 0
-    control_list = [controlScene1, controlScene2]
-    
     
     director.run( controlScene1 )
     

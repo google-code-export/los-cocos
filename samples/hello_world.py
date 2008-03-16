@@ -7,17 +7,18 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import cocos
 from cocos.director import director
 
-import pyglet
+from pyglet import font
 
 class HelloWorld(cocos.layer.Layer):
     def __init__(self):
-
-        super( HelloWorld, self ).__init__()
-
         # see pyglet documentation for help on this lines
-        self.text = pyglet.text.Label('Hello, World!', font_name='', font_size=32, x=100, y=240, batch=self.batch)
-
+        ft = font.load('Arial', 36)
+        self.text = font.Text(ft, 'Hello, World!', x=100, y=240)
         
+    def step(self, dt):
+        # this function is called on every frame
+        # dt is the elapsed time between this frame and the last        
+        self.text.draw()
 
 if __name__ == "__main__":
     # director init takes the same arguments as pyglet.window

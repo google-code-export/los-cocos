@@ -1,5 +1,9 @@
 #
-# An implementation of Cocos' ActionSprite for Pyglet 1.1
+# Los Cocos: An extension for Pyglet
+# http://code.google.com/p/los-cocos/
+#
+# To see some examples, see:
+#    test/test_sprite.py
 #
 # Based on actions.py from Grossini's Hell:
 #    http://www.pyweek.org/e/Pywiii/
@@ -10,6 +14,21 @@
 
 '''Classes to manipulate sprites.
 
+Sprites
+=======
+
+Creating sprites
+================
+
+An sprite is created instantiating the ActionSprite class::
+
+    from cocos.actions import *
+
+    sprite = ActionSprite('sprite_texture.png')
+
+``sprite_texture.png`` is an image file with the shape of the sprite
+
+
 Animating a sprite
 ==================
 
@@ -17,13 +36,14 @@ To animate an sprite you need to execute an action.
 
 Actions that modifies the sprite's properties:
 
-    * `Move` ( (x,y), duration)
-    * `Goto` ( (x,y), duration )
+    * `Move` ( (x,y,0), duration)
+    * `Goto` ( (x,y,0), duration )
     * `Rotate` ( degrees, duration )
     * `Scale` ( zoom_factor, duration )
     * `Jump` ( height, x, number_of_jumps, duration )
     * `Bezier` ( bezier_configuration, duration )
-    * `Place` ( (x,y) )
+    * `Place` ( (x,y,0) )
+    * `Animate` ( animation_name )
     * `FadeIn` ( duration )
     * `FadeOut` ( duration )
     * `Blink` ( times_to_blink, duration )
@@ -46,7 +66,7 @@ Misc actions:
 
 To execute any action you need to create an action::
 
-    move = Move( (50,0), 5 )
+    move = Move( (50,0,0), 5 )
 
 In this case, ``move`` is an action that will move the sprite
 50 pixels to the right (``x`` coordinate), 0 pixel in the ``y`` coordinate,
@@ -94,12 +114,13 @@ Available IntervalActions
   * `Blink`
   * `Rotate`
   * `Scale`
+  * `Animate`
   * `FadeOut`
   * `FadeIn`
 
 Examples::
 
-    move = Move( (200,0), 5 )    # Moves 200 pixels to the right in 5 seconds.
+    move = Move( (200,0,0), 5 )  # Moves 200 pixels to the right in 5 seconds.
                                  # Direction: ForwardDir (default)
                                  # RepeatMode:  PingPongMode (default)
                                  # time_func:  No alter function (default)
@@ -108,7 +129,7 @@ Examples::
                                  # The repetitions are in PingPongMode
                                  # times: -1 (default)
 
-    move2 = Move( (200,0), 5, time_func=accelerate )
+    move2 = Move( (200,0,0), 5, time_func=accelerate )
                                 # Moves 200 pixels to the right in 5 seconds
                                 # time_func=accelerate. This means that the
                                 # speed is not linear. It will start to action
@@ -116,7 +137,7 @@ Examples::
                                 # in each step. The total running time will be
                                 # 5 seconds.
 
-    move3 = Move( (200,0), 5, dir=BackwardDir )
+    move3 = Move( (200,0,0), 5, dir=BackwardDir )
                                 # Moves 200 pixels to the **left** in 5 seconds
                                 # But when you use this direction (BackwardDir)
                                 # the starting coords and the finishing coords
@@ -132,7 +153,6 @@ import math
 
 from euclid import *
 
-import pyglet
 from pyglet import image
 from pyglet.gl import *
 
@@ -148,7 +168,10 @@ __all__ = [ 'ActionSprite',                     # Sprite class
             'CallFunc','CallFuncS',             # Calls a function
             'Delay','RandomDelay',              # Delays
             'Hide','Show','Blink',              # Hide or Shows the sprite
+            'Animate',                          # Animates the sprite
             'FadeOut','FadeIn',                 # Fades out the sprite
+
+            'Animation',                        # class that holds the frames to animate
 
             'ForwardDir','BackwardDir',         # Movement Directions
             'RepeatMode','PingPongMode',        # Repeat modes
@@ -162,7 +185,7 @@ class BackwardDir: pass
 class PingPongMode: pass
 class RepeatMode: pass
 
-class ActionSprite( pyglet.sprite.Sprite ):
+class ActionSprite( object ):
     '''ActionSprites are sprites that can execute actions.
 
     Example::
@@ -170,14 +193,20 @@ class ActionSprite( pyglet.sprite.Sprite ):
         sprite = ActionSprite('grossini.png')
     '''
     
-    def __init__( self, *args, **kwargs ):
-
-        super( ActionSprite, self ).__init__( *args, **kwargs)
-
+    def __init__( self, img ):
         self.actions = []
         self.to_remove = []
-        self.scheduled = False
+        self.translate = Point3(0,0,0)
+        self.scale = 1.0
+        self.angle = 0.0
+        self.show = True
+        self.animations = {}
+        self.color = [1.0,1.0,1.0,1.0]
 
+        # create a default animation
+        default_anim = Animation( "default", 0, img)
+        self.frame = default_anim.frames[0]
+        self.add_animation( default_anim )
 
 
     def do( self, action ):
@@ -207,47 +236,80 @@ class ActionSprite( pyglet.sprite.Sprite ):
         a.target = self
         a._start()
         self.actions.append( a )
-
-        if not self.scheduled:
-            self.scheduled = True
-            pyglet.clock.schedule( self.step )
         return a
 
-    def remove(self, action ):
-        """Removes an action from the queue
-
-        :Parameters:
-            `action` : Action
-                Action to be removed
-        """
+    def done(self, action ):
         self.to_remove.append( action )
-
-    def stop(self):
-        """Removes running actions from the queue"""
-        for action in self.actions:
-            self.to_remove.append( action )
-
+        
     def step(self, dt):
-        """This method is called every frame.
+        """This functions is called *n* times per second, where
+        *n* are the FPS.
 
         :Parameters:
             `dt` : delta_time
-                The time that elapsed since that last time this functions was called.
+                The time that ellapsed since that last time this functions was called.
         """
+        for action in self.actions:
+            action._step(dt)
+            if action.done():
+                self.done( action )
+                
         for x in self.to_remove:
             self.actions.remove( x )
         self.to_remove = []
 
-        if len( self.actions ) == 0:
-            self.scheduled = False
-            pyglet.clock.unschedule( self.step )
+        self.draw()
 
-        for action in self.actions:
-            action._step(dt)
-            if action.done():
-                self.remove( action )
-                
+    def draw( self ):
+        '''
+        '''
+ 
+        if self.show:
+            glPushMatrix()
+            glLoadIdentity()
 
+            glColor4f(*self.color)
+            glTranslatef(self.translate.x, self.translate.y, self.translate.z )
+
+            # comparison is cheaper than an OpenGL matrix multiplication
+            if self.angle != 0.0:
+                glRotatef(self.angle, 0, 0, 1)
+            if self.scale != 1.0:
+                glScalef(self.scale, self.scale, 1)
+
+            # hotspot is in the center of the sprite.
+            # TODO: hotspot shall be customizable
+            self.frame.blit( -self.frame.width / 2, - self.frame.height / 2 )
+
+            glPopMatrix()
+
+    def place( self, coords ):
+        '''Places the sprite in the coordinates *coords*.
+
+        :Parameters:
+            `coords` : (x,y,0)
+                Coordinates where the sprite will be translated.'''
+        self.translate = Point3( *coords )
+
+    def get_box( self ):
+        ''' Returns the box that continas the sprite in Screen coordinates
+
+        :rtype: (x1,x2,y1,y2)
+        :returns: Returns the box that contains the sprite in screen coordinates'''
+
+        x2 = self.frame.width / 2
+        y2 = self.frame.height / 2
+        return (self.translate.x - x2, self.translate.y - x2,
+                self.translate.x +  x2, self.translate.y + y2 )
+
+    def add_animation( self, animation ):
+        '''Adds a new `Animation` instance to the sprite. These Animations can be animated
+        using the *Animate* action.
+
+        :Parameters:
+            `animation` : `Animation` instance
+                Animation that will be executed.'''
+        self.animations[ animation.name ] = animation
 
 class Action(object):
     def __init__(self, *args, **kwargs):
@@ -389,13 +451,13 @@ class Place( Action ):
         """Init method.
 
         :Parameters:
-            `position` : (x,y)
+            `position` : (x,y,0)
                 Coordinates where the sprite will be placed
         """
-        self.position = position
+        self.position = Point3(*position)
         
     def start(self):
-        self.target.position = self.position
+        self.target.translate = self.position
 
     def done(self):
         return True
@@ -410,7 +472,7 @@ class Hide( Action ):
         sprite.do( action )
     """
     def start(self):
-        self.target.visible = False
+        self.target.show = False
 
     def done(self):
         return True
@@ -424,7 +486,7 @@ class Show( Action ):
         sprite.do( action )
     """
     def start(self):
-        self.target.visible = True
+        self.target.show = True
 
     def done(self):
         return True
@@ -454,7 +516,7 @@ class Blink( IntervalAction ):
     def step(self, dt):
         slice = self.duration / float( self.times )
         m =  min( self.duration, self.get_runtime()) % slice
-        self.target.visible = (m  >  slice / 2.0)
+        self.target.show = (m  >  slice / 2.0)
 
 class Rotate( IntervalAction ):
     """Rotates a sprite counter-clockwise in degrees
@@ -476,11 +538,11 @@ class Rotate( IntervalAction ):
         self.angle = angle
         self.duration = duration
 
-    def start( self ): 
-        self.start_angle = self.target.rotation
+    def start( self ):       
+        self.start_angle = self.target.angle
 
     def step(self, dt):
-        self.target.rotation = (self.start_angle +
+        self.target.angle = (self.start_angle +
                     self.angle * (
                         max(0,min(1,float(self.get_runtime())/self.duration))
                     )) % 360 
@@ -507,12 +569,12 @@ class Scale(IntervalAction):
 
     def start( self ):
         self.start_scale = self.target.scale
-        self.delta = self.end_scale-self.start_scale
 
     def step(self, dt):
+        delta = self.end_scale-self.start_scale
 
         self.target.scale = (self.start_scale +
-                    self.delta * (
+                    delta * (
                         max(0,min(1,float(self.get_runtime() )/self.duration))
                     ))
 
@@ -521,29 +583,29 @@ class Goto( IntervalAction ):
 
     Example::
 
-        action = Goto( (50,10), 8 )       # Move the sprite to coords x=50, y=10 in 8 seconds
+        action = Goto( (50,10,0), 8 )       # Move the sprite to coords x=50, y=10 in 8 seconds
         sprite.do( action )
     """
     def init(self, dst_coords, duration=5):
         """Init method.
 
         :Parameters:
-            `dst_coords` : (x,y)
+            `dst_coords` : (x,y,0)
                 Coordinates where the sprite will be placed at the end of the action
             `duration` : float
                 Duration time in seconds
         """
 
-        self.end_position = Point2( *dst_coords )
+        self.end_position = Point3( *dst_coords )
         self.duration = duration
 
     def start( self ):
-        self.start_position = self.target.position
-        self.delta = self.end_position-self.start_position
+        self.start_position = self.target.translate
 
     def step(self,dt):
-        self.target.position = (self.start_position +
-                    self.delta * (
+        delta = self.end_position-self.start_position
+        self.target.translate = (self.start_position +
+                    delta * (
                         max(0,min(1,float(self.get_runtime() )/self.duration))
                     ))
 
@@ -555,23 +617,23 @@ class Move( Goto ):
 
     Example::
 
-        action = Move( (-50,0), 8 )  # Move the sprite 50 pixels to the left in 8 seconds
+        action = Move( (-50,0,0), 8 )  # Move the sprite 50 pixels to the left in 8 seconds
         sprite.do( action )
     """
     def init(self, delta, duration=5):
         """Init method.
 
         :Parameters:
-            `delta` : (x,y)
+            `delta` : (x,y,0)
                 Delta coordinates
             `duration` : float
                 Duration time in seconds
         """
-        self.delta = Point2( *delta)
+        self.delta = Point3( *delta)
         self.duration = duration
 
     def start( self ):
-        self.start_position = self.target.position
+        self.start_position = self.target.translate
         self.end_position = self.start_position + self.delta
 
 
@@ -604,14 +666,14 @@ class Jump(IntervalAction):
         self.jumps = jumps
 
     def start( self ):
-        self.start_position = self.target.position
+        self.start_position = self.target.translate
 
     def step(self, dt):
-        y = int( self.y * ( math.sin( ( max(0,min(1, self.get_runtime()/self.duration)) * math.pi * self.jumps ) ) ) )
+        y = int( self.y * ( math.sin( max(0,(min(1, self.get_runtime()/self.duration)) * math.pi * self.jumps ) ) ) )
         y = abs(y)
 
         x = self.x * max(0,min(1,float(self.get_runtime())/self.duration))
-        self.target.position = self.start_position + Point2(x,y)
+        self.target.translate = self.start_position + (x,y,0)
 
 class Bezier( IntervalAction ):
     """Moves a sprite through a bezier path
@@ -635,14 +697,14 @@ class Bezier( IntervalAction ):
         self.bezier = bezier
 
     def start( self ):
-        self.start_position = self.target.position
+        self.start_position = self.target.translate
 
     def step(self,dt):
-        at = max(0, min(1, self.get_runtime() / self.duration ) )
+        at = self.get_runtime() / self.duration
         p = self.bezier.at( at )
 
-        self.target.position = ( self.start_position +
-            Point2( p[0], p[1] ) )
+        self.target.translate = ( self.start_position +
+            Point3( p[0], p[1], 0 ) )
 
 
 class Spawn(Action):
@@ -903,9 +965,13 @@ class FadeOut( IntervalAction ):
         """
         self.duration = duration
 
+    def start( self ):
+        self.sprite_color = [1.0,1.0,1.0,1.0]
+
     def step( self, dt ):
-        p = max(0, min(1, self.get_runtime() / self.duration ) )
-        self.target.opacity = 255 * (1-p)
+        p = max(min(1, self.get_runtime() / self.duration ),0)
+        c = self.sprite_color[3] - self.sprite_color[3] * p
+        self.target.color[3] = c
 
 
 class FadeIn( FadeOut):
@@ -918,5 +984,71 @@ class FadeIn( FadeOut):
         sprite.do( action )
     """
     def step( self, dt ):
-        p = max(0, min(1, self.get_runtime() / self.duration ) )
-        self.target.opacity = 255 * p
+        p = max(min(1, self.get_runtime() / self.duration ),0)
+        c = self.sprite_color[3] * p
+        self.target.color[3] = c
+
+
+class Animate( IntervalAction ):
+    """Animates a sprite given the name of an Animation
+
+    Example::
+
+        anim = Animation( "walk", 0.2, sprite01.png, sprite02.png, sprite03.png )
+        sprite.add_animation( anim )
+
+        sprite.do( Animate("walk") )
+    """
+    def init( self, animation_name ):
+        """Init method.
+
+        :Parameters:
+            `animation_name` : string
+                The name of the animation
+        """
+        self.animation_name = animation_name
+
+    def start( self ):
+        self.animation = self.target.animations[self.animation_name]
+        self.duration = len( self.animation.frames ) * self.animation.delay
+
+    def step( self, dt ):
+        if self.animation.delay == 0:
+            # default animation, and 1 frame animations have a delay of 0
+            i = 0
+        else:
+            i =  self.get_runtime() / self.animation.delay
+            i = min(int(i), len(self.animation.frames)-1)
+        self.target.frame = self.animation.frames[i]
+
+
+class Animation( object ):
+    """Creates an animation
+
+    Example::
+
+        anim = Animation( "walk", 0.2, sprite01.png, sprite02.png, sprite03.png )
+    """
+    def __init__( self, name, delay, *frames):
+        """Constructor
+
+        :Parameters:
+            `name` : string
+                Name of the animation.
+            `delay` : float
+                Delay between frames
+            `frames` : list_of_filenames
+                The images' filenames
+        """
+        self.name = name
+        self.delay = delay
+        self.frames = [ image.load(i) for i in frames]
+        
+    def add_frame( self, frame ):
+        """Adds a frame to the animation
+
+        :Parameters:
+            `frame` : filename
+                An image filename. Supports all the images supported by Pyglet
+        """
+        self.frames.append( image.load( frame ) )

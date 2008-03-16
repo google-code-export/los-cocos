@@ -102,11 +102,13 @@ The director also has some useful attributes:
 
 __docformat__ = 'restructuredtext'
 
-import pyglet
+
 from pyglet import window, event
 from pyglet import clock
 from pyglet import media
 from pyglet.gl import *
+
+from timer import *
 
 __all__ = ['director']
 
@@ -123,73 +125,81 @@ class Director(event.EventDispatcher):
         """
         
         self.window = window.Window( *args, **kwargs )
-        self.show_FPS = True
-
-        # scene related
         self.scene_stack = []
-        self.scene = None
-        self.next_scene = None
+        self.show_FPS = False
+        self.show_Timer = True
 
+        # alpha blending
+        self.enable_alpha_blending()
 
         # save resolution and aspect for resize / fullscreen
-        self.window.on_resize = self.on_resize
-        self.window.on_draw = self.on_draw
+        self.window.on_resize = self._on_resize
         self._window_original_width = self.window.width
         self._window_original_height = self.window.height
         self._window_aspect =  self.window.width / float( self.window.height )
         self._offset_x = 0
         self._offset_y = 0
-
-
-        # init fps
-        self.fps_display = clock.ClockDisplay()
-
+        
         return self.window
-
 
     def run(self, scene):
         """Runs a scene, entering in the Director's main loop.
 
         :Parameters:   
-            `scene` : `Scene`
-                The scene that will be run.
+            `scene` : a Scene instance
+                It is the scene that will be run.
         """
+        fps_display = clock.ClockDisplay()
+        self.timer_display = Timer()
 
-        self.scene_stack.append( self.scene )
-        self._set_scene( scene )
+        self.scene = scene
+        self.scene_stack.append( scene )
 
-        pyglet.app.run()
+        self.next_scene = None
 
+        self.scene.on_enter()
 
-    def on_draw( self ):
-        """Callback to draw the window.
-        It propagates the event to the running scene."""
-         
-        self.window.clear()
+        while not self.window.has_exit:
 
-        if self.next_scene is not None:
-            self._set_scene( self.next_scene )
+            if self.next_scene is not None:
+                self._set_scene( self.next_scene )
 
-        if not self.scene_stack:
-            # How should I terminate the EventLoop ?
-            # pyglet.app.EventLoop().exit()
-            import sys
-            sys.exit(0)
+            if not self.scene_stack:
+                break
+            
+            dt = clock.tick()
 
-        # draw all the objects
-        self.scene.on_draw()
+            # dispatch pyglet events
+            self.window.dispatch_events()
+            media.dispatch_events()
+#            self.dispatch_events('on_push', 'on_pop')
 
-        # finally show the FPS
-        if self.show_FPS:
-            self.fps_display.draw()
+            # clear pyglets main window
+            self.window.clear()
 
+            # step / tick / draw
+            self.scene.step( dt )
+
+            # show Timer
+            if self.show_Timer:
+                self.timer_display.step(dt)
+            
+            # show the FPS
+            if self.show_FPS:
+                fps_display.draw()
+                
+            
+ 
+            # show all the changes
+            self.window.flip()
+    
     
     def push(self, scene):
         """Suspends the execution of the running scene, pushing it
-        on the stack of suspended scenes. The new scene will be executed.
+        on the stack of suspended scene. The new scene will be executed.
 
         :Parameters:   
-            `scene` : `Scene`
+            `scene` : a Scene instance
                 It is the scene that will be run.
            """
         self.dispatch_event("on_push", scene )
@@ -199,9 +209,8 @@ class Director(event.EventDispatcher):
         self.scene_stack.append( self.scene )
         
     def pop(self):
-        """Pops out a scene from the queue. This scene will replace the running one.
-           The running scene will be deleted. If there are no more scenes in the stack
-           the execution is terminated.
+        """Pops out a scene from the queue. This scene will replace the running scene.
+           The running scene will be deleted.
         """
         self.dispatch_event("on_pop")
         
@@ -212,7 +221,7 @@ class Director(event.EventDispatcher):
         """Replaces the running scene with a new one. The running scene is terminated.
 
         :Parameters:   
-            `scene` : `Scene`
+            `scene` : a Scene instance
                 It is the scene that will be run.
         """  
         self.next_scene = scene
@@ -254,6 +263,11 @@ class Director(event.EventDispatcher):
         """
         return ( self._window_original_width, self._window_original_height)
         
+    def enable_alpha_blending( self ):
+        """Enables alpha blending in OpenGL using the GL_ONE_MINUS_SRC_ALPHA algorithm.
+        """
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
     def get_virtual_coordinates( self, x, y ):
         """Transforms coordinates that belongs the *real* window size, to the
@@ -277,16 +291,10 @@ class Director(event.EventDispatcher):
 
         return ( int( x_diff * x) - adjust_x,   int( y_diff * y ) - adjust_y )
 
-
-    def on_resize( self, width, height):
-        """Method that is called every time the main window is resized.
-        
-        :Parameters:
-            `width` : Integer
-                New width
-            `height` : Integer
-                New height
-        """
+    #
+    # window resize handler
+    #
+    def _on_resize( self, width, height):
         width_aspect = width
         height_aspect = int( width / self._window_aspect)
 
@@ -303,15 +311,6 @@ class Director(event.EventDispatcher):
         glOrtho(0, self._window_original_width, 0, self._window_original_height, -1, 1)
         glMatrixMode(gl.GL_MODELVIEW)
 
-        
-    #
-    # Misc functions
-    #
-    def enable_alpha_blending( self ):
-        """Enables alpha blending in OpenGL using the GL_ONE_MINUS_SRC_ALPHA algorithm."""
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-        
 
 director = Director()
 """The singleton; check `cocos.director.Director` for details on usage.

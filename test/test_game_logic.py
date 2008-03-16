@@ -15,7 +15,7 @@ from pyglet.window import key
 from cocos.actions import *
 
 from cocos.director import director
-from cocos.layer import Layer 
+from cocos.layer import Layer, AnimationLayer
 from cocos.scene import Scene
 
 
@@ -28,6 +28,8 @@ class SampleLayer(Layer):
     def on_key_release( self, keys, modifiers ):
         print "key: release: %s %s" % (keys, modifiers )
                
+    def step(self, dt):
+        pass
 
 class SampleLayer2(Layer):
     def on_key_press(self, keys, modifiers ):
@@ -37,8 +39,15 @@ class SampleLayer2(Layer):
         print "key2: release: %s %s" % (keys, modifiers )
         director.scene.end( "me mori" )
     
+    def step(self, dt):
+        pass
 
-class HiScoreLayer( Layer ):
+class SampleLayer3( AnimationLayer ):
+    def __init__( self ):
+        super( AnimationLayer, self ).__init__()
+
+
+class HiScoreLayer ( AnimationLayer ):
 
     def on_key_release( self, keys, mod ):
         if keys == key.ENTER:
@@ -77,11 +86,11 @@ class Nivel( Layer ):
 class GameLayer( Layer ):
 
     def __init__( self ):
-        super( GameLayer, self ).__init__()
+        super( GameLayer, self ).__init__(self)
         self.first_time = True
         self.next_level = 0
 
-    def on_enter( self ):
+    def step( self, dt ):
         print " **** START GAME **** "
 
         if self.first_time:
