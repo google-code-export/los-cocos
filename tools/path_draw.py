@@ -12,8 +12,9 @@ from pyglet import font
 
 from cocos.director import director
 from cocos.layer import Layer
+from cocos.layer import AnimationLayer
 from cocos.scene import Scene
-from cocos.path import Path, Bezier
+from cocos.path import Path,Bezier
 
 from primitives import Circle, Line
 import threading, string
@@ -124,7 +125,6 @@ class PathDraw(Layer):
     @property
     def path(self):
         return self.paths[self.pathp]
-
     def __init__(self, module, filepath):
         Layer.__init__(self)
         self.module = module
@@ -223,7 +223,7 @@ class PathDraw(Layer):
             if button == mouse.LEFT:
                 self.state = self.SHOW       
         
-    def draw(self):
+    def step(self, dt):
         if self.stop:
             director.scene.end()
             
@@ -283,11 +283,11 @@ class PathDraw(Layer):
         
 if __name__ == "__main__":
     import imp, sys
-    
+
     if len(sys.argv) < 2:
         print "\nUsage:\n\tpython %s file_with_paths.py\n" % sys.argv[0]
         sys.exit()
-        
+
     path = sys.argv[1]
     client = imp.load_source("client", path)
     director.init()

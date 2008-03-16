@@ -26,6 +26,11 @@ class MainMenu(Menu):
         self.font_title = 'You Are Loved'
         self.font_items = 'You Are Loved'
 
+        font.add_directory('.')
+
+        self.font_title = 'You Are Loved'
+        self.font_items = 'You Are Loved'
+
         # you can also override the font size and the colors. see menu.py for
         # more info
 
@@ -40,6 +45,7 @@ class MainMenu(Menu):
 
         # after adding all the items just call build_items()
         self.build_items()
+
 
     # Callbacks
     def on_new_game( self ):
@@ -62,8 +68,8 @@ class OptionMenu(Menu):
     def __init__( self ):
         super( OptionMenu, self ).__init__("GROSSINI'S SISTERS" )
 
-        self.font_title = 'KonQa Black'
-        self.font_items = 'You Are Loved'
+        self.font_title = 'You Are Loved'
+#        self.font_items = 'You Are Loved'
         self.menu_valign = BOTTOM
         self.menu_halign = RIGHT
 
@@ -89,7 +95,7 @@ class ScoreMenu(Menu):
     def __init__( self ):
         super( ScoreMenu, self ).__init__("GROSSINI'S SISTERS" )
 
-        self.font_title = 'KonQa Black'
+        self.font_title = 'You Are Loved'
 #        self.font_items = 'You Are Loved'
         self.menu_valign = BOTTOM
         self.menu_halign = LEFT
@@ -102,14 +108,7 @@ class ScoreMenu(Menu):
 
 
 if __name__ == "__main__":
-
-    pyglet.resource.path.append('.')
-    pyglet.resource.reindex()
-
-    pyglet.resource.add_font('KonQa Black.ttf')
-    pyglet.resource.add_font('You Are Loved.ttf')
-
     director.init( resizable=True)
-    director.run( Scene(
+    director.run( Scene( 
             MultiplexLayer( MainMenu(), OptionMenu(), ScoreMenu() )
-            ) )
+            ) ) 
