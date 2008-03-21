@@ -3,7 +3,7 @@
 
 = Cocos Programming Guide for v0.2.x =
 
-For a list of changes since last version, check [ProgrammingGuideFor_v0_2#Changes]
+For a list of changes since last version, check [ProgrammingGuideFor_v0_2#Changes Changelog]
 = Introduction =
 http://pyglet-users.googlegroups.com/web/coco.png
 
