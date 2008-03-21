@@ -21,7 +21,7 @@ Cocos simplifies the game development in these areas:
 == Requirements ==
 
  * Python 2.4 or later
- * Pyglet 1.1 or later. Cocos 0.2.x does not work with Pyglet 1.0
+ * pyglet 1.1 or later. Cocos 0.2.x does not work with pyglet 1.0
 
 == Install ==
 {{{
@@ -597,7 +597,7 @@ When `self.get_runtime() >= self.duration` the action finished.
   * `Director`: enable_alpha_blending() is not called automatically
   * `Scene`: does not have the step() method. Uses on_draw() instead.
   * `Layer`: step() is called only when it is enabled with Layer.enable_step()
-  * `Layer`: Removed AnimationLayer. No longer necessary.
+  * `Layer`: Removed !AnimationLayer. No longer necessary.
   * `Layer`: uses Batch.draw() to draw objects. Propagates the message draw() to the objects it contains.
   * `ActionSprite`: is a subclass of pyglet.sprite.Sprite
   * `ActionSprite`: `Move()` and `Goto()` uses (x,y) instead of (x,y,0)
