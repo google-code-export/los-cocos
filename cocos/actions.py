@@ -944,7 +944,7 @@ class RandomDelay(Delay):
             `hi` : float
                 Maximun seconds of delay
         """
-        self.delay = random.randint(low, hi)
+        self.delay = low + (random.random() * (hi - low))
 
 
 class FadeOut( IntervalAction ):
