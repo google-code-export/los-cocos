@@ -550,27 +550,26 @@ It is a sublcass of {{{IntervalAction}}}, since this is an action that takes pla
 
 {{{
     def init(self, dst_coords, duration=5):
-
-        self.end_position = Point3( *dst_coords )
+        self.end_position = Point2( *dst_coords )
         self.duration = duration
 }}}
 In the `init()` method, you shall define the action's arguments.
-`Goto(coords,duration)` receives as arguments a tuple (the destination coordinates), and a duration time specified in seconds. The coordinates are transformed into a `Point3` structure to facilitate the arithmetics.
+`Goto(coords,duration)` receives as arguments a tuple (the destination coordinates), and a duration time specified in seconds. The coordinates are transformed into a `Point2` structure to facilitate the arithmetics.
 
 {{{
     def start( self ):
-        self.start_position = self.target.translate
-
+        self.start_position = self.target.position
+        self.delta = self.end_position-self.start_position
 }}}
 The `start()` method is called before the action starts. The difference between `init()` and `start()` is that at the moment that `start()` is called `self.target` is initialized with the target sprite. So, in the `start()` method you shall initialize everything that depends on the target sprite.
 
 {{{
     def step(self,dt):
-        delta = self.end_position-self.start_position
-        self.target.translate = (self.start_position +
-                    delta * (
-                        min(1,float(self.get_runtime() )/self.duration)
+        self.target.position = (self.start_position +
+                    self.delta * (
+                        max(0,min(1,float(self.get_runtime() )/self.duration))
                     ))
+
 }}}
 The calculation is done in the `step(dt)` method. `dt` is the delta time.
 `self.get_runtime()` returns how many seconds have elapsed since the start of action.
