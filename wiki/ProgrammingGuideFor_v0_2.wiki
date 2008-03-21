@@ -484,7 +484,7 @@ The `duration` parameter is specified in seconds. The `x,y` parameters are speci
    * Repeats an action.
    * If `times` is -1, then it will repeat the action forever. Default is -1
    * If mode is `PingPongMode` (default mode) it will repeat the action forwards and backwards.
-   * If mode is `RepeatMode`, then it will always repeat the actions forwards.
+   * If mode is `RestartMode`, then it will always repeat the actions forwards.
  * `Sequence( list_of_actions, dir=ForwardDir )` or `action1 + action2 + action3` ...
    * Runs a list of actions is sequential mode. First it runs the first action. When this action finished, it execute the next one until the last one is executed.
  * `Spawn( list_of_actions )` or `action1 | action2 | action3` ...
@@ -514,14 +514,14 @@ For example, if you run an action in a _Forward_ direction and the you run it ag
 
 These actions has 3 special parameters: 
  * _dir_ (direction): It can be !ForwardDir or !BackwardDir . Default is: !ForwardDir 
- * _mode_ (repeat mode): It can be !PingPongMode or !RepeatMode . Default is : !PingPongMode . 
+ * _mode_ (repeat mode): It can be !PingPongMode or !RestartMode . Default is : !PingPongMode . 
  * _time_func_ (a function): A function that alters the speed of time
 
 Examples of _Interval_ _Actions_:
 {{{
     move = Move( (200,0), 5 ) # Moves 200 pixels to the right in 5 seconds. 
                                 # Direction: ForwardDir (default) 
-                                # RepeatMode: PingPongMode (default) 
+                                # RestartMode: PingPongMode (default) 
                                 # time_func: No alter function (default) 
 
     rmove = Repeat( move )      # Will repeat the action *move* forever 
@@ -605,5 +605,5 @@ When `self.get_runtime() >= self.duration` the action finished.
   * `ActionSprite`: `Move()` and `Goto()` uses (x,y) instead of (x,y,0)
   * `ActionSprite`: removed `Animate` since it is part of pyglet.sprite.Sprite )
   * `ActionSprite`: uses pyglet.clock.schedule() to generate a ticker.
-  * `ActionSprite`: renamed `RepeatMode` to `RestartMode`
+  * `ActionSprite`: renamed `RestartMode` to `RestartMode`
   * `ActionSprite`: `Rotate` rotates clockwise with positive degrees
