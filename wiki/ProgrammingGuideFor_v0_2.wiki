@@ -455,7 +455,7 @@ The `duration` parameter is specified in seconds. The `x,y` parameters are speci
    * Moves the sprite to the `x,y` coordinates.
    * The difference between `Move()` and `Goto()` is that `Move()` is relative to the current coordinates and `Goto()` is absolute.
  * `Rotate( degrees, duration )`
-   * Rotates the sprites degrees in `duration` time. Positives degrees rotates the sprite counter-clockwise.
+   * Rotates the sprites degrees in `duration` time. Positives degrees rotates the sprite clockwise.
    * The rotation is relative to the current angle.
  * `Scale( zoom_factor, duration )`
    * Scales the sprites `zoom_factor` in `duration` time.
@@ -600,10 +600,8 @@ When `self.get_runtime() >= self.duration` the action finished.
   * `Layer`: Removed AnimationLayer. No longer necessary.
   * `Layer`: uses Batch.draw() to draw objects. Propagates the message draw() to the objects it contains.
   * `ActionSprite`: is a subclass of pyglet.sprite.Sprite
-  * `ActionSprite`: Move() and Goto() uses (x,y) instead of (x,y,0)
-  * `ActionSprite`: removed Animate / Animation (part of pyglet.sprite.Sprite )
+  * `ActionSprite`: `Move()` and `Goto()` uses (x,y) instead of (x,y,0)
+  * `ActionSprite`: removed `Animate` since it is part of pyglet.sprite.Sprite )
   * `ActionSprite`: uses pyglet.clock.schedule() to generate a ticker.
-  * `ActionSprite`: renamed RepeatMode to RestartMode
-  * `ActionSprite`: Spawn(a,b) + c works as expected
-  * `Effect`: uses draw() and not step() to draw the layer
-  * `Transition`: added enable/disable_step(). Uses draw() to draw subscenes and not step()
+  * `ActionSprite`: renamed `RepeatMode` to `RestartMode`
+  * `ActionSprite`: `Rotate` rotates clockwise with positive degrees
