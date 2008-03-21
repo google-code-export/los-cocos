@@ -3,6 +3,6 @@
 
 = API Reference =
 
-You can get the api reference in HTML format, generated with epicdoc downloading the flooowing package:
+You can get the api reference in HTML format, generated with epicdoc downloading the following package:
 
   - [http://los-cocos.googlecode.com/files/cocos-0.1.1-docs.tar.gz]
