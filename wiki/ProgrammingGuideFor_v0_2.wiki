@@ -21,7 +21,7 @@ Cocos simplifies the game development in these areas:
 == Requirements ==
 
  * Python 2.4 or later
- * Pyglet 1.1 or later. Does not work with Pyglet 1.0
+ * Pyglet 1.1 or later. Cocos 0.2.x does not work with Pyglet 1.0
 
 == Install ==
 {{{
