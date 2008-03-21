@@ -14,3 +14,4 @@
      * plus Rotate, Translate, Scale, Colorize, Opacity, Fade, etc...
  * Repeat Mode in actions shall be human friendly
  * Actions can be time altered ( accelerated, enlarged, etc...)
+ * Show only things that are in the display area.
