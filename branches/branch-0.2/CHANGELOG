@@ -1,3 +1,6 @@
+v0.2.1 - XXXX
+  - If cocos is using pyglet 1.0, raise an exception
+
 v0.2.0 - March, 21th 2008
   - Director: uses the new pyglet 1.1 loop
   - Director: doesn't have the step() method. Uses on_draw() instead.
