@@ -21,7 +21,7 @@ Cocos simplifies the game development in these areas:
 == Requirements ==
 
  * Python 2.4 or later
- * Pyglet 1.0 or 1.1
+ * Pyglet 1.1 or later. Does not work with Pyglet 1.0
 
 == Install ==
 {{{
@@ -111,17 +111,18 @@ http://lh6.google.com/rayentray/R9B_OWa0PGI/AAAAAAAAAXA/l4RnO2EBI4w/hello_world.
 
 To do so, follow the following steps:
 
- # Define a layer which shows something (For example, a "Hello world" string). To define a new layer class you inherit `cocos.layer.Layer`. In the `step' method you should define the code that paints the layer on screen (using pyglet or opengl functions):
+ # Define a layer which shows something (For example, a "Hello world" string).
+ # To define a new layer class you inherit `cocos.layer.Layer`. In the `draw' method you should define the code that paints the layer on screen (using pyglet or opengl functions):
 {{{
 class HelloWorld(cocos.layer.Layer):
     def __init__(self):
+        super(HelloWorld,self).__init__()
         # see pyglet documentation for help on this lines
         ft = font.load('Arial', 36)
         self.text = font.Text(ft, 'Hello, World!', x=100, y=240)
         
-    def step(self, dt):
-        # this funcition is called on every frame
-        # dt is the elapsed time betwen this frame and the last
+    def draw(self):
+        # this funcition is called every frame
         self.text.draw()
 }}}
  # Start the director. This initializes the window/display, and sets up cocos
@@ -158,13 +159,15 @@ from pyglet import font
 
 class HelloWorld(cocos.layer.Layer):
     def __init__(self):
+
+        super(HelloWorld,self).__init__()
+
         # see pyglet documentation for help on this lines
         ft = font.load('Arial', 36)
         self.text = font.Text(ft, 'Hello, World!', x=100, y=240)
         
-    def step(self, dt):
+    def draw(self)
         # this function is called on every frame
-        # dt is the elapsed time between this frame and the last        
         self.text.draw()
 
 if __name__ == "__main__":
@@ -197,12 +200,15 @@ class Square(cocos.layer.Layer):
     """Square (color, c, y, size=50) : A layer drawing a square at (x,y) of
     given color and size"""
     def __init__(self, color, x, y, size=50):
+
+        super(Square,self).__init__()
+
         self.x = x
         self.y = y
         self.size = size
         self.color = color
                 
-    def step(self, dt):
+    def draw(self):
         gl.glColor4f(*self.color)
         x, y = self.x, self.y
         w = x+self.size; h=y+self.size
@@ -265,12 +271,15 @@ class Square(cocos.layer.Layer):
     """Square (color, c, y, size=50) : A layer drawing a square at (x,y) of
     given color and size"""
     def __init__(self, color, x, y, size=50):
+
+        super(Square,self).__init__()
+
         self.x = x
         self.y = y
         self.size = size
         self.color = color
                 
-    def step(self, dt):
+    def draw(self):
         gl.glColor4f(*self.color)
         x, y = self.x, self.y
         w = x+self.size; h=y+self.size
@@ -304,7 +313,7 @@ All our previous examples are non-interactive. They display something, but do no
 
 All layers are event handlers from the pyglet event framework. When a layer is being shown, its event handlers will be active. You can read more about pyglet events at http://www.pyglet.org/doc/programming_guide/the_pyglet_event_framework.html
 
-In this section we will build step by test the demo provided in `samples/event_demo.py`; this is a very simple cocos app which shows which keys are pressed, and reacts to mouse motion and clicks. Run the app before reading on te get a clearer idea of what we are trying to build.
+In this section we will build step by step the demo provided in `samples/event_demo.py`; this is a very simple cocos app which shows which keys are pressed, and reacts to mouse motion and clicks. Run the app before reading on te get a clearer idea of what we are trying to build.
 
 http://lh5.google.com/rayentray/R9CHIGa0PKI/AAAAAAAAAXk/cDrvKuUTy4o/event_demo.py.png?imgmax=512
 
@@ -316,19 +325,20 @@ We start defining the `KeyDisplay` layer class. As always, we put some initializ
 {{{
 class KeyDisplay(cocos.layer.Layer):
     def __init__(self):
-        self.font = font.load('Arial', 24)
+
+        super( KeyDisplay, self ).__init__()
+
+        self.text = pyglet.text.Label("", x=100, y=280, batch=self.batch)
+
         # To keep track of which keys are pressed:
         self.keys_pressed = set()
         self.update_text()
         
-    def step(self, dt):
-        self.text.draw()
-
     def update_text(self):
         key_names = [pyglet.window.key.symbol_string (k) for k in self.keys_pressed]
         text = 'Keys: '+','.join (key_names)
         # Update self.text
-        self.text = font.Text(self.font, text, x=100, y=280)
+        self.text.text = text
 }}}
 
 This class defines a `key_pressed` set, which should be the set of keys pressed at any time. However, this code as it is still does nothing. We need to tell this layer to update this set when a key is pressed or released. In other words, we need to add event handlers to the layer. Adding event handlers to a layer is just a matter of adding methods to it called `on_<event name>`. The two events that interest us now are `on_key_press` and `on_key_release`:
@@ -356,7 +366,6 @@ This class defines a `key_pressed` set, which should be the set of keys pressed 
         """
         self.keys_pressed.remove (key)
         self.update_text()
-
 }}}
 
 With that code, the layer is now fully working. You can press and release keys or key combinations, and you will se how the display is updated telling you which keys are pressed at any time.
@@ -366,17 +375,19 @@ Handling mouse input is similar. You have three events of interest: `on_mouse_pr
 {{{
 class MouseDisplay(cocos.layer.Layer):
     def __init__(self):
-        self.font = font.load('Arial', 24)
+        super( MouseDisplay, self ).__init__()
+
         self.x = 100
         self.y = 240
-        self.text = font.Text(self.font, 'No mouse events yet', x=self.x, y=self.y)
+        self.text = pyglet.text.Label('No mouse events yet', font_size=18, x=self.x, y=self.y, batch=self.batch)
         
-    def step(self, dt):
-        self.text.draw()
 
     def update_text (self, x, y):
         text = 'Mouse @ %d,%d' % (x, y)
-        self.text = font.Text(self.font, text, x=self.x, y=self.y)
+        self.text.text = text
+        self.text.x = self.x
+        self.text.y = self.y
+
 }}}
 
 And then add event handlers to update the text when the mouse is moved, and change the text position when any button is clicked.
@@ -401,7 +412,6 @@ And then add event handlers to update the text when the mouse is moved, and chan
         """
         self.x, self.y = director.get_virtual_coordinates (x, y)
         self.update_text (x,y)
-
 }}}
 
 The only thing a bit unusual here is the call to `director.get_virtual_coordinates (x, y)`. As explained in the example before, cocos has two coordinates systems, a physical one and a virtual one. The mouse event handlers receive their arguments from pyglet in physical coordinates. If you want to map that to virtual coordinates, you need to use the `director.get_virtual_coordinates` method, which does the correct mapping. If you put instead `self.x, self.y = x,y` in the `on_mouse_press` handler above, you will see that the app seems to work, but if you resize the window, the clicks will move the text to the wrong place.
@@ -439,9 +449,9 @@ Run the file in order to see them working.
 
 ==== Transformation actions ====
 The `duration` parameter is specified in seconds. The `x,y` parameters are specified in pixels. The (0,0) point is the bottom-left point.
- * `Move( (delta_x,delta_y,0), duration)`
+ * `Move( (delta_x,delta_y), duration)`
    * Moves the sprite `delta_x` and `delta_y` pixels in `duration` time. 
- * `Goto( (x,y,0), duration )`
+ * `Goto( (x,y), duration )`
    * Moves the sprite to the `x,y` coordinates.
    * The difference between `Move()` and `Goto()` is that `Move()` is relative to the current coordinates and `Goto()` is absolute.
  * `Rotate( degrees, duration )`
@@ -455,11 +465,8 @@ The `duration` parameter is specified in seconds. The `x,y` parameters are speci
    * During that movement the sprite will do a `number_of_jumps` of `height`.
  * `Bezier( bezier_configuration, duration )`
    * Moves the sprite using a bezier path in `duration` time. The movement is relative to the current position.
- * `Place( (x,y,0) )`
+ * `Place( (x,y) )`
    * Places the sprite in the `x,y` coordinates.
- * `Animate( animation_name )`
-   * Animates the sprite using an `animation_name`.
-   * Before running an animation, you need to create an `Animation()`, and you must add it to the sprite.
  * `FadeIn( duration )`
    * Fades the sprite in in `duration` time.
  * `FadeOut( duration )`
@@ -511,7 +518,7 @@ These actions has 3 special parameters:
 
 Examples of _Interval_ _Actions_:
 {{{
-    move = Move( (200,0,0), 5 ) # Moves 200 pixels to the right in 5 seconds. 
+    move = Move( (200,0), 5 ) # Moves 200 pixels to the right in 5 seconds. 
                                 # Direction: ForwardDir (default) 
                                 # RepeatMode: PingPongMode (default) 
                                 # time_func: No alter function (default) 
@@ -520,14 +527,14 @@ Examples of _Interval_ _Actions_:
                                 # The repetitions are in PingPongMode 
                                 # times: -1 (default) 
     
-    move2 = Move( (200,0,0), 5, time_func=accelerate ) 
+    move2 = Move( (200,0), 5, time_func=accelerate ) 
                                 # Moves 200 pixels to the right in 5 seconds 
                                 # time_func=accelerate. This means that the 
                                 # speed is not linear. It will start to action 
                                 # very slowly, and it will increment the speed 
                                 # in each step. The total running time will be 
                                 # 5 seconds. 
-    move3 = Move( (200,0,0), 5, dir=BackwardDir ) 
+    move3 = Move( (200,0), 5, dir=BackwardDir ) 
                                 # Moves 200 pixels to the **left** in 5 seconds 
                                 # But when you use this direction (BackwardDir) 
                                 # the starting coords and the finishing coords 
@@ -584,3 +591,20 @@ When `self.get_runtime() >= self.duration` the action finished.
 `MultiplexLayer( *layers )` A Composite layer that only enables one layer at the time
 
 == Menus ==
+
+= Changes from Cocos v0.1.x =
+  * `Director`: uses the new pyglet 1.1 loop
+  * `Director`: doesn't have the step() method. Uses on_draw() instead.
+  * `Director`: enable_alpha_blending() is not called automatically
+  * `Scene`: does not have the step() method. Uses on_draw() instead.
+  * `Layer`: step() is called only when it is enabled with Layer.enable_step()
+  * `Layer`: Removed AnimationLayer. No longer necessary.
+  * `Layer`: uses Batch.draw() to draw objects. Propagates the message draw() to the objects it contains.
+  * `ActionSprite`: is a subclass of pyglet.sprite.Sprite
+  * `ActionSprite`: Move() and Goto() uses (x,y) instead of (x,y,0)
+  * `ActionSprite`: removed Animate / Animation (part of pyglet.sprite.Sprite )
+  * `ActionSprite`: uses pyglet.clock.schedule() to generate a ticker.
+  * `ActionSprite`: renamed RepeatMode to RestartMode
+  * `ActionSprite`: Spawn(a,b) + c works as expected
+  * `Effect`: uses draw() and not step() to draw the layer
+  * `Transition`: added enable/disable_step(). Uses draw() to draw subscenes and not step()
