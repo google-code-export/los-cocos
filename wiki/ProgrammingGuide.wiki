@@ -1,5 +1,5 @@
 #summary Cocos Programming Guide
-#labels Phase-Implementation,Featured
+#labels Phase-Implementation
 
 = Cocos Programming Guide =
 
