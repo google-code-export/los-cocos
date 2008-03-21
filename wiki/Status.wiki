@@ -1,74 +1,16 @@
 #summary Status
 #labels Phase-Requirements
 
-= Introduction =
-
-Things that needs to be completed for !PyWeek #6
-
-
-= Details =
-
-*Main Loop*:
-  * *director*: a singleton that controls scenes and the main window
-    * fullscreen support
-  * *scenes*: A set of layers that controls a "scene"
-    * pop / push / replace scene
-  * *layer*: A "buffer" where you can place drawings, sprites, or what you want
-
-*Transitions*:
-  * Supported transitions:
-    * Slide LR
-    * Slide RL
-    * Grow
-    * Fade
-    * Shrink and Grow
-    * Slide BT
-    * Slide TB
-    * Move In B
-    * Move in T
-    * Move in L
-    * Move in R
-    * Corner Move
-
-*Sprites*:
-  * Supported actions
-    * Goto
-    * Move
-    * Rotate
-    * Scale
-    * Jump
-    * Blink
-    * !FadeIn
-    * !FadeOut
-    * Bezier
-    * Animate
-    * Sequence
-    * Repeat
-    * Spawn
-    * !CallFunc
-    * CallFuncS
-    * Delay
-    * !RandomDelay
-    * Place
-    * Hide
-    * Show
-
-*Effects*:
-  * Available effects:
-    * Change color and/or transparency
-    * Change layer position and/or dimensions
-
-*Menus*:
-  * Supported Menus:
-    * !MenuItem
-    * !MenuToggleItem
-    * Mouse and keyboard
-    * Alignment
-    * Multiplexing
-
-*Wishes*:
-  * Support camera with screen-coordinates-layer and world-coordinate-layers 
-  * OpenGL particles engine:
-    * Fireworks engine: 100%
-    * Fire engine: 0%
-    * Fountain: 0%
+= TODO List for cocos 0.3.x =
+ * Sprites, Layers and Scenes:
+   * can have actions, the same actions
+   * Add Mesh effects (the same effect shall work in every kind of object)
+   * Composite of Sprites, Layers, Scenes
+   * Possible effects:
+     * Wave
+     * Twist
+     * Shake
+     * Magnifying glass
+     * plus Rotate, Translate, Scale, Colorize, Opacity, Fade, etc...
+ * Repeat Mode in actions shall be human friendly
+ * Actions can be time altered ( accelerated, enlarged, etc...)
