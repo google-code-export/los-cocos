@@ -1,5 +1,5 @@
+#summary Instruction on getting the API reference
 #labels Featured
-#Instruction on getting the API reference
 
 = API Reference =
 
