@@ -605,5 +605,5 @@ When `self.get_runtime() >= self.duration` the action finished.
   * `ActionSprite`: `Move()` and `Goto()` uses (x,y) instead of (x,y,0)
   * `ActionSprite`: removed `Animate` since it is part of pyglet.sprite.Sprite )
   * `ActionSprite`: uses pyglet.clock.schedule() to generate a ticker.
-  * `ActionSprite`: renamed `RestartMode` to `RestartMode`
+  * `ActionSprite`: renamed `RepeatMode` to `RestartMode`
   * `ActionSprite`: `Rotate` rotates clockwise with positive degrees
