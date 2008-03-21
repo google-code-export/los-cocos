@@ -3,6 +3,7 @@
 
 = Cocos Programming Guide for v0.2.x =
 
+For a list of changes since last version, check [ProgrammingGuideFor_v0_2#Changes]
 = Introduction =
 http://pyglet-users.googlegroups.com/web/coco.png
 
@@ -591,7 +592,8 @@ When `self.get_runtime() >= self.duration` the action finished.
 
 == Menus ==
 
-= Changes from Cocos v0.1.x =
+= Changes = 
+== from Cocos v0.1.x to Cocos v0.2.0 =
   * `Director`: uses the new pyglet 1.1 loop
   * `Director`: doesn't have the step() method. Uses on_draw() instead.
   * `Director`: enable_alpha_blending() is not called automatically
