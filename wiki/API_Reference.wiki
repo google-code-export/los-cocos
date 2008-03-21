@@ -1,0 +1,7 @@
+#Instruction on getting the API reference
+
+= API Reference =
+
+You can get the api reference in HTML format, generated with epicdoc downloading the flooowing package:
+
+  - paquete
