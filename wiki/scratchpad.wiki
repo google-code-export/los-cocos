@@ -1,0 +1,38 @@
+#summary scratchpad
+{{{
+#---------
+node(
+   ship,
+   translate( (10,0),
+        attached_ship()
+    )
+)
+
+#--------------------
+ship.attache_point = translation(10,10)
+ship.attache_point.attached_ship = attached_ship()
+
+for i in range(10):
+    ship.attache_point.x += 1
+    
+
+#-------------------------
+ship.translated((10,10)).place( attached_ship() )
+
+for i in range(10):
+    ship[0].x += 1
+
+#-------------------------
+ship.translated((10,10), "attach_point").place( attached_ship() )
+
+for i in range(10):
+    ship["attach_point"].x += 1
+
+#-------------------------
+attach_point = ship.translated(10)
+attach_point.place( attached_ship() )
+
+for i in range(10):
+    attach_point.x += 1
+    
+}}}
