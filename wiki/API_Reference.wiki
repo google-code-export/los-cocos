@@ -6,4 +6,4 @@
 You can get the api reference, in various formats, downloading one of the following package:
 
  * HTML: [http://los-cocos.googlecode.com/files/cocos-0.2.0-api_ref_doc.tar.gz]
- * PDF: /to be generated/
+ * PDF: [http://los-cocos.googlecode.com/files/Cocos%20API%20Reference%20for%20v0_2.pdf]
