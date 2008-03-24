@@ -4,6 +4,9 @@
 = Cocos Programming Guide for v0.2.x =
 
 For a list of changes since last version, check [ProgrammingGuideFor_v0_2#Changes Changelog]
+
+Download this document in PDF format: [http://los-cocos.googlecode.com/files/Cocos%20Programming%20Guide%20for%20v0_2.pdf]
+
 = Introduction =
 http://pyglet-users.googlegroups.com/web/coco.png
 
