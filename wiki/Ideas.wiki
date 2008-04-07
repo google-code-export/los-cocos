@@ -31,7 +31,7 @@ issues:
 we can still replicate all its functionality using this interfaces and it will end up a lot nicer. i prefer having a "batchtextures" node and be explicit about optimizations then have implicit optmizations and messy code/semantics.
 
 other stuff:
-  * is it reasonable to require the ability to render to textures to make cocos work? if not, the drawing api should be prepare/draw. this make the api uglier, but you only mess with it if you are a layer or scene. which you should not do so often.
+  * is it reasonable to require the ability to render to textures to make cocos work? if not, the drawing api should be prepare/draw. this make the api uglier, but you only mess with it if you are a layer or scene. which you should not do so often. idea: the benefit of rendering to textures is that we can create textures big enough to support messh effects without screen clipping.
   * we should create a library package inside cocos, where all actions, transitions, effects and stuff get places, so we keep the basic cocos small and we can tell the difference between basic and extras. (i think one of the selling points of cocos will be (if we get it done) having a big library of effects/actions/transitions and easy ways to create your own)
   * we should have a cocosimage that automatically sets the anchor in the middle or have a {{{CocosSprite(image_filename)}}} that loads the image and sets the anchor. i had too load, set anchors and create the sprite too many times.
   * we should consider having {{{scale_x}}} and `scale_y` attributes separated. if you touch {{{.scale}}} both are set to the same value.
