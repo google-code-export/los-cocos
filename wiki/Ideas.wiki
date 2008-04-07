@@ -1,0 +1,35 @@
+#summary Ideas for the future
+
+Have a CocosNode base element. Replaces all stuff in interfaces. A cocosnode has the following attributes:
+
+position, scale, opacity, rotation, etc.
+
+a cocosnode can be told to do stuff (action target) with the node.do() stuff (pause, resume, flush, remove_action, etc)
+
+
+a cocosnode knows how to draw itself. it has a method draw(*args, **kwargs) that tells him to draw itself. the arguments to draw alter their drawing behaviour. (for example, dont push texture to gl, or if we want to go crazy and port cocos to pygame, the surface where you should do the drawing)
+
+a cocosnode can require "dt". that its, it has the attribute "has_step" (or something) set to true, every frame its "update(dt)" function will be called.
+
+a cocosnode can contain other cocosnodes. cointainment includes z-level ordering. (see IContainer api). Each cocosnode decides which nodes it wants to contain. each node is responsible for calling draw on its children in the correct order and with the correct parameters.
+
+Scenes, layers and sprites are cocosnode. the differences are:
+layers cant contain scenes.
+scenes cant contain sprites.
+you can only push scenes into the director.
+the root scene calls the event handlers of its closest children (if they have any)
+
+what this all means:
+there is a clear api for a cocosnode
+the user should subclass one of scene, layer, sprite or cocosnode to insert his code.
+an empty cocosnode can be a "translate" node in a scenegraph.
+you can easily add special stuff to the graph. just subclass from cocosnode and override "draw" (you should not have to add a text.draw in the layer code)
+
+issues:
+we will have to evaluate using pyglet sprites. doing this with goups and batches may end up beaing ugly. richards claims it wont. i still dont see it. the "on_removed" stuff and the need to propagate the .batch attribute to its children and stuff is messy.
+we can still replicate all its functionality using this interfaces and it will end up a lot nicer.
+
+other stuff:
+
+
+
