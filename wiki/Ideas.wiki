@@ -7,15 +7,16 @@ position, scale, opacity, rotation, etc.
 a cocosnode can be told to do stuff (action target) with the node.do() stuff (pause, resume, flush, remove_action, etc)
 
 
-a cocosnode knows how to draw itself. it has a method draw(*args, **kwargs) that tells him to draw itself. the arguments to draw alter their drawing behaviour. (for example, dont push texture to gl, or if we want to go crazy and port cocos to pygame, the surface where you should do the drawing)
+a cocosnode knows how to draw itself. it has a method draw(*args, **kwargs) that tells him to draw itself. the arguments to draw alter their drawing behavior. (for example, dont push texture to gl, or if we want to go crazy and port cocos to pygame, the surface where you should do the drawing)
 
-a cocosnode can require "dt". that its, it has the attribute "has_step" (or something) set to true, every frame its "update(dt)" function will be called.
+a cocosnode can require "dt". that its, it has the attribute "has_step" (or something) set to true, every frame its "update(dt)" method will be called.
 
-a cocosnode can contain other cocosnodes. cointainment includes z-level ordering. (see IContainer api). Each cocosnode decides which nodes it wants to contain. each node is responsible for calling draw on its children in the correct order and with the correct parameters.
+a cocosnode can contain other cocosnodes. containment includes z-level ordering. (see IContainer api). Each cocosnode decides which nodes it wants to contain. each node is responsible for calling draw on its children in the correct order and with the correct parameters.
 
 Scenes, layers and sprites are cocosnode. the differences are:
 layers cant contain scenes.
 scenes cant contain sprites.
+sprites cant contain scenes or layers.
 you can only push scenes into the director.
 the root scene calls the event handlers of its closest children (if they have any)
 
@@ -23,13 +24,51 @@ what this all means:
 there is a clear api for a cocosnode
 the user should subclass one of scene, layer, sprite or cocosnode to insert his code.
 an empty cocosnode can be a "translate" node in a scenegraph.
-you can easily add special stuff to the graph. just subclass from cocosnode and override "draw" (you should not have to add a text.draw in the layer code)
+you can easily add special stuff to the graph. just subclass from cocosnode and override "draw" (you should not have to add a text.draw in the layer code, this solves that)
 
 issues:
-we will have to evaluate using pyglet sprites. doing this with goups and batches may end up beaing ugly. richards claims it wont. i still dont see it. the "on_removed" stuff and the need to propagate the .batch attribute to its children and stuff is messy.
-we can still replicate all its functionality using this interfaces and it will end up a lot nicer.
+we will have to evaluate using pyglet sprites. doing this with goups and batches may end up being ugly. richard claims it wont. i still dont see it. the "on_removed" stuff and the need to propagate the .batch attribute to its children and stuff is messy.
+we can still replicate all its functionality using this interfaces and it will end up a lot nicer. i prefer having a "batchtextures" node and be explicit about optimizations then have implicit optmizations and messy code/semantics.
 
 other stuff:
+- is it reasonable to require the ability to render to textures to make cocos work? if not, the drawing api should be prepare/draw. this make the api uglier, but you only mess with it if you are a layer or scene. which you should not do so often.
+- we should create a library package inside cocos, where all actions, transitions, effects and stuff get places, so we keep the basic cocos small and we can tell the difference between basic and extras. (i think one of the selling points of cocos will be [if we get it done] having a big library of effects/actions/transitions and easy ways to create your own)
+- we have to consider using a director.status attribute where you put globals and stuff. our singleton stuff worked great. some way to reference global/nonlocal status is needed.
+- we should avoid cyclic references like the plague. this means no .parent stuff.
+try this code:
+{{{
+class A:
+    def __init__(self, parent):
+        self.parent = parent
+class B:
+    def __init__(self):
+        self.a = A(self)
+
+for i in range(100000):
+    B()
+}}}
+versus this code:
+{{{
+class A:
+    def __init__(self, parent):
+        self.parent = None
+class B:
+    def __init__(self):
+        self.a = A(self)
+
+for i in range(100000):
+    B()
+}}}
+
+version one kills my machine. fills gigs and gigs of swap space and finally dies after the machine has been unresponsive for an hour.
+version two takes it time but:
+- memory is never above 4mb
+- machine is always responsive. no swapping or anything. (although cpu is at 100%)
+note: i've actually tested this inside a bigger loop. so update the number of iterations to achieve the desired crash.
+
+
+finally:
+all of this + more actions + more transitions + mesheffects (i want to do them with shaders), should make a 0.3 release.
 
 
 
