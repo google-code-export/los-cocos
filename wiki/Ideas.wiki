@@ -32,7 +32,7 @@ we can still replicate all its functionality using this interfaces and it will e
 
 other stuff:
   * is it reasonable to require the ability to render to textures to make cocos work? if not, the drawing api should be prepare/draw. this make the api uglier, but you only mess with it if you are a layer or scene. which you should not do so often.
-  * we should create a library package inside cocos, where all actions, transitions, effects and stuff get places, so we keep the basic cocos small and we can tell the difference between basic and extras. (i think one of the selling points of cocos will be [if we get it done] having a big library of effects/actions/transitions and easy ways to create your own)
+  * we should create a library package inside cocos, where all actions, transitions, effects and stuff get places, so we keep the basic cocos small and we can tell the difference between basic and extras. (i think one of the selling points of cocos will be (if we get it done) having a big library of effects/actions/transitions and easy ways to create your own)
   * we have to consider using a {{{director.status}}} attribute where you put globals and stuff. our singleton stuff worked great. some way to reference global/nonlocal status is needed.
   * we should avoid cyclic references like the plague. this means no {{{.parent}}} stuff.
 try this code:
