@@ -1,17 +1,42 @@
 #summary Status
 #labels Phase-Requirements
 
-= TODO List for cocos 0.3.x =
- * Sprites, Layers and Scenes:
-   * can have actions, the same actions
-   * Add Mesh effects (the same effect shall work in every kind of object)
-   * Composite of Sprites, Layers, Scenes
-   * Possible effects:
-     * Wave
-     * Twist
-     * Shake
-     * Magnifying glass
-     * plus Rotate, Translate, Scale, Colorize, Opacity, Fade, etc...
- * Repeat Mode in actions shall be human friendly
- * Actions can be time altered ( accelerated, enlarged, etc...)
- * Show only things that are in the display area.
+= Features for v0.3 =
+ # New Actions
+   # `[must]` Accelerate (or any other modifier) to a Sequence
+   # `[must]` Have "relative" and "absolute" actions:
+     # !MoveBy, !MoveTo
+     # !ScaleBy, !ScaleTo
+     # !RotateBy, !RotateTo
+     # !JumpBy, !JumpTo
+   # `[must]` Repeat Mode to be human friendly
+   # `[must]` Incorporate Meshes effects as Actions: Wave effect, Twist, Magnifying glass, etc.
+   # `[must]` Actions shall be applied to Sprites, Layers and Scenes
+   # `[optional]` To have a generic way to apply actions to any other object like pyglet.Label
+   # `[should]` Separate !ActionSprite from actions.py 
+ # !CocosNode / IContainer:
+   # `[must]` To insert z-ordered objects
+     * z-ordered sprites into sprites
+     * z-ordered sprites into layers
+     * z-ordered layers into layers
+     * z-ordered layers into scenes
+     * z-ordered scenes into scenes
+   # `[should]` To change the z-order in runtime
+   # `[must]` To add/remove objects into live containers
+     * Sprites into running sprites
+     * Sprites into running Layers
+     * Layers into running layers
+     * Layers into running scenes
+     * Scnees into running scenes
+ # Tiles
+   # `[must]` To have tiles support
+   # `[must]` To have a Tile Layer
+   # `[optional]` To have a tile editor
+   # `[optional]` To have a map editor
+ # Director
+   # `[should]` to support multiple directors 
+ # Documentation:
+   # `[must]` To have an updated Programming Guide describing all the features
+   # `[must]` To have an API Reference GUI
+ # Unit Test
+   # `[must]` To have a unit test for each of the new features
