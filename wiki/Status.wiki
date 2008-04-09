@@ -31,7 +31,6 @@
    # `[must]` To have access to parent sprites, layers and scenes (by name or not)
  # Stauts object
    # `[must]` To have access to a status (game status) object from the layers and scenes
-   #
  # Tiles
    # `[must]` To have tiles support
    # `[must]` To have a Tile Layer
