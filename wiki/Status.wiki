@@ -15,6 +15,7 @@
      # Twist
      # Magnifying glass
      # ~~Shaky~~
+     # ~~ShakyTiles~~
      # ~~Liquid~~
      # ~~QuadMoveBy~~
    # `[must]` Actions shall be applied to Sprites, Layers and Scenes
