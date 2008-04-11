@@ -16,6 +16,7 @@
      # Magnifying glass
      # ~~Shaky~~
      # ~~Liquid~~
+     # ~~QuadMoveBy~~
    # `[must]` Actions shall be applied to Sprites, Layers and Scenes
    # `[optional]` To have a generic way to apply actions to any other object like pyglet.Label
    # `[should]` Separate !ActionSprite from actions.py 
