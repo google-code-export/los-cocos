@@ -34,8 +34,8 @@
  # Tiles
    # `[must]` To have tiles support
    # `[must]` To have a Tile Layer
+   # `[must]` To have a map editor
    # `[optional]` To have a tile editor
-   # `[optional]` To have a map editor
  # Director
    # `[should]` to support multiple directors 
  # Documentation:
