@@ -11,13 +11,17 @@
      # !JumpBy, !JumpTo
    # `[must]` ~~Repeat Mode to be human friendly~~
    # `[must]` Incorporate Meshes effects as Actions:
-     # Wave effect
+     # ~~Sin, SinVerical, SinHorizontal~~
      # Twist
      # Magnifying glass
      # ~~Shaky~~
      # ~~ShakyTiles~~
      # ~~Liquid~~
      # ~~QuadMoveBy~~
+     # ~~MoveCornerUp~~
+     # ~~MoveCornerDown~~
+     # ~~SkewHorizontal~~
+     # ~~SkewVertical~~
    # `[must]` Actions shall be applied to Sprites, Layers and Scenes
    # `[optional]` To have a generic way to apply actions to any other object like pyglet.Label
    # `[should]` Separate !ActionSprite from actions.py 
