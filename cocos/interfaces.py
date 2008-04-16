@@ -2,7 +2,9 @@
 # Los Cocos: An extension for Pyglet
 # http://code.google.com/p/los-cocos/
 #
-"""Interfaces uses internally by Sprites, Layers and Scenes"""
+"""
+CocosNode: the basic ellement of cocos
+"""
 
 import bisect, copy
 
@@ -12,24 +14,20 @@ from pyglet.gl import *
 from director import director
 from mesh import Mesh
 
-__all__ = ['IContainer','IActionTarget',]
+import weakref
 
 
-class IContainer( object ):
+__all__ = ['CocosNode']
 
-    supported_classes = (object,)
-
-    def __init__( self, *children ):
-
-        super( IContainer, self).__init__()
-
+class CocosNode:
+    def __init__(self):
+        # composition stuff
         self.children = []
         self.children_names = {}
-
+        self.parent = None
         self.is_running = False
 
-        self.parent = None
-
+        # drawing stuff
         self.position = (0,0)
         self.scale = 1.0
         self.rotation = 0.0
@@ -39,34 +37,23 @@ class IContainer( object ):
         self.opacity = 255
         self.mesh = Mesh()
 
-        # Layers sets it's own batch
-        self.batch  = None
+        # actions stuff
+        self.actions = []
+        self.to_remove = []
+        self.scheduled = False
+        self.skip_frame = False
 
-        self.add_children( *children )
-
-
-    def add( self, child, position=(0,0), rotation=0.0, scale=1.0, color=(255,255,255), opacity=255, anchor_x=0.5, anchor_y=0.5, name=None, z=0 ):
+        
+    def add(self, child, z=0, name=None ):
         """Adds a child to the container
 
         :Parameters:
             `child` : object
                 object to be added
+            `z`: float
+                the z index wrt self
             `name` : str
                 Name of the child
-            `position` : tuple
-                 this is the lower left corner by default
-            `rotation` : float
-                the rotation (degrees)
-            `scale` : float
-                the zoom factor
-            `opacity` : int
-                the opacity (0=transparent, 255=opaque)
-            `color` : tuple
-                the color to colorize the child (RGB 3-tuple)
-            `anchor_x` : float
-                x-point from where the image will be rotated / scaled. Value goes from 0 to 1
-            `anchor_y` : float
-                y-point from where the image will be rotated / scaled. Value goes from 0 to 1
         """
         # child must be a subclass of supported_classes
         if not isinstance( child, self.supported_classes ):
@@ -77,51 +64,13 @@ class IContainer( object ):
                 raise Exception("Name already exists: %s" % name )
             self.children_names[ name ] = child
 
-        # don't override the batch it child already has one
-        if self.batch and hasattr(child, "batch") and child.batch == None:
-            child.batch = self.batch
-
-        properties = {'position' : position,
-                      'rotation' : rotation,
-                      'scale' : scale,
-                      'color' : color,
-                      'opacity' : opacity,
-                      'anchor_x' : anchor_x,
-                      'anchor_y' : anchor_y,
-                      }
-
-        child.parent = self
+        child.parent = weakref.ref(self)
 
         elem = z, child
         bisect.insort( self.children,  elem )
-
-        for k,v in properties.items():
-            setattr(child, k, v)
-
         if self.is_running:
-            from layer import Layer
-
-            # XXX: shall be part of on_enter() but will be fixed after pyweek
-            if isinstance(child,Layer) and not hasattr(child,"dont_push_handlers"):
-                director.window.push_handlers( child )
-
-            if hasattr(child,"on_enter"):
-                child.on_enter()
-
-        if hasattr(child,"on_added"):
-            child.on_added()    
-
-
-    def add_children( self, *children ):
-        """Adds a list of children to the container
-
-        :Parameters:
-            `children` : list of objects
-                objects to be added
-        """
-        for c in children:
-            self.add( c )
-
+            child.on_enter()
+        
     def remove( self, child ):
         """Removes a child from the container
 
@@ -136,28 +85,13 @@ class IContainer( object ):
             raise Exception("Child not found: %s" % str(child) )
 
         if self.is_running:
-            from layer import Layer
-
-            # XXX: shall be part of on_exit(). Will be fixed after pyweek
-            if isinstance(child,Layer) and not hasattr(child,"dont_push_handlers"):
-                director.window.remove_handlers(child)
-
-            if hasattr(child,"on_exit"):
-                child.on_exit()
-
-
-        if hasattr(child, "on_removed"):
-            child.on_removed()
-
+            child.on_exit()
 
     def get_children(self):
         return [ c for (z, c) in self.children ]
 
     def __contains__(self, child):
-        for z,c in self.children:
-            if  c==child:
-                return True
-        return False
+        return  c in self.get_children()
 
     def remove_by_name( self, name ):
         """Removes a child from the container given its name
@@ -171,52 +105,35 @@ class IContainer( object ):
             self.remove( child )
         else:
             raise Exception("Child not found: %s" % name )
-
+            
     def on_enter( self ):
         """
-        Called every time just before the scene is run.
+        Called every time just before the node enters the stage.
         """
         self.is_running = True
 
-        # start actions if self is actiontaget
-        if hasattr(self, "resume"):
-            self.resume()
+        # start actions 
+        self.resume()
 
-
-        for z,c in self.children:
-            from layer import Layer
-
-            if isinstance(c,Layer):
-                if not hasattr(c,"dont_push_handlers"):
-                    director.window.push_handlers( c )
-
-            if hasattr(c,"on_enter"):
-                c.on_enter()
+        # propagate
+        for c in self.get_children():
+            c.on_enter()
 
 
     def on_exit( self ):
         """
-        Called every time just before the scene leaves the stage
+        Called every time just before the node leaves the stage
         """
-
         self.is_running = False
 
-        # stop actions if self is actiontaget
-        if hasattr(self, "pause"):
-            self.pause()
-
-        if hasattr(self,"disable_step"):
-            self.disable_step()
-
-        for z,c in self.children:
-            from layer import Layer
-
-            if hasattr(c,"on_exit"):
-                c.on_exit()
-            if isinstance(c,Layer):
-                if not hasattr(c,"dont_push_handlers"):
-                    director.window.remove_handlers(c)
-
+        # pause actions
+        self.pause()
+        
+        # propagate
+        for c in self.get_children():
+            c.on_exit()
+                    
+                     
     def transform( self ):
         """Apply ModelView transformations"""
 
@@ -226,34 +143,43 @@ class IContainer( object ):
         if color != (255,255,255,255):
             glColor4ub( * color )
 
-        if self.anchor_x != 0 or self.anchor_y != 0:
-            rel_x = self.anchor_x * x + self.position[0]
-            rel_y = self.anchor_y * y + self.position[1]
-            glTranslatef( rel_x, rel_y, 0 )
+        if self.position != (0,0):
+            glTranslatef( self.position[0], self.position[1], 0 )
 
         if self.scale != 1.0:
             glScalef( self.scale, self.scale, 1)
 
         if self.rotation != 0.0:
             glRotatef( -self.rotation, 0, 0, 1)
-
-        if self.anchor_x != 0 or self.anchor_y != 0:
-            glTranslatef( -rel_x, -rel_y, 0 )
-
-        if self.position != (0,0):
-            glTranslatef( self.position[0], self.position[1], 0 )
-
-class IActionTarget(object):
-    def __init__(self):
-
-        super( IActionTarget, self).__init__()
-
-        self.actions = []
-        self.to_remove = []
-        self.scheduled = False
-        self.skip_frame = False
-
-
+    
+    def visit(self):
+        position = 0
+        # we visit all nodes that should be drawn before ourselves
+        if self.children[0][0] < 0:
+            glPushMatrix()
+            self.transform()
+            for z,c in self.children:
+                if z >= 0: break
+                position += 1
+                c.visit()
+                
+            glPopMatrix()
+            
+        # we draw ourselves
+        self.draw()
+        
+        # we visit al the remaining nodes, that are over ourselves
+        if position < len(self.children):
+            glPushMatrix()
+            self.transform()
+            for z,c in self.children[position:]:
+                c.visit()
+            glPopMatrix()
+        
+        
+    def draw(self, *args, **kwargs):
+        pass 
+        
     def do( self, action ):
         '''Executes an *action*.
         When the action finished, it will be removed from the sprite's queue.
@@ -337,5 +263,5 @@ class IActionTarget(object):
             action.step(dt)
             if action.done():
                 self.remove_action( action )
-
+        
 
