@@ -457,7 +457,7 @@ class Blink( IntervalAction ):
         self.target.visible = (m  >  slice / 2.0)
 
 class Rotate( IntervalAction ):
-    """Rotates a sprite counter-clockwise in degrees
+    """Rotates a sprite clockwise in degrees
 
     Example::
 
@@ -469,7 +469,7 @@ class Rotate( IntervalAction ):
         
         :Parameters:
             `angle` : float
-                Degrees that the sprite will be rotated. Positive degrees rotates the sprite conter-clockwise.
+                Degrees that the sprite will be rotated. Positive degrees rotates the sprite clockwise.
             `duration` : float
                 Duration time in seconds
         """
