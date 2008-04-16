@@ -16,6 +16,7 @@
      # Magnifying glass
      # ~~Shaky~~
      # ~~ShakyTiles~~
+     # ~~ShufleTiles~~
      # ~~Liquid~~
      # ~~QuadMoveBy~~
      # ~~MoveCornerUp~~
