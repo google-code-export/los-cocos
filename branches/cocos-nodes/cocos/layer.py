@@ -21,22 +21,51 @@ from pyglet.gl import *
 
 from director import *
 import cocosnode
-
+import scene
 import bisect
 
 __all__ = [ 'Layer', 'MultiplexLayer', 'ColorLayer', 'DontPushHandlers' ]
 
-class Layer(cocosnode.CocosNode):
+class Layer(cocosnode.CocosNode, scene.EventHandlerMixin):
     """Class that handles events and other important game's behaviors"""
 
-    push_handlers = False #! if true, the event handlers of this layer will be registered. defaults to false.
+    is_event_handler = False #! if true, the event handlers of this layer will be registered. defaults to false.
     
     def __init__( self ):
         super( Layer, self ).__init__()
         self.scheduled_layer = False
-
-
-
+    
+    def push_handlers(self):
+        if self.is_event_handler:
+            director.window.push_handlers( self )
+        for child in self.get_children():
+            if isinstance(child, layer.Layer):
+                child.push_handlers()
+                
+    def remove_handlers(self):
+        if self.is_event_handler:
+            director.window.remove_handlers( self )
+        for child in self.get_children():
+            if isinstance(child, layer.Layer):
+                child.remove_handlers()
+           
+    def on_enter(self):
+        super(Layer, self).on_enter()
+        
+        scn = self.get(scene.Scene)
+        if not scene: return
+        
+        if scn._handlers_enabled:
+            director.window.push_handlers( self )
+        
+    def on_exit(self):
+        super(Layer, self).on_exit()
+        
+        scn = self.get(scene.Scene)
+        if not scene: return
+        
+        if scn._handlers_enabled:
+            director.window.remove_handlers( self )
 
 #
 # MultiplexLayer

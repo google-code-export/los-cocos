@@ -11,7 +11,7 @@ from cocos.sprite import ActionSprite
 import pyglet
         
 class PrintKey(cocos.layer.Layer):
-    push_handlers = True
+    is_event_handler = True
     def on_key_press (self, key, modifiers):
         print "Key Pressed:", key, modifiers
 
