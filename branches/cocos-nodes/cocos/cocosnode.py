@@ -28,7 +28,7 @@ class CocosNode(object):
         self.is_running = False
 
         # drawing stuff
-        self.position = (0,0)
+        self.x, self.y = (0,0)
         self.scale = 1.0
         self.rotation = 0.0
         self.anchor_x = 0.5
@@ -43,6 +43,12 @@ class CocosNode(object):
         self.scheduled = False
         self.skip_frame = False
 
+    def _get_position(self):
+        return (self.x, self.y)
+    def _set_position(self, (x,y)):
+        self.x, self.y = x,y
+        
+    position = property(_get_position, _set_position, doc="Get an (x,y) tuple")
         
     def add(self, child, z=0, name=None ):
         """Adds a child to the container
@@ -136,7 +142,6 @@ class CocosNode(object):
                      
     def transform( self ):
         """Apply ModelView transformations"""
-
         x,y = director.get_window_size()
 
         color = tuple(self.color) + (self.opacity,)

@@ -19,14 +19,14 @@ class SwitchLayer(cocos.layer.Layer):
     def __init__(self, subscene):
         super(SwitchLayer, self).__init__()
         self.subscene = subscene
-        self.channel = False
+        self.dispatch = False
     
     push_handlers = True
     def on_key_press (self, key, modifiers):
         if key == pyglet.window.key.SPACE:
-            self.channel = not self.channel
-            print "CHANNEL EVENTS:", self.channel
-            self.subscene.enable_handlers(self.channel)
+            self.dispatch = not self.dispatch
+            print "DISPATCH EVENTS:", self.dispatch
+            self.subscene.enable_handlers(self.dispatch)
             
     
 if __name__ == "__main__":
