@@ -11,20 +11,20 @@
      # !JumpBy, !JumpTo
    # `[must]` ~~Repeat Mode to be human friendly~~
    # `[must]` Incorporate Meshes effects as Actions:
-     # ~~Sin, SinVerical, SinHorizontal~~
+     # ~~Sin, !SinVerical, !SinHorizontal~~
      # Twist
      # Magnifying glass
      # ~~Shaky~~
-     # ~~ShakyTiles~~
-     # ~~ShufleTiles~~
+     # ~~!ShakyTiles~~
+     # ~~!ShufleTiles~~
      # ~~Liquid~~
-     # ~~QuadMoveBy~~
-     # ~~MoveCornerUp~~
-     # ~~MoveCornerDown~~
-     # ~~SkewHorizontal~~
-     # ~~SkewVertical~~
-     # ~~Flip, FlipX, FlipY~~
-     # ~~CornerSwap~~
+     # ~~!QuadMoveBy~~
+     # ~~!MoveCornerUp~~
+     # ~~!MoveCornerDown~~
+     # ~~!SkewHorizontal~~
+     # ~~!SkewVertical~~
+     # ~~!Flip, !FlipX, !FlipY~~
+     # ~~!CornerSwap~~
    # `[must]` Actions shall be applied to Sprites, Layers and Scenes
    # `[optional]` To have a generic way to apply actions to any other object like pyglet.Label
    # `[should]` Separate !ActionSprite from actions.py 
@@ -58,8 +58,8 @@
  # Unit Test
    # `[must]` To have a unit test for each of the new features
  # Menus
-   # `[must]` Use CocosNodes/ IContainer
-   # Add effects to MenuItems
+   # `[must]` Use !CocosNodes/ IContainer
+   # Add effects to !MenuItems
      # `[must]` None effect
      # `[optional]` Scale effect
    # `[should]` To support image as title
