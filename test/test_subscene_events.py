@@ -11,7 +11,7 @@ from cocos.sprite import ActionSprite
 import pyglet
         
 class PrintKey(cocos.layer.Layer):
-    push_handlers = True
+    is_event_handler = True
     def on_key_press (self, key, modifiers):
         print "Key Pressed:", key, modifiers
 
@@ -21,7 +21,7 @@ class SwitchLayer(cocos.layer.Layer):
         self.subscene = subscene
         self.dispatch = False
     
-    push_handlers = True
+    is_event_handler = True
     def on_key_press (self, key, modifiers):
         if key == pyglet.window.key.SPACE:
             self.dispatch = not self.dispatch

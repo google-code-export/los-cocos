@@ -43,6 +43,18 @@ class CocosNode(object):
         self.scheduled = False
         self.skip_frame = False
 
+
+    def get(self, klass):
+        """
+        Walks the nodes tree upwards until it finds a node of the class `klass`
+        or returns None
+        """
+        if isinstance(self, klass):
+            return self
+        parent = self.parent()
+        if parent:
+            return parent.get( klass )
+            
     def _get_position(self):
         return (self.x, self.y)
     def _set_position(self, (x,y)):

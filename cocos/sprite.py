@@ -25,6 +25,7 @@ __docformat__ = 'restructuredtext'
 import interfaces
 import rect
 from director import director
+import cocosnode
 
 import pyglet
 from pyglet import image
@@ -35,8 +36,8 @@ __all__ = [ 'ActionSprite',                     # Sprite class
             ]
 
 class SpriteGroup(pyglet.graphics.Group):
-    def __init__(self, sprite):
-        super(SpriteGroup, self).__init__(parent=sprite.group)
+    def __init__(self, sprite, group):
+        super(SpriteGroup, self).__init__(parent=group)
         self.sprite = sprite
 
     def set_state(self):
@@ -46,112 +47,84 @@ class SpriteGroup(pyglet.graphics.Group):
     def unset_state(self):
         glPopMatrix()
 
-class ActionSprite( pyglet.sprite.Sprite, interfaces.IActionTarget, interfaces.IContainer ):
+def ensure_batcheable(node):
+    if not isinstance(node, BatchableNodeMixin):
+        raise Exception("Children node of a batch must be have the batch mixin")
+    for c in  node.get_children():
+        ensure_batcheable(c)
+
+class BatchNode( cocosnode.CocosNode ):
+    def __init__(self):
+        self.batch = pyglet.graphics.Batch()
+        
+    def add(self, child, z=0, name=None):
+        ensure_batcheable(child)
+        group = pyglet.graphics.OrderedGroup( z )
+        child.set_batch( self.batch, group )
+         
+        super(Scene, self).add(child, z, name)
+    
+        
+class BatchableNodeMixin( cocosnode.CocosNode ):
+    def add(self, child, z=0, name=None):
+        batchnode = self.get(BatchNode)
+        if not batchnode: 
+            # this node was addded, but theres no batchnode in the
+            # hierarchy. so we proceed as normal
+            super(Scene, self).add(child, *args, **kwargs)
+            return
+            
+        # we are being batched, so we set groups and batch
+        # pre/same/post will be set, because if we have a
+        # batchnode parent, we already executed set_batch on self
+        ensure_batcheable(child)
+        if z < 0:
+            group = self.pre_group
+        elif z == 0:
+            group = self.same_group
+        else:
+            group = self.post_group
+            
+        super(Scene, self).add(child, z, name)
+        child.set_batch( self.batch, group )
+        
+                 
+    def remove(self, child):
+        child.set_batch( None, None )
+        super(Scene, self).remove(child)
+        
+    def set_batch(self, batch, group):
+        sprite_group = SpriteGroup(self, group)
+        self.pre_group = SpriteGroup(self, OrderedGroup(-1, parent=group))
+        self.group = OrderedGroup(0, parent=group)
+        self.same_group = SpriteGroup(self, self.group)
+        self.post_group = SpriteGroup(self, OrderedGroup(1, parent=group))
+        self.batch = batch
+
+        
+        
+class ActionSprite( cocosnode.CocosNode, pyglet.sprite.Sprite):
     '''ActionSprites are sprites that can execute actions.
 
     Example::
 
         sprite = ActionSprite('grossini.png')
     '''
-    def __init__( self, *args, **kwargs ):
-
-        pyglet.sprite.Sprite.__init__(self, *args, **kwargs)
-        interfaces.IActionTarget.__init__(self)
-        interfaces.IContainer.__init__(self)
+    
+    def __init__( self, image_name, *args, **kwargs ):
+        img = pyglet.resource.image(image_name)
+        img.anchor_x = img.width / 2
+        img.anchor_y = img.height / 2
+         
+        pyglet.sprite.Sprite.__init__(self, img, *args, **kwargs)
+        cocosnode.CocosNode.__init__(self)
         self.group = None
         self.children_group = None
 
-    def add( self, child, position=(0,0), rotation=0.0, scale=1.0, color=(255,255,255), opacity=255, anchor_x=0.5, anchor_y=0.5, z=0,name='',):
-        """Adds a child to the container
-
-        :Parameters:
-            `child` : object
-                object to be added
-            `name` : str
-                Name of the child
-            `position` : tuple
-                 this is the lower left corner by default
-            `rotation` : int
-                the rotation (degrees)
-            `scale` : int
-                the zoom factor
-            `opacity` : int
-                the opacity (0=transparent, 255=opaque)
-            `color` : tuple
-                the color to colorize the child (RGB 3-tuple)
-            `anchor_x` : float
-                x-point from where the image will be rotated / scaled. Value goes from 0 to 1
-            `anchor_y` : float
-                y-point from where the image will be rotated / scaled. Value goes from 0 to 1
-        """
-        # child must be a subclass of supported_classes
-        if not isinstance( child, self.supported_classes ):
-            raise TypeError("%s is not istance of: %s" % (type(child), self.supported_classes) )
-
-        properties = {'position' : position,
-                      'rotation' : rotation,
-                      'scale' : scale,
-                      'color' : color,
-                      'opacity' : opacity,
-                      'anchor_x' : anchor_x,
-                      'anchor_y' : anchor_y,
-                      }
-        for k,v in properties.items():
-            setattr(child, k, v)
-
-        if self.group is None:
-            self.children_group = SpriteGroup( self )
-        child.set_parent( self )
-
-        self.children.append( child )
-
-    def set_parent(self, parent):
-        self.group = parent.children_group
-        self.batch = parent.batch
-
-        self.children_group = SpriteGroup( self )
-        for c in self.children:
-            c.set_parent( self )
-
-    def get_children(self):
-        return self.children[:]
-
-    def get_rect(self):
-        x, y = self.position
-        return rect.Rect(x, y, self.width, self.height)
-
-    def transform( self ):
-        """Apply ModelView transformations"""
-
-        x,y = director.get_window_size()
-
-        color = tuple(self.color) + (self.opacity,)
-        if color != (255,255,255,255):
-            glColor4ub( * color )
-
-        if self.position != (0,0):
-            glTranslatef( self.position[0], self.position[1], 0 )
-
-        if self.scale != 1.0:
-            glScalef( self.scale, self.scale, 1)
-
-        if self.rotation != 0.0:
-            glRotatef( -self.rotation, 0, 0, 1)
-
-
-    def on_exit(self):
-        self.pause()
-
-    def on_removed(self):
-        self.batch = None
-        for c in self.children:
-            c.set_parent( self )
-
-    def on_added(self):
-        for c in self.children:
-            c.set_parent( self )
-
-    def on_enter(self):
-        self.resume()
-
+    def on_draw(self):
+        self._group.set_state()
+        if self._vertex_list is not None:
+            self._vertex_list.draw(GL_QUADS)
+        self._group.unset_state()
+        
 ActionSprite.supported_classes = ActionSprite
