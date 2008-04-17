@@ -17,13 +17,14 @@
      # ~~Shaky~~
      # ~~!ShakyTiles~~
      # ~~!ShufleTiles~~
+     # ~~!FadeOutTiles~~
      # ~~Liquid~~
      # ~~!QuadMoveBy~~
      # ~~!MoveCornerUp~~
      # ~~!MoveCornerDown~~
      # ~~!SkewHorizontal~~
      # ~~!SkewVertical~~
-     # ~~!Flip, !FlipX, !FlipY~~
+     # ~~Flip, FlipX, FlipY~~
      # ~~!CornerSwap~~
    # `[must]` Actions shall be applied to Sprites, Layers and Scenes
    # `[optional]` To have a generic way to apply actions to any other object like pyglet.Label
