@@ -19,7 +19,7 @@ import weakref
 
 __all__ = ['CocosNode']
 
-class CocosNode:
+class CocosNode(object):
     def __init__(self):
         # composition stuff
         self.children = []
@@ -56,8 +56,8 @@ class CocosNode:
                 Name of the child
         """
         # child must be a subclass of supported_classes
-        if not isinstance( child, self.supported_classes ):
-            raise TypeError("%s is not istance of: %s" % (type(child), self.supported_classes) )
+        #if not isinstance( child, self.supported_classes ):
+        #    raise TypeError("%s is not istance of: %s" % (type(child), self.supported_classes) )
 
         if name:
             if name in self.children_names:
@@ -155,7 +155,7 @@ class CocosNode:
     def visit(self):
         position = 0
         # we visit all nodes that should be drawn before ourselves
-        if self.children[0][0] < 0:
+        if self.children and self.children[0][0] < 0:
             glPushMatrix()
             self.transform()
             for z,c in self.children:
@@ -166,7 +166,7 @@ class CocosNode:
             glPopMatrix()
             
         # we draw ourselves
-        self.draw()
+        self.on_draw()
         
         # we visit al the remaining nodes, that are over ourselves
         if position < len(self.children):
@@ -177,7 +177,7 @@ class CocosNode:
             glPopMatrix()
         
         
-    def draw(self, *args, **kwargs):
+    def on_draw(self, *args, **kwargs):
         pass 
         
     def do( self, action ):
