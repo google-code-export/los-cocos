@@ -24,7 +24,7 @@ class CocosNode(object):
         # composition stuff
         self.children = []
         self.children_names = {}
-        self.parent = None
+        self._parent = None
         self.is_running = False
 
         # drawing stuff
@@ -43,7 +43,16 @@ class CocosNode(object):
         self.scheduled = False
         self.skip_frame = False
 
-
+    def _get_parent(self):
+        if self._parent is None: return None
+        else: return self._parent()
+        
+    def _set_parent(self, parent):
+        if parent is None: self._parent = None
+        else: self._parent = weakref.ref(parent)
+        
+    parent = property(_get_parent, _set_parent)
+        
     def get(self, klass):
         """
         Walks the nodes tree upwards until it finds a node of the class `klass`
@@ -51,7 +60,7 @@ class CocosNode(object):
         """
         if isinstance(self, klass):
             return self
-        parent = self.parent()
+        parent = self.parent
         if parent:
             return parent.get( klass )
             
@@ -82,7 +91,7 @@ class CocosNode(object):
                 raise Exception("Name already exists: %s" % name )
             self.children_names[ name ] = child
 
-        child.parent = weakref.ref(self)
+        child.parent = self
 
         elem = z, child
         bisect.insort( self.children,  elem )
