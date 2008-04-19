@@ -26,24 +26,15 @@
      # ~~!SkewVertical~~
      # ~~Flip, FlipX, FlipY~~
      # ~~!CornerSwap~~
-   # `[must]` Actions shall be applied to Sprites, Layers and Scenes
+   # `[must]` ~~Actions shall be applied to Sprites, Layers and Scenes~~
    # `[optional]` To have a generic way to apply actions to any other object like pyglet.Label
-   # `[should]` Separate !ActionSprite from actions.py 
+   # `[should]` ~~Separate !ActionSprite from actions.py ~~
  # !CocosNode / IContainer:
-   # `[must]` To insert z-ordered objects
-     * z-ordered sprites into sprites
-     * z-ordered sprites into layers
-     * z-ordered layers into layers
-     * z-ordered layers into scenes
-     * z-ordered scenes into scenes
-   # `[should]` To change the z-order in runtime
-   # `[must]` To add/remove objects into live containers
-     * Sprites into running sprites
-     * Sprites into running Layers
-     * Layers into running layers
-     * Layers into running scenes
-     * Scnees into running scenes
-   # `[must]` To have access to parent sprites, layers and scenes (by name or not)
+   # `[must]` ~~To insert z-ordered objects~~
+   # `[should]` ~~To change the z-order in runtime (solution: remove and add) ~~
+   # `[must]` ~~To add/remove objects into live containers~~
+   # `[must]` ~~To have access to parent sprites, layers and scenes (by name or not)~~
+   # `[must]` Validate adding acceptable classes
  # Stauts object
    # `[must]` To have access to a status (game status) object from the layers and scenes
  # Tiles
@@ -66,3 +57,4 @@
    # `[should]` To support image as title
    # `[optional]` To support configurable margins
    # `[optional]` To support images as menu items 
+   
