@@ -25,8 +25,7 @@ class CocosNode(object):
         self.children = []
         self.children_names = {}
         self._parent = None
-        self.is_running = False
-
+        
         # drawing stuff
         self.x, self.y = (0,0)
         self.scale = 1.0
@@ -40,8 +39,118 @@ class CocosNode(object):
         # actions stuff
         self.actions = []
         self.to_remove = []
-        self.scheduled = False
         self.skip_frame = False
+        
+        # schedule stuff
+        self.scheduled = False # deprecated, soon to be removed
+        self.scheduled_calls = []
+        self.scheduled_interval_calls = []
+        self.is_running = False
+        
+        
+
+    def schedule_interval(self, callback, interval, *args, **kwargs):
+        """
+        Schedule a function to be called every `interval` seconds.
+
+        Specifying an interval of 0 prevents the function from being
+        called again (see `schedule` to call a function as often as possible).
+
+        The callback function prototype is the same as for `schedule`.
+
+        :Parameters:
+            `func` : function
+                The function to call when the timer lapses.
+            `interval` : float
+                The number of seconds to wait between each call.
+                
+        This function is a wrapper to pyglet.clock.schedule_interval.
+        It has the additional benefit that all calllbacks are paussed and
+        resumed when the node leaves or enters a scene.
+        
+        You should not have to schedule things using pyglet by yourself.
+        """
+        if self.is_running:
+            pyglet.clock.schedule_interval(callback, interval, *args, **kwargs)
+        self.scheduled_interval_calls.append(
+                (callback, interval, args, kwargs)
+                )
+                
+    def schedule(self, callback, *args, **kwargs):
+        """
+        Schedule a function to be called every frame.
+
+        The function should have a prototype that includes ``dt`` as the
+        first argument, which gives the elapsed time, in seconds, since the
+        last clock tick.  Any additional arguments given to this function
+        are passed on to the callback::
+
+            def callback(dt, *args, **kwargs):
+                pass
+
+        :Parameters:
+            `func` : function
+                The function to call each frame.
+                
+        This function is a wrapper to pyglet.clock.schedule.
+        It has the additional benefit that all calllbacks are paussed and
+        resumed when the node leaves or enters a scene.
+        
+        You should not have to schedule things using pyglet by yourself.
+        """        if self.is_running:
+            pyglet.clock.schedule(callback, *args, **kwargs)
+        self.scheduled_calls.append(
+                (callback, args, kwargs)
+                )
+                         
+    def unschedule(self, callback):
+        """
+        Remove a function from the schedule.  
+        
+        If the function appears in the schedule more than once, all occurances
+        are removed.  If the function was not scheduled, no error is raised.
+
+        :Parameters:
+            `func` : function
+                The function to remove from the schedule.
+        
+        This function is a wrapper to pyglet.clock.unschedule.
+        It has the additional benefit that all calllbacks are paussed and
+        resumed when the node leaves or enters a scene.
+        
+        You should not unschedule things using pyglet that where scheduled
+        by node.schedule/node.schedule_interface.
+        """
+        
+        total_len = len(self.scheduled_calls + self.scheduled_interval_calls)
+        self.scheduled_calls = [ 
+                c for c in self.scheduled_calls if c[0] != callback 
+                ]
+        self.scheduled_interval_calls = [ 
+                c for c in self.scheduled_interval_calls if c[0] != callback 
+                ]
+        if total_len != len(
+                self.scheduled_calls + self.scheduled_interval_calls
+                ):
+            raise Exception("Call not scheduled")
+            
+        if self.is_running:
+            pyglet.clock.unschedule( callback )
+           
+    def resume_scheduler(self):
+        for c, i, a, k in self.scheduled_interval_calls:
+            pyglet.clock.schedule_interval(c, i, *a, **k)  
+        for c, a, k in self.scheduled_calls:
+            pyglet.clock.schedule(c, *a, **k)  
+            
+    def pause_scheduler(self):
+        for f in set(
+                [ x[0] for x in self.scheduled_interval_calls ] +
+                [ x[0] for x in self.scheduled_calls ]
+                ):
+            pyglet.clock.unschedule(f)  
+        for arg in self.scheduled_calls:
+            pyglet.clock.schedule(*args)  
 
     def _get_parent(self):
         if self._parent is None: return None
@@ -141,7 +250,9 @@ class CocosNode(object):
 
         # start actions 
         self.resume()
-
+        # resume scheduler
+        self.resume_scheduler()
+        
         # propagate
         for c in self.get_children():
             c.on_enter()
@@ -155,6 +266,8 @@ class CocosNode(object):
 
         # pause actions
         self.pause()
+        # pause callbacks
+        self.pause_scheduler()
         
         # propagate
         for c in self.get_children():
