@@ -195,8 +195,8 @@ class CocosNode(object):
         
         
     def on_draw(self, *args, **kwargs):
-        pass 
-        
+        pass
+                
     def do( self, action ):
         '''Executes an *action*.
         When the action finished, it will be removed from the sprite's queue.

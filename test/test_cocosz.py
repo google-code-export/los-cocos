@@ -18,14 +18,16 @@ class Quad(cocos.cocosnode.CocosNode):
         self.qcolor = color
         
     def on_draw(self):
-        glColor4ub(*self.qcolor)
-        glBegin(GL_QUADS)
-        glVertex2f(self.x, self.y)
-        glVertex2f(self.x+self.size, self.y)
-        glVertex2f(self.x+self.size, self.y+self.size)
-        glVertex2f(self.x, self.y+self.size)
-        glEnd()
-        glColor4ub(255,255,255,255)
+        points = (self.x, self.y,
+                    self.x, self.y+self.size, 
+                    self.x+self.size, self.y+self.size,
+                    self.x + self.size, self.y )
+        color = self.qcolor * 4
+
+        pyglet.graphics.draw(4, pyglet.gl.GL_QUADS,
+            ('v2i', points),
+            ('c4B', color)
+        )
 
 class MultiQuadLayer(cocos.layer.Layer):
     def __init__(self):

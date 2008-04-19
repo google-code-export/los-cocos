@@ -21,24 +21,13 @@ class TestLayer(cocos.layer.Layer):
         
         x,y = director.get_window_size()
         
-        image = pyglet.resource.image('grossini.png')
-        image.anchor_x = image.width / 2
-        image.anchor_y = image.height / 2
-        sprite1 = ActionSprite( image )
+        sprite1 = ActionSprite( 'grossini.png', (x/2, y/2) )
+        sprite2 = ActionSprite( 'grossinis_sister1.png', (x/4,y/2) )
+        sprite3 = ActionSprite( 'grossinis_sister2.png', (x/4*3, y/2) )
 
-        image = pyglet.resource.image('grossinis_sister1.png')
-        image.anchor_x = image.width / 2
-        image.anchor_y = image.height / 2
-        sprite2 = ActionSprite( image )
-
-        image = pyglet.resource.image('grossinis_sister2.png')
-        image.anchor_x = image.width / 2
-        image.anchor_y = image.height / 2
-        sprite3 = ActionSprite( image )
-
-        self.add( sprite2, (x/4, y/2) )
-        self.add( sprite1, (x/2, y/2) )
-        self.add( sprite3, (x/(4/3.0), y/2) )
+        self.add( sprite2 )
+        self.add( sprite1 )
+        self.add( sprite3 )
 
 
 if __name__ == "__main__":
@@ -46,10 +35,11 @@ if __name__ == "__main__":
     director.show_FPS = True
     main_scene = cocos.scene.Scene()
 
+    def rcol(): return int(random.random()*255)
     for i in range(32):
-        l = ColorLayer(random.random(), random.random(), random.random(), 1.0)
-        scale = (32-i)/32.0
-        main_scene.add( l, z=i, scale=scale )
+        l = ColorLayer(rcol(), rcol(), rcol(), 255)
+        l.scale = (32-i)/32.0
+        main_scene.add( l, z=i )
 
     tl1 = TestLayer()
     main_scene.add( tl1, z=33 )

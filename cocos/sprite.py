@@ -109,17 +109,46 @@ class ActionSprite( cocosnode.CocosNode, pyglet.sprite.Sprite):
     Example::
 
         sprite = ActionSprite('grossini.png')
+        
+    :Parameters:
+            `image_name` : string or image
+                name of the image resource or a pyglet image.
+            `position` : tuple
+                 position of the anchor. Defaults to (0,0)
+            `rotation` : float
+                the rotation (degrees). Defaults to 0.
+            `scale` : float
+                the zoom factor. Defaults to 1.
+            `opacity` : int
+                the opacity (0=transparent, 255=opaque). Defaults to 255.
+            `color` : tuple
+                the color to colorize the child (RGB 3-tuple). Defaults to (255,255,255).
+            `anchor` : (float, float)
+                (x,y)-point from where the image will be positiones, rotated and scaled in pixels. For example (image.width/2, image.height/2) is the center (default).
+            
     '''
     
-    def __init__( self, image_name, *args, **kwargs ):
-        img = pyglet.resource.image(image_name)
-        img.anchor_x = img.width / 2
-        img.anchor_y = img.height / 2
-         
-        pyglet.sprite.Sprite.__init__(self, img, *args, **kwargs)
+    def __init__( self, image, position=(0,0), rotation=0, scale=1, opacity = 255, color=(255,255,255), anchor = None ):
+        if isinstance(image, str):
+            image = pyglet.resource.image(image)
+        
+        if anchor is None:
+            image.anchor_x = image.width / 2
+            image.anchor_y = image.height / 2
+        else:
+            image.anchor = anchor
+            
+        pyglet.sprite.Sprite.__init__(self, image)
         cocosnode.CocosNode.__init__(self)
         self.group = None
         self.children_group = None
+
+        self.position = position
+        self.rotation = rotation
+        self.scale = scale
+        self.opacity = opacity
+        self.color = color
+        
 
     def on_draw(self):
         self._group.set_state()
