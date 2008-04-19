@@ -39,14 +39,14 @@ class Layer(cocosnode.CocosNode, scene.EventHandlerMixin):
         if self.is_event_handler:
             director.window.push_handlers( self )
         for child in self.get_children():
-            if isinstance(child, layer.Layer):
+            if isinstance(child, Layer):
                 child.push_handlers()
                 
     def remove_handlers(self):
         if self.is_event_handler:
             director.window.remove_handlers( self )
         for child in self.get_children():
-            if isinstance(child, layer.Layer):
+            if isinstance(child, Layer):
                 child.remove_handlers()
            
     def on_enter(self):
