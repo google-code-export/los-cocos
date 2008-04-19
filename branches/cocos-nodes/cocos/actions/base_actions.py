@@ -160,18 +160,22 @@ class Sequence(IntervalAction):
                 List of actions to be sequenced
         """
 
-        if not hasattr(one, "duration") or not hasattr(one, "duration"):
-            raise Exception("You can only sequence actions with finite duration, not repeats or others like that")
         self.one = copy.deepcopy(one)
         self.two = copy.deepcopy(two)
         self.actions = [self.one, self.two]
 
+        if not hasattr(self.one, "duration") or not hasattr(self.two, "duration"):
+            raise Exception("You can only sequence actions with finite duration, not repeats or others like that")
+        
         self.duration = self.one.duration + self.two.duration
         self.split = self.one.duration / float(self.duration)
 
         self.last = None
 
     def start(self):
+        self.duration = self.one.duration + self.two.duration
+        self.split = self.one.duration / float(self.duration)
+
         self.one.target = self.target
         self.two.target = self.target
 

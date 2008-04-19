@@ -126,6 +126,23 @@ class DontPushHandlers( object ):
         self.dont_push_handlers = True
     
 
+class QuadNode(cocosnode.CocosNode):
+    def __init__(self, color):
+        super(QuadNode, self).__init__()
+
+        self.batch = pyglet.graphics.Batch()
+        
+        x, y = director.get_window_size()
+        
+        vertex_list = self.batch.add(4, pyglet.gl.GL_QUADS, None,
+            ('v2i', (0, 0, 0, y, x, y, x, 0)),
+            ('c4B', color*4)
+        )
+
+
+    def on_draw(self):
+        self.batch.draw()
+
 class ColorLayer(Layer):
     """Creates a layer of a certain color.
     The color shall be specified in the format (r,g,b,a).
@@ -135,16 +152,7 @@ class ColorLayer(Layer):
         l = ColorLayer(0, 255, 0, 0 )
     """
     def __init__(self, *color):
-        self.layer_color = color
         super(ColorLayer, self).__init__()
-
-    def on_draw(self):
-        glColor4ub(*self.layer_color)
-        x, y = director.get_window_size()
-        glBegin(GL_QUADS)
-        glVertex2f( 0, 0 )
-        glVertex2f( 0, y )
-        glVertex2f( x, y )
-        glVertex2f( x, 0 )
-        glEnd()
-        glColor4ub(255,255,255,255)    
+        self.add( QuadNode(color) )
+        
+        
