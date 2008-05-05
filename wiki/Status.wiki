@@ -1,7 +1,8 @@
 #summary Status
 #labels Phase-Requirements
 
-= Features for v0.3 =
+
+= Features for v0.3 DEPRECATED. See issues instead=
  # New Actions
    # `[must]` ~~Accelerate (or any other modifier) to a Sequence~~
    # `[must]` Have "relative" and "absolute" actions:
@@ -12,8 +13,8 @@
    # `[must]` ~~Repeat Mode to be human friendly~~
    # `[must]` Incorporate Meshes effects as Actions:
      # ~~Sin, !SinVerical, !SinHorizontal~~
-     # Twist
-     # Magnifying glass
+     # ~~Twist~~
+     # ~~Magnifying glass~~
      # ~~Shaky~~
      # ~~!ShakyTiles~~
      # ~~!ShufleTiles~~
