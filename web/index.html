@@ -12,7 +12,7 @@
     <div class="navigation"> 
         <a href="#about">ABOUT</a>
         <a href="#download" >DOWNLOAD</a>
-        <a href="#documentation">DOCUMENTATION</a> 
+        <a href="doc/">DOCUMENTATION</a> 
         <a href="#contribute">CONTRIBUTE</a>
     </div>
 	<div class="logo"><a href="/">cocos<span style="font-size:130px">2</span><span style="font-size:90px">d</span></a></div>
@@ -23,14 +23,14 @@
 <div class="main_body">  
     <h2><a name="news">news</a></h2>
     <p>
-    cocos0.3beta released
+    <i>May 5th, 2008</i>: <a href="http://los-cocos.googlecode.com/files/cocos2d-0.3.0beta0.tar.gz">cocos2d-0.3.0beta0</a> released. See the <a href="http://code.google.com/p/los-cocos/source/browse/trunk/CHANGELOG">CHANGELOG</a>
     </p>
 
     <h2><a name="about">about</a></h2>
     <p>
     cocos2d is a framework for building 2D games, demos, and other graphical/interactive applications. It is built over pyglet. It provides some conventions and classes to help you structure a "scene based application".
 
-A cocos application consists of several scenes, and a workflow connecting the different scenes. It provides you with a "director" (a singleton) which handles that workflow between scenes. Each scene is composed of an arbitrary number of layers; layers take care of drawing to the screen (using the pyglet and OpenGL APIs or built it elements like sprites and text), handling events and in general contain all of the game/application logic.
+A cocos2d application consists of several scenes, and a workflow connecting the different scenes. It provides you with a "director" (a singleton) which handles that workflow between scenes. Each scene is composed of an arbitrary number of layers; layers take care of drawing to the screen (using the pyglet and OpenGL APIs or built it elements like sprites and text), handling events and in general contain all of the game/application logic.
 
     </p>
     <p>
@@ -41,33 +41,36 @@ A cocos application consists of several scenes, and a workflow connecting the di
     <ul>
         <li><strong>BSD License</strong>  Just use it.</li>
         <li><strong>Pyglet Based</strong>  No external dependencies.</li>
+        <li><strong>Flow control</strong> Define your scenes and layers and forget about flow control</li>
         <li><strong>Sprites</strong>  Fast and easy sprites.</li>
         <li><strong>Text Rendering</strong> </li>
         <li><strong>Documentation</strong>  Programming Guide + API Reference + Lots of simple tests showing how to use it.</li>
         <li><strong>Actions</strong>  Just tell sprites what you want them to do. Composable actions like move, rotate, scale, etc. Make your own actions too.</li>
-        <li><strong>Effects</strong>  OpenGL effects like wave and shake</li>
+        <li><strong>Effects</strong>  OpenGL effects like wave, shake, lens and much more</li>
         <li><strong>Transitions</strong> Move from scene to scene with style.</li>
         <li><strong>Menus</strong> Built in classes to create menus</li>
+        <li><strong>Built-in Python Interpreter</strong> For debugging purposes</li>
+        <li><strong>a more!</strong</li>
     </ul>
     </p>
     
-    <h2><a name="games">some games made with cocos2d</a></h2>
+    <h2><a name="games">Some games made with cocos2d</a></h2>
     <p>
     <ul>
-        <li><strong><a href="http://pyweek.org/e/pywiic/">Robo-T2</a></strong> </li>
+        <li><strong><a href="http://pyweek.org/e/pywiic/">Robo-T2</a></strong> <i>(using cocos-0.3.0.alpha0)</i></li>
         <p><img src="http://farm4.static.flickr.com/3060/2390437371_0178699a32_o.png" width="300"></p>
         
-        <li><strong<a href="http://pyweek.org/e/pupo/">X-25 Unplugged</a></strong> </li>
+        <li><strong<a href="http://pyweek.org/e/pupo/">X-25 Unplugged</a></strong> <i>(using cocos-0.1.2)</i></li>
         <p><img src="http://media.pyweek.org/dl/6/pupo/x25-menu.png-thumb.png"></p>
         
-        <li><strong><a href="http://pyweek.org/e/flatbot/">Flat Bot</a></strong> </li>
+        <li><strong><a href="http://pyweek.org/e/flatbot/">Flat Bot</a></strong> <i>(using cocos-0.3.0.alpha0)</i></li>
         <p><img src="http://media.pyweek.org/dl/6/flatbot/flatbot-shot2.png-thumb.png"></p>
 
         
-        <li><strong><a href="http://code.google.com/p/irobotgame/">IRobot</a></strong> </li>
+        <li><strong><a href="http://code.google.com/p/irobotgame/">IRobot</a></strong> <i>(using cocos-0.2.0)</i></li>
         <p><img src="http://media.pyweek.org/dl/6/losersjuegos/main_scene.jpg"></p>
         
-       <li><strong><a href="http://pyweek.org/e/binary-defense/">Binary Defense</a></strong> </li>
+       <li><strong><a href="http://pyweek.org/e/binary-defense/">Binary Defense</a></strong> <i>(using cocos-0.2.0)</i> </li>
         
         <p><img src="http://media.pyweek.org/dl/6/binary-defense/Picture%204.png-thumb.png"></p>
         
@@ -75,14 +78,14 @@ A cocos application consists of several scenes, and a workflow connecting the di
     
     <h2><a name="download">download</a></h2>
     <p>
-    The recomended download is <a href="#">cocos-0.3RC</a>. We are close to the final 0.3 release and we plan to keep things more or less stable from now on.
+    The recomended download is <a href="http://los-cocos.googlecode.com/files/cocos2d-0.3.0beta0.tar.gz">cocos2d-0.3.0beta0</a>. We are close to the final 0.3 release and we plan to keep things more or less stable from now on.
     </p>
     
   
     <h2><a name="documentation">documentation</a></h2>
 
    <p>
-    Documentation comes in the form of the programming guide (<a href="#">online HTML</a>, <a href="#">PDF</a>) and API Reference (<a href="#">online HTML</a>, <a href="#">PDF</a>). You can also take a look at the tests in the test folder for simple examples of using the cocos2d functionality.
+    Documentation comes in the form of the programming guide (<a href="doc/programming_guide/">online HTML</a>) and API Reference (<a href="doc/api">online HTML</a>). You can also look at the tests in the test folder for simple examples of using the cocos2d functionality.
     </p>
       
     <h2><a name="videos">videos</a></h2>
@@ -93,22 +96,22 @@ A cocos application consists of several scenes, and a workflow connecting the di
     
   <h2><a name="contribute">mailing lists</a></h2>
   <p>
-    The main forum for cocos2d discussion is the <a href="http://groups.google.com/group/los-cocos-users">los-cocos-users</a>
+    The main forum for cocos2d discussion is the <a href="http://groups.google.com/group/los-cocos-users">cocos2d users</a>
     mailing list.  You can browse the mailing list online or provide your
     email address for immediate or digest updates.
   </p>
 
   <p>
     There are two more mailing lists if you're interested in following the
-    progress of los-cocos development:
+    progress of cocos2d development:
   </p>
   
     <p>
   <ul>
-    <li><a href="http://groups.google.com/group/los-cocos-issues">los-cocos-issues</a> is
+    <li><a href="http://groups.google.com/group/los-cocos-issues">cocos2d issues</a> is
     an announcement list which broadcasts emails from the issue tracker.</li>
 
-    <li><a href="http://groups.google.com/group/los-cocos-commits">los-cocos-commits</a> is
+    <li><a href="http://groups.google.com/group/los-cocos-commits">cocos2d commits</a> is
     an announcement list which broadcasts SVN commits.</li>
   </ul>
 <br/>
@@ -123,7 +126,7 @@ A cocos application consists of several scenes, and a workflow connecting the di
   <h2>wiki</h2>
 
   <p>We have a <a href="http://code.google.com/p/los-cocos/w/list">wiki</a> which
-  is primarily used for discussing future design aspects of los-cocos.  Anyone
+  is primarily used for discussing future design aspects of cocos2d.  Anyone
   can read this wiki, however you must be a cocos2d developer (have SVN commit
   access) to write to it.</p>
 
@@ -134,7 +137,7 @@ A cocos application consists of several scenes, and a workflow connecting the di
   out a working copy using an SVN client:</p>
 
   <p class="console">svn checkout http://los-cocos.googlecode.com/svn/trunk/
-  los-cocos</p>
+  cocos2d</p>
 
   
 </div>
