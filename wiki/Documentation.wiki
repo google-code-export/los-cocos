@@ -1,0 +1,7 @@
+#summary One-sentence summary of this page.
+#labels Featured
+
+= cocos2d documentation =
+
+  * [http://cocos2d.org/doc/programming_guide/ Programming Guide]
+  * [http://cocos2d.org/doc/api/ API Reference]
