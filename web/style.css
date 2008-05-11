@@ -5,7 +5,7 @@ font-family:Helvetica, Arial, sans-serif
 }
 
 .header{
-height:110px;
+height:120px;
 background-color:#444444;
 color:#FFFFFF;
 margin:0px;}
@@ -24,7 +24,7 @@ a:hover {
 	color:#999999;
 	margin-left: 50px;
 	font-weight:bold;
-	width:80%;
+	width:100%;
 	padding-top: 10px;
 }
 
@@ -43,9 +43,9 @@ text-decoration:none;
 	color:#FFFFFF;
 	font-size:100px;
 	font-weight:bold;
-	margin-left:50px;
-	margin-bottom: -80px;
-	margin-top: -32px;
+	margin-left:90px;
+/*	margin-bottom: -80px; */
+	margin-top: -28px;
 	font-family:Georgia, "Times New Roman", Times, serif;
 	letter-spacing:-5px;
 }
@@ -64,10 +64,12 @@ margin-top:20px;
 
 h2 {
 	margin: 0;
+	margin-left:-40px;
 	color: #000;
 	font-size: 20px;
 	font-weight: normal;
-	letter-spacing: -1px;
+	letter-spacing: 2px;
+	font-family:Georgia, "Times New Roman", Times, serif;
 }
 
 h2 a:link, h2 a:hover, h2 a:visited {
