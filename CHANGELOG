@@ -1,3 +1,10 @@
+v0.4.0 - XXX
+  - Added particles system engine
+
+v0.3.0 - XXX
+  - Fixed Camera "once" locate bug
+  - Applied patch by naveen.michaudagrawal
+
 v0.3.0rc0 -  June 27th, 2008
   - Transitions: Added ZoomTransition by Hugo Ruscitti
   - Fixed Tile Map

@@ -48,3 +48,4 @@ import scene
 import grid
 import text
 import camera
+import particle

@@ -403,19 +403,16 @@ class Spawn(IntervalAction):
 
     def done(self):
         ret = True
-        for i in self.actions:
+        for i in self.cloned_actions:
             ret = ret and i.done()
+
         return ret
 
     def start(self):
         for a in self.actions:
-            a.target = self.target
-            a.start()
+            c = self.target.do( a )
+            self.cloned_actions.append( c )
 
-    def update(self, t):
-        self.actions[0].update(t)
-        self.actions[1].update(t)
-        
 
     def __reversed__(self):
         return Reverse( self.actions[0]  ) | Reverse( self.actions[1] )

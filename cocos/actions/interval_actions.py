@@ -142,10 +142,10 @@ class RotateBy( IntervalAction ):
 
     def start( self ):
         self.start_angle = self.target.rotation
-        
+
     def update(self, t):
         self.target.rotation = (self.start_angle + self.angle * t ) % 360
-            
+
     def __reversed__(self):
         return RotateBy(-self.angle, self.duration)
 
@@ -566,9 +566,7 @@ class Jump(IntervalAction):
                 Duration time in seconds
         """
 
-        import warnings
-        warnings.warn('Deprecated "Jump" action. Consider using JumpBy instead', DeprecationWarning)
-        
+        print 'WARNING: Deprecated "Jump" action. Consider using JumpBy instead'
 
         self.y = y
         self.x = x
