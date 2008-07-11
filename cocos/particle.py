@@ -41,7 +41,6 @@ import copy
 from cocosnode import CocosNode
 from euclid import Point2
 
-
 rand = lambda: random.random() * 2 - 1
 
 ALIVE = (1 << 0 )
@@ -55,6 +54,16 @@ class Color( object ):
 
     def to_array(self):
         return self.r, self.g, self.b, self.a
+
+class PointSpriteGroup( pyglet.sprite.SpriteGroup ):
+    def set_state(self):
+        super(PointSpriteGroup,self).set_state()
+        glEnable( GL_POINT_SPRITE )
+        glTexEnvi( GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE )
+
+    def unset_state(self):
+        glDisable( GL_POINT_SPRITE )
+        super(PointSpriteGroup,self).unset_state()
 
 class Particle( object ):
     def __init__(self):
@@ -82,7 +91,7 @@ class Particle( object ):
         return s
 
 class ParticleSystem( CocosNode ):
-    def __init__(self, total_particles):
+    def __init__(self, total_particles, texture=None):
         super(ParticleSystem,self).__init__()
 
         self.id = 0
@@ -160,12 +169,14 @@ class ParticleSystem( CocosNode ):
         # TEXTURE RELATED
 
         #: texture id of the particle
-        self.texture = None
+        if not texture:
+            texture = pyglet.resource.image('fire.png').texture
+
+        self.texture = texture
 
         self.batch = pyglet.graphics.Batch()
-
-        self.vertex_list = pyglet.graphics.vertex_list( self.total_particles, 
-                            "v2f/stream","c4f")
+        self.group = PointSpriteGroup(self.texture, blend_src=GL_SRC_ALPHA, blend_dest=GL_ONE)
+        self.vertex_list = self.batch.add( self.total_particles, GL_POINTS, self.group, "v2f/stream","c4f")
 
         ver = []
         for i in xrange(self.total_particles):
@@ -177,25 +188,19 @@ class ParticleSystem( CocosNode ):
 
         self.schedule( self.step )
 
+    def on_enter( self ):
+        super( ParticleSystem, self).on_enter()
+        self.add_particle()
+
     def draw( self ):
         glPushMatrix()
         self.transform()
 
-        glEnable( GL_TEXTURE_2D )
-        glBindTexture( GL_TEXTURE_2D, self.texture.id )
-        glEnable( GL_POINT_SPRITE )
-        glTexEnvi( GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE )
         glPointSize( self.size )
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-
-        self.vertex_list.draw(pyglet.gl.GL_POINTS)
-
-        glDisable( GL_POINT_SPRITE )
-        glDisable( GL_TEXTURE_2D )
-
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        self.batch.draw()
 
         glPopMatrix()
+
 
     def step( self, delta ):
         if self.active:
@@ -262,7 +267,7 @@ class ParticleSystem( CocosNode ):
             # else
             elif p.flags == ALIVE:
                 if idx != self.particle_count -1:
-                    self.particles[ idx ] = self.particles[ self.particle_count -1 ]
+                    self.particles[ idx ] = copy.copy(self.particles[ self.particle_count -1 ])
                 self.particles[ self.particle_count-1].flags = 0
                 self.particle_count -= 1
 
@@ -434,5 +439,395 @@ class Explosion( ParticleSystem ):
         # size, in pixels
         self.size = 15.0
         self.size_var = 10.0
+
+        self.texture = pyglet.resource.image("fire.png").get_texture()
+
+class Fire( ParticleSystem ):
+
+    def __init__( self ):
+        super( Fire, self).__init__(500)
+
+        # duration
+        self.duration = -1
+
+        # gravity
+        self.gravity.x = 0.
+        self.gravity.y = 0.0
+
+        # angle
+        self.angle = 90.0
+        self.angle_var = 20.0
+
+        # radial
+        self.radial_accel = 0
+        self.radial_accel_var = 0
+
+        # speed of particles
+        self.speed = 70.0
+        self.speed_var = 40.0
+
+        # emitter position
+        self.x = 320.0
+        self.y = 0.0
+        self.pos_var.x = 40
+        self.pos_var.y = 20
+
+        # life of particles
+        self.life = 2.0
+        self.life_var = 1.0
+
+        # emits per frame
+        self.emission_rate = self.total_particles / self.life
+
+        # color of particles
+        self.start_color.r = 0.76
+        self.start_color.g = 0.25
+        self.start_color.b = 0.12
+        self.start_color.a = 1.0
+        self.start_color_var.r = 0.0
+        self.start_color_var.g = 0.0
+        self.start_color_var.b = 0.0
+        self.start_color_var.a = 0.0
+        self.end_color.r = 0.0
+        self.end_color.g = 0.0
+        self.end_color.b = 0.0
+        self.end_color.a = 1.0
+        self.end_color_var.r = 0.0
+        self.end_color_var.g = 0.0
+        self.end_color_var.b = 0.0
+        self.end_color_var.a = 0.0
+
+        # size, in pixels
+        self.size = 100.0
+        self.size_var = 10.0
+
+        self.texture = pyglet.resource.image("fire.png").get_texture()
+
+class Flower( ParticleSystem ):
+
+    def __init__( self ):
+
+        super( Flower, self).__init__(350)
+
+        # duration
+        self.duration = -1
+
+        # gravity
+        self.gravity.x = 0.
+        self.gravity.y = 0.0
+
+        # angle
+        self.angle = 90.0
+        self.angle_var = 360.0
+
+        # speed of particles
+        self.speed = 80.0
+        self.speed_var = 10.0
+
+        # radial
+        self.radial_accel = -60
+        self.radial_accel_var = 0
+
+        # tangential
+        self.tangential_accel = 15.0
+        self.tangential_accel_var = 0.0
+
+
+        # emitter position
+        self.x = 320.0
+        self.y = 240.0
+        self.pos_var.x = 0
+        self.pos_var.y = 0
+
+        # life of particles
+        self.life = 4.0
+        self.life_var = 1.0
+
+        # emits per frame
+        self.emission_rate = self.total_particles / self.life
+
+        # color of particles
+        self.start_color.r = 0.5
+        self.start_color.g = 0.5
+        self.start_color.b = 0.5
+        self.start_color.a = 1.0
+        self.start_color_var.r = 0.5
+        self.start_color_var.g = 0.5
+        self.start_color_var.b = 0.5
+        self.start_color_var.a = 0.0
+        self.end_color.r = 0.0
+        self.end_color.g = 0.0
+        self.end_color.b = 0.0
+        self.end_color.a = 1.0
+        self.end_color_var.r = 0.0
+        self.end_color_var.g = 0.0
+        self.end_color_var.b = 0.0
+        self.end_color_var.a = 0.0
+
+        # size, in pixels
+        self.size = 30.0
+        self.size_var = 0.0
+
+class Sun( ParticleSystem ):
+
+    def __init__( self ):
+        super( Sun, self).__init__(350)
+
+        # duration
+        self.duration = -1
+
+        # gravity
+        self.gravity.x = 0.
+        self.gravity.y = 0.0
+
+        # angle
+        self.angle = 90.0
+        self.angle_var = 360.0
+
+        # speed of particles
+        self.speed = 20.0
+        self.speed_var = 5.0
+
+        # radial
+        self.radial_accel = 0
+        self.radial_accel_var = 0
+
+        # tangential
+        self.tangential_accel = 0.0
+        self.tangential_accel_var = 0.0
+
+
+        # emitter position
+        self.x = 320.0
+        self.y = 240.0
+        self.pos_var.x = 0
+        self.pos_var.y = 0
+
+        # life of particles
+        self.life = 1.0
+        self.life_var = 0.5
+
+        # emits per frame
+        self.emission_rate = self.total_particles / self.life
+
+        # color of particles
+        self.start_color.r = 0.75
+        self.start_color.g = 0.25
+        self.start_color.b = 0.12
+        self.start_color.a = 1.0
+        self.start_color_var.r = 0.0
+        self.start_color_var.g = 0.0
+        self.start_color_var.b = 0.0
+        self.start_color_var.a = 0.0
+        self.end_color.r = 0.0
+        self.end_color.g = 0.0
+        self.end_color.b = 0.0
+        self.end_color.a = 1.0
+        self.end_color_var.r = 0.0
+        self.end_color_var.g = 0.0
+        self.end_color_var.b = 0.0
+        self.end_color_var.a = 0.0
+
+        # size, in pixels
+        self.size = 30.0
+        self.size_var = 10.0
+
+        self.texture = pyglet.resource.image("fire.png").get_texture()
+
+class Spiral( ParticleSystem ):
+
+    def __init__( self ):
+        super( Spiral, self).__init__(500)
+
+        # duration
+        self.duration = -1
+
+        # gravity
+        self.gravity.x = 0.0
+        self.gravity.y = 0.0
+
+        # angle
+        self.angle = 90.0
+        self.angle_var = 0.0
+
+        # speed of particles
+        self.speed = 150.0
+        self.speed_var = 0.0
+
+        # radial
+        self.radial_accel = -380
+        self.radial_accel_var = 0
+
+        # tangential
+        self.tangential_accel = 45.0
+        self.tangential_accel_var = 0.0
+
+
+        # emitter position
+        self.x = 320.0
+        self.y = 240.0
+        self.pos_var.x = 0
+        self.pos_var.y = 0
+
+        # life of particles
+        self.life = 12.0
+        self.life_var = 0.0
+
+        # emits per frame
+        self.emission_rate = self.total_particles / self.life
+
+        # color of particles
+        self.start_color.r = 0.5
+        self.start_color.g = 0.5
+        self.start_color.b = 0.5
+        self.start_color.a = 1.0
+        self.start_color_var.r = 0.5
+        self.start_color_var.g = 0.5
+        self.start_color_var.b = 0.5
+        self.start_color_var.a = 0.0
+        self.end_color.r = 0.5
+        self.end_color.g = 0.5
+        self.end_color.b = 0.5
+        self.end_color.a = 1.0
+        self.end_color_var.r = 0.5
+        self.end_color_var.g = 0.5
+        self.end_color_var.b = 0.5
+        self.end_color_var.a = 0.0
+
+        # size, in pixels
+        self.size = 20.0
+        self.size_var = 10.0
+
+        self.texture = pyglet.resource.image("fire.png").get_texture()
+
+class Meteor( ParticleSystem ):
+
+    def __init__( self ):
+        super( Meteor, self).__init__(150)
+
+        # duration
+        self.duration = -1
+
+        # gravity
+        self.gravity.x = -200.0
+        self.gravity.y = 200.0
+
+        # angle
+        self.angle = 90.0
+        self.angle_var = 360.0
+
+        # speed of particles
+        self.speed = 15.0
+        self.speed_var = 5.0
+
+        # radial
+        self.radial_accel = 0
+        self.radial_accel_var = 0
+
+        # tangential
+        self.tangential_accel = 0.0
+        self.tangential_accel_var = 0.0
+
+
+        # emitter position
+        self.x = 320.0
+        self.y = 240.0
+        self.pos_var.x = 0
+        self.pos_var.y = 0
+
+        # life of particles
+        self.life = 2.0
+        self.life_var = 1.0
+
+        # size, in pixels
+        self.size = 60.0
+        self.size_var = 10.0
+
+        # emits per frame
+        self.emission_rate = self.total_particles / self.life
+
+        # color of particles
+        self.start_color.r = 0.2
+        self.start_color.g = 0.7
+        self.start_color.b = 0.7
+        self.start_color.a = 1.0
+        self.start_color_var.r = 0.0
+        self.start_color_var.g = 0.0
+        self.start_color_var.b = 0.0
+        self.start_color_var.a = 0.2
+        self.end_color.r = 0.0
+        self.end_color.g = 0.0
+        self.end_color.b = 0.0
+        self.end_color.a = 1.0
+        self.end_color_var.r = 0.0
+        self.end_color_var.g = 0.0
+        self.end_color_var.b = 0.0
+        self.end_color_var.a = 0.0
+
+        self.texture = pyglet.resource.image("fire.png").get_texture()
+
+class Galaxy( ParticleSystem ):
+
+    def __init__( self ):
+        super( Galaxy, self).__init__(200)
+
+        # duration
+        self.duration = -1
+
+        # gravity
+        self.gravity.x = 0.0
+        self.gravity.y = 0.0
+
+        # angle
+        self.angle = 90.0
+        self.angle_var = 360.0
+
+        # speed of particles
+        self.speed = 60.0
+        self.speed_var = 10.0
+
+        # radial
+        self.radial_accel = -80.0
+        self.radial_accel_var = 0
+
+        # tangential
+        self.tangential_accel = 80.0
+        self.tangential_accel_var = 0.0
+
+
+        # emitter position
+        self.x = 320.0
+        self.y = 240.0
+        self.pos_var.x = 0
+        self.pos_var.y = 0
+
+        # life of particles
+        self.life = 4.0
+        self.life_var = 1.0
+
+        # size, in pixels
+        self.size = 37.0
+        self.size_var = 10.0
+
+        # emits per frame
+        self.emission_rate = self.total_particles / self.life
+
+        # color of particles
+        self.start_color.r = 0.12
+        self.start_color.g = 0.25
+        self.start_color.b = 0.76
+        self.start_color.a = 1.0
+        self.start_color_var.r = 0.0
+        self.start_color_var.g = 0.0
+        self.start_color_var.b = 0.0
+        self.start_color_var.a = 0.0
+        self.end_color.r = 0.0
+        self.end_color.g = 0.0
+        self.end_color.b = 0.0
+        self.end_color.a = 1.0
+        self.end_color_var.r = 0.0
+        self.end_color_var.g = 0.0
+        self.end_color_var.b = 0.0
+        self.end_color_var.a = 0.0
 
         self.texture = pyglet.resource.image("fire.png").get_texture()
