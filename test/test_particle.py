@@ -18,11 +18,11 @@ class L(Layer):
 #        p = Fireworks()
 #        p = Explosion()
 #        p = Fire()
-        p = Flower()
+#        p = Flower()
 #        p = Sun()
 #        p = Spiral()
 #        p = Meteor()
-#        p = Galaxy()
+        p = Galaxy()
         self.add( p )
 
 if __name__ == "__main__":
