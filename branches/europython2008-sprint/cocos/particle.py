@@ -37,13 +37,19 @@ import pyglet
 from pyglet.gl import *
 import math
 import copy
+import numpy
+import ctypes
 
 from cocosnode import CocosNode
 from euclid import Point2
 
 rand = lambda: random.random() * 2 - 1
 
-ALIVE = (1 << 0 )
+# PointerToNumpy by Gary Herron
+# from pyglet's user list
+def PointerToNumpy(a, ptype=ctypes.c_float):
+    a = numpy.ascontiguousarray(a)           # Probably a NO-OP, but perhaps not
+    return a.ctypes.data_as(ctypes.POINTER(ptype)) # Ugly and undocumented! 
 
 class Color( object ):
     def __init__( self, r,g,b,a ):
@@ -55,47 +61,12 @@ class Color( object ):
     def to_array(self):
         return self.r, self.g, self.b, self.a
 
-class PointSpriteGroup( pyglet.sprite.SpriteGroup ):
-    def set_state(self):
-        super(PointSpriteGroup,self).set_state()
-        glEnable( GL_POINT_SPRITE )
-        glTexEnvi( GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE )
-
-    def unset_state(self):
-        glDisable( GL_POINT_SPRITE )
-        super(PointSpriteGroup,self).unset_state()
-
-class Particle( object ):
-    def __init__(self):
-        #: position of the particle, relative to the center of the system
-        self.pos = Point2(0,0)
-        #: direction of the particle
-        self.dir = Point2(0,0)
-        #: radial acceleration of the particle
-        self.radial_accel = 0.0
-        #: tangential acceleration of the particle
-        self.tangential_accel = 0.0
-        #: color of the particle
-        self.color = Color(255,255,255,255)
-        #: delta color of the particle
-        self.delta_color = Color(0,0,0,0)
-        #: size of the particle
-        self.size = 1
-        #: life of the particle
-        self.life = 0
-        #: flags of the particle (ALIVE, etc...)
-        self.flags = 0
-
-    def __str__(self):
-        s ='pos:%s, dir:%s, life:%s, r:%s, t:%s, f:%s' % (self.pos, self.dir, self.life, self.radial_accel, self.tangential_accel, self.flags)
-        return s
 
 class ParticleSystem( CocosNode ):
     def __init__(self, total_particles, texture=None):
         super(ParticleSystem,self).__init__()
 
         self.id = 0
-        self.flags = 0
 
         #: is the particle system active ?
         self.active = True
@@ -138,23 +109,39 @@ class ParticleSystem( CocosNode ):
         self.size_var = 0.0
 
         #: Start color of the particles
-        self.start_color = Color(255,255,255,255)
+        self.start_color = Color(0.0,0.0,0.0,0.0)
         #: Start color variance
-        self.start_color_var = Color(255,255,255,255)
+        self.start_color_var = Color(0.0,0.0,0.0,0.0)
         #: End color of the particles
-        self.end_color = Color(255,255,255,255)
+        self.end_color = Color(0.0,0.0,0.0,0.0)
         #: End color variance
-        self.end_color_var = Color(255,255,255,255)
-
-        #: array of particles
-        self.particles = []
-        for i in xrange( total_particles ):
-            self.particles.append( Particle() )
+        self.end_color_var = Color(0.0,0.0,0.0,0.0)
 
         #: Maximum particles
         self.total_particles = total_particles
         #: Count of particles
         self.particle_count = 0
+
+        # particles
+        # position x 2
+        self.pas_pos = numpy.zeros( (self.total_particles, 2), numpy.float32 )
+        # direction x 2
+        self.pas_dir = numpy.zeros( (self.total_particles, 2), numpy.float32 )
+        # rad accel x 1
+        self.pas_rad = numpy.zeros( (self.total_particles, 1), numpy.float32 )
+        # tan accel x 1
+        self.pas_tan = numpy.zeros( (self.total_particles, 1), numpy.float32 )
+        # gravity x 2
+        self.pas_grav = numpy.zeros( (self.total_particles, 2), numpy.float32 )
+        # colors x 4
+        self.pas_color = numpy.zeros( (self.total_particles, 4), numpy.float32 )
+        # delta colors x 4
+        self.pas_delta_color = numpy.zeros( (self.total_particles, 4), numpy.float32 )
+        # life x 1
+        self.pas_life = numpy.zeros( (self.total_particles, 1), numpy.float32 )
+        self.pas_life.fill(-1.0)
+        # size x 1
+        self.pas_size = numpy.zeros( (self.total_particles, 1), numpy.float32 )
 
         #: How many particles can be emitted per second
         self.emission_rate = 0
@@ -174,18 +161,6 @@ class ParticleSystem( CocosNode ):
 
         self.texture = texture
 
-        self.batch = pyglet.graphics.Batch()
-        self.group = PointSpriteGroup(self.texture, blend_src=GL_SRC_ALPHA, blend_dest=GL_ONE)
-        self.vertex_list = self.batch.add( self.total_particles, GL_POINTS, self.group, "v2f/stream","c4f")
-
-        ver = []
-        for i in xrange(self.total_particles):
-            ver.append(0)
-            ver.append(0)
-
-        self.vertex_list.vertices = ver
-        self.vertex_list.colors = [255,255,255,255] * self.total_particles
-
         self.schedule( self.step )
 
     def on_enter( self ):
@@ -197,7 +172,35 @@ class ParticleSystem( CocosNode ):
         self.transform()
 
         glPointSize( self.size )
-        self.batch.draw()
+
+        vtr = PointerToNumpy( self.pas_pos )
+        color = PointerToNumpy( self.pas_color )
+
+        glEnable(GL_TEXTURE_2D)
+        glBindTexture(GL_TEXTURE_2D, self.texture.id )
+
+        glEnable(GL_POINT_SPRITE)
+        glTexEnvi( GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE )
+
+        glEnableClientState(GL_VERTEX_ARRAY)
+        glVertexPointer(2,GL_FLOAT,0,vtr)
+
+        glEnableClientState(GL_COLOR_ARRAY);
+        glColorPointer(4,GL_FLOAT,0,color);
+
+        glPushAttrib(GL_COLOR_BUFFER_BIT)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+        glDrawArrays(GL_POINTS, 0, self.total_particles);
+
+        glPopAttrib()
+
+        # unbind
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_POINT_SPRITE);
 
         glPopMatrix()
 
@@ -206,6 +209,8 @@ class ParticleSystem( CocosNode ):
         if self.active:
             rate = 1.0 / self.emission_rate
             self.emit_counter += delta
+
+            self.particle_count = sum( self.pas_life >= 0 )
 
             while self.particle_count < self.total_particles and self.emit_counter > rate:
                 self.add_particle()
@@ -219,7 +224,7 @@ class ParticleSystem( CocosNode ):
         self.update_particles( delta )
 
     def add_particle( self ):
-        self.init_particle( self.particle_count )
+        self.init_particle()
         self.particle_count += 1
 
     def stop_system( self ):
@@ -232,68 +237,80 @@ class ParticleSystem( CocosNode ):
         self.emit_counter = 0
 
     def update_particles( self, delta ):
-        for idx in xrange(self.particle_count):
-            p = self.particles[idx]
-            if p.life > 0:
-
-                # radial
-                radial = Point2(0,0)
-                if p.pos.x or p.pos.y:
-                    radial = p.pos.normalized()
-                tangential = radial.copy()
-                radial *= p.radial_accel
-
-                # tangential acceleration
-                tangential = Point2( -tangential.y, tangential.x )
-                tangential *= p.tangential_accel
-
-                # (gravity + radial + tangential) * dt
-                p.dir += ( radial + tangential + self.gravity ) * delta
-                p.pos += (p.dir * delta)
-
-                # color
-                p.color.r += p.delta_color.r * delta
-                p.color.g += p.delta_color.g * delta
-                p.color.b += p.delta_color.b * delta
-                p.color.a += p.delta_color.a * delta
-
-                p.life -= delta
-
-                # update vertex list
-                self.vertex_list.vertices[ idx * 2 ] = p.pos.x
-                self.vertex_list.vertices[ idx * 2 + 1 ] = p.pos.y
-                self.vertex_list.colors[idx*4:idx*4+4] = p.color.to_array()
-
-            # else
-            elif p.flags == ALIVE:
-                if idx != self.particle_count -1:
-                    self.particles[ idx ] = copy.copy(self.particles[ self.particle_count -1 ])
-                self.particles[ self.particle_count-1].flags = 0
-                self.particle_count -= 1
 
 
-    def init_particle( self, idx ):
+        # radial: posx + posy
+        norm = numpy.sqrt( self.pas_pos[:,0] ** 2 + self.pas_pos[:,1] ** 2 )
+        # XXX prevent div by 0
+        norm = numpy.select( [norm==0], [0.0000001], default=norm )
+        posx = self.pas_pos[:,0] / norm
+        posy = self.pas_pos[:,1] / norm
+
+        radial = numpy.array( [posx, posy] )
+        tangential = numpy.array( [posy, posx] )
+
+        # update dir
+        radial = numpy.swapaxes(radial,0,1)
+        radial *= self.pas_rad
+        tangential = numpy.swapaxes(tangential,0,1)
+        tangential *= self.pas_tan
+
+        self.pas_dir +=  (tangential + radial + self.pas_grav) * delta
+
+        # update pos with updated dir
+        self.pas_pos += self.pas_dir * delta
+
+        # life
+        self.pas_life -= delta
+
+
+        # color
+        self.pas_color += self.pas_delta_color * delta
+
+        # if life < 0, set alpha in 0
+        self.pas_color[:,3] = numpy.select( [self.pas_life[:,0] < 0], [0], default=self.pas_color[:,3] )
+
+#        print self.particles[0]
+#        print self.pas[0,0:4]
+
+    def init_particle( self ):
         # position
 #        p=self.particles[idx]
-        p = Particle()
 
-        p.pos.x = self.pos_var.x * rand()
-        p.pos.y = self.pos_var.y * rand()
+        a = self.pas_life < 0
+        idxs = a.nonzero()
 
-        # direction
+        idx = -1
+
+        if len(idxs[0]) > 0:
+            idx = idxs[0][0] 
+        else:
+            raise Exception("No empty particle")
+
+        # position
+        self.pas_pos[idx][0] = self.pos_var.x * rand()
+        self.pas_pos[idx][1] = self.pos_var.y * rand()
+
+
         a = math.radians( self.angle + self.angle_var * rand() )
         v = Point2( math.cos( a ), math.sin( a ) )
         s = self.speed + self.speed_var * rand()
-        p.dir = v * s
+
+        dir = v * s
+
+        # direction
+        self.pas_dir[idx][0] = dir.x
+        self.pas_dir[idx][1] = dir.y
 
         # radial accel
-        p.radial_accel = self.radial_accel + self.radial_accel_var * rand()
+        self.pas_rad[idx] = self.radial_accel + self.radial_accel_var * rand()
+
 
         # tangential accel
-        p.tangential_accel = self.tangential_accel + self.tangential_accel_var * rand()
+        self.pas_tan[idx] = self.tangential_accel + self.tangential_accel_var * rand()
         
         # life
-        p.life = self.life + self.life_var * rand()
+        life = self.pas_life[idx] = self.life + self.life_var * rand()
 
         # Color
         # start
@@ -302,7 +319,10 @@ class ParticleSystem( CocosNode ):
         sb = self.start_color.b + self.start_color_var.b * rand()
         sa = self.start_color.a + self.start_color_var.a * rand()
 
-        p.color = Color(sr,sg,sb,sa)
+        self.pas_color[idx][0] = sr
+        self.pas_color[idx][1] = sg
+        self.pas_color[idx][2] = sb
+        self.pas_color[idx][3] = sa
 
         # end
         er = self.end_color.r + self.end_color_var.r * rand()
@@ -310,22 +330,27 @@ class ParticleSystem( CocosNode ):
         eb = self.end_color.b + self.end_color_var.b * rand()
         ea = self.end_color.a + self.end_color_var.a * rand()
 
-        p.delta_color.r = (er - sr) / p.life
-        p.delta_color.g = (eg - sg) / p.life
-        p.delta_color.b = (eb - sb) / p.life
-        p.delta_color.a = (ea - sa) / p.life
+        delta_color_r = (er - sr) / life
+        delta_color_g = (eg - sg) / life
+        delta_color_b = (eb - sb) / life
+        delta_color_a = (ea - sa) / life
+
+        self.pas_delta_color[idx][0] = delta_color_r
+        self.pas_delta_color[idx][1] = delta_color_g
+        self.pas_delta_color[idx][2] = delta_color_b
+        self.pas_delta_color[idx][3] = delta_color_a
 
         # size
-        p.size = self.size + self.size_var * rand()
+        self.pas_size[idx] = self.size + self.size_var * rand()
 
-        # alive
-        p.flags = ALIVE
+        # gravity
+        self.pas_grav[idx][0] = self.gravity.x
+        self.pas_grav[idx][1] = self.gravity.y
 
-        self.particles[ idx ] = p
 
 class Fireworks( ParticleSystem ):
     def __init__( self ):
-        super( Fireworks, self).__init__(500)
+        super( Fireworks, self).__init__(1500)
 
         # duration
         self.duration = -1
@@ -378,8 +403,6 @@ class Fireworks( ParticleSystem ):
         # size, in pixels
         self.size = 8.0
         self.size_var = 2.0
-
-        self.texture = pyglet.resource.image("fire.png").get_texture()
 
 
 class Explosion( ParticleSystem ):
@@ -440,7 +463,6 @@ class Explosion( ParticleSystem ):
         self.size = 15.0
         self.size_var = 10.0
 
-        self.texture = pyglet.resource.image("fire.png").get_texture()
 
 class Fire( ParticleSystem ):
 
@@ -501,13 +523,12 @@ class Fire( ParticleSystem ):
         self.size = 100.0
         self.size_var = 10.0
 
-        self.texture = pyglet.resource.image("fire.png").get_texture()
 
 class Flower( ParticleSystem ):
 
     def __init__( self ):
 
-        super( Flower, self).__init__(350)
+        super( Flower, self).__init__(1500)
 
         # duration
         self.duration = -1
@@ -577,7 +598,7 @@ class Sun( ParticleSystem ):
         self.duration = -1
 
         # gravity
-        self.gravity.x = 0.
+        self.gravity.x = 0.0
         self.gravity.y = 0.0
 
         # angle
@@ -632,7 +653,6 @@ class Sun( ParticleSystem ):
         self.size = 30.0
         self.size_var = 10.0
 
-        self.texture = pyglet.resource.image("fire.png").get_texture()
 
 class Spiral( ParticleSystem ):
 
@@ -661,7 +681,6 @@ class Spiral( ParticleSystem ):
         # tangential
         self.tangential_accel = 45.0
         self.tangential_accel_var = 0.0
-
 
         # emitter position
         self.x = 320.0
@@ -698,7 +717,6 @@ class Spiral( ParticleSystem ):
         self.size = 20.0
         self.size_var = 10.0
 
-        self.texture = pyglet.resource.image("fire.png").get_texture()
 
 class Meteor( ParticleSystem ):
 
@@ -764,7 +782,6 @@ class Meteor( ParticleSystem ):
         self.end_color_var.b = 0.0
         self.end_color_var.a = 0.0
 
-        self.texture = pyglet.resource.image("fire.png").get_texture()
 
 class Galaxy( ParticleSystem ):
 
@@ -829,5 +846,3 @@ class Galaxy( ParticleSystem ):
         self.end_color_var.g = 0.0
         self.end_color_var.b = 0.0
         self.end_color_var.a = 0.0
-
-        self.texture = pyglet.resource.image("fire.png").get_texture()
