@@ -210,6 +210,9 @@ class ParticleSystem( CocosNode ):
             rate = 1.0 / self.emission_rate
             self.emit_counter += delta
 
+#            if random.random() < 0.01:
+#                delta += 0.5
+
             self.particle_count = sum( self.pas_life >= 0 )
 
             while self.particle_count < self.total_particles and self.emit_counter > rate:
@@ -247,7 +250,7 @@ class ParticleSystem( CocosNode ):
         posy = self.pas_pos[:,1] / norm
 
         radial = numpy.array( [posx, posy] )
-        tangential = numpy.array( [posy, posx] )
+        tangential = numpy.array( [-posy, posx] )
 
         # update dir
         radial = numpy.swapaxes(radial,0,1)
@@ -350,7 +353,7 @@ class ParticleSystem( CocosNode ):
 
 class Fireworks( ParticleSystem ):
     def __init__( self ):
-        super( Fireworks, self).__init__(1500)
+        super( Fireworks, self).__init__(4000)
 
         # duration
         self.duration = -1
@@ -467,7 +470,7 @@ class Explosion( ParticleSystem ):
 class Fire( ParticleSystem ):
 
     def __init__( self ):
-        super( Fire, self).__init__(500)
+        super( Fire, self).__init__(250)
 
         # duration
         self.duration = -1
@@ -528,7 +531,7 @@ class Flower( ParticleSystem ):
 
     def __init__( self ):
 
-        super( Flower, self).__init__(1500)
+        super( Flower, self).__init__(500)
 
         # duration
         self.duration = -1
