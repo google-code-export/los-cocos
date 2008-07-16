@@ -34,7 +34,7 @@
 http://cocos2d.org
 '''
 
-__version__ = "0.3.0-rc0"
+__version__ = "0.4.0-beta0"
 __author__ = "cocos2d team"
 version = __version__
 
@@ -49,3 +49,4 @@ import grid
 import text
 import camera
 import particle
+import particle_systems
