@@ -70,6 +70,7 @@ class ParticleLayer( Layer ):
         super(ParticleLayer, self ).__init__()
         self.index = index
         self.particle_instance = particle_instance
+        self.particle_instance.position = (320,200)
 
     def on_enter( self ):
         super( ParticleLayer, self).on_enter()

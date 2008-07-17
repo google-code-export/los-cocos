@@ -9,7 +9,7 @@ import cocos
 from cocos.director import director
 from cocos.actions import *
 from cocos.layer import *
-from cocos.particle import *
+from cocos.particle_systems import *
 
 class L(Layer):
     def __init__(self):
@@ -23,6 +23,8 @@ class L(Layer):
 #        p = Spiral()
 #        p = Meteor()
 #        p = Galaxy()
+
+        p.position = (320,100)
         self.add( p )
 
 if __name__ == "__main__":
