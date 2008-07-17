@@ -32,504 +32,377 @@
 # ----------------------------------------------------------------------------
 '''Pre-defined Particle Systems'''
 
+__all__ = ['Fireworks', 'Spiral', 'Meteor', 'Sun', 'Fire', 'Galaxy', 'Flower', 'Explosion']
 
-from particle import ParticleSystem
+from particle import ParticleSystem, Color
 from euclid import Point2
 
 class Fireworks( ParticleSystem ):
-    def __init__( self ):
-        super( Fireworks, self).__init__(3000)
 
-        # duration
-        self.duration = -1
+    # total particles
+    total_particles = 3000
 
-        # gravity
-        self.gravity.x = 0
-        self.gravity.y = -90
+    # duration
+    duration = -1
 
-        # angle
-        self.angle = 90
-        self.angle_var = 20
+    # gravity
+    gravity = Point2(0,-90)
 
-        # radial
-        self.radial_accel = 0
-        self.radial_accel_var = 0
+    # angle
+    angle = 90
+    angle_var = 20
 
-        # speed of particles
-        self.speed = 180
-        self.speed_var = 50
+    # radial
+    radial_accel = 0
+    radial_accel_var = 0
 
-        # emitter position
-        self.x = 320
-        self.y = 160
+    # speed of particles
+    speed = 180
+    speed_var = 50
 
-        # life of particles
-        self.life = 3.5
-        self.life_var = 1
+    # emitter variable position
+    pos_var = Point2(0,0)
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.life
+    # life of particles
+    life = 3.5
+    life_var = 1
 
-        # color of particles
-        self.start_color.r = 0.5
-        self.start_color.g = 0.5
-        self.start_color.b = 0.5
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.5
-        self.start_color_var.g = 0.5
-        self.start_color_var.b = 0.5
-        self.start_color_var.a = 0.1
-        self.end_color.r = 0.1
-        self.end_color.g = 0.1
-        self.end_color.b = 0.1
-        self.end_color.a = 0.2
-        self.end_color_var.r = 0.1
-        self.end_color_var.g = 0.1
-        self.end_color_var.b = 0.1
-        self.end_color_var.a = 0.2
+    # emits per frame
+    emission_rate = total_particles / life
 
-        # size, in pixels
-        self.size = 8.0
-        self.size_var = 2.0
+    # color of particles
+    start_color = Color(0.5,0.5,0.5,1.0)
+    start_color_var = Color(0.5, 0.5, 0.5, 1.0)
+    end_color = Color(0.1,0.1,0.1,0.2)
+    end_color_var = Color(0.1,0.1,0.1,0.2)
+
+    # size, in pixels
+    size = 8.0
+    size_var = 2.0
 
 
 class Explosion( ParticleSystem ):
-    def __init__( self ):
-        super( Explosion, self).__init__(700)
 
-        # duration
-        self.duration = 0.1
+    # total particle
+    total_particles = 700
 
-        # gravity
-        self.gravity.x = 0
-        self.gravity.y = -90.0
+    # duration
+    duration = 0.1
 
-        # angle
-        self.angle = 90.0
-        self.angle_var = 360.0
+    # gravity
+    gravity = Point2(0,-90)
 
-        # radial
-        self.radial_accel = 0
-        self.radial_accel_var = 0
+    # angle
+    angle = 90.0
+    angle_var = 360.0
 
-        # speed of particles
-        self.speed = 70.0
-        self.speed_var = 40.0
+    # radial
+    radial_accel = 0
+    radial_accel_var = 0
 
-        # emitter position
-        self.x = 320.0
-        self.y = 240.0
-        self.pos_var.x = 0
-        self.pos_var.y = 0
+    # speed of particles
+    speed = 70.0
+    speed_var = 40.0
 
-        # life of particles
-        self.life = 5.0
-        self.life_var = 2.0
+    # emitter variable position
+    pos_var = Point2(0,0)
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.duration
+    # life of particles
+    life = 5.0
+    life_var = 2.0
 
-        # color of particles
-        self.start_color.r = 0.7
-        self.start_color.g = 0.2
-        self.start_color.b = 0.1
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.5
-        self.start_color_var.g = 0.5
-        self.start_color_var.b = 0.5
-        self.start_color_var.a = 0.0
-        self.end_color.r = 0.5
-        self.end_color.g = 0.5
-        self.end_color.b = 0.5
-        self.end_color.a = 0.0
-        self.end_color_var.r = 0.5
-        self.end_color_var.g = 0.5
-        self.end_color_var.b = 0.5
-        self.end_color_var.a = 0.0
+    # emits per frame
+    emission_rate = total_particles / duration
 
-        # size, in pixels
-        self.size = 15.0
-        self.size_var = 10.0
+    # color of particles
+    start_color = Color(0.7, 0.2, 0.1, 1.0)
+    start_color_var = Color(0.5, 0.5, 0.5, 0.0)
+    end_color = Color(0.5, 0.5, 0.5, 0.0)
+    end_color_var = Color(0.5, 0.5, 0.5, 0.0)
+
+    # size, in pixels
+    size = 15.0
+    size_var = 10.0
 
 
 class Fire( ParticleSystem ):
 
-    def __init__( self ):
-        super( Fire, self).__init__(250)
+    # total particles
+    total_particles = 250
 
-        # duration
-        self.duration = -1
+    # duration
+    duration = -1
 
-        # gravity
-        self.gravity.x = 0.
-        self.gravity.y = 0.0
+    # gravity
+    gravity = Point2(0,0)
 
-        # angle
-        self.angle = 90.0
-        self.angle_var = 20.0
+    # angle
+    angle = 90.0
+    angle_var = 20.0
 
-        # radial
-        self.radial_accel = 0
-        self.radial_accel_var = 0
+    # radial
+    radial_accel = 0
+    radial_accel_var = 0
 
-        # speed of particles
-        self.speed = 70.0
-        self.speed_var = 40.0
+    # speed of particles
+    speed = 70.0
+    speed_var = 40.0
 
-        # emitter position
-        self.x = 320.0
-        self.y = 0.0
-        self.pos_var.x = 40
-        self.pos_var.y = 20
+    # emitter variable position
+    pos_var = Point2(40, 20)
 
-        # life of particles
-        self.life = 2.0
-        self.life_var = 1.0
+    # life of particles
+    life = 2.0
+    life_var = 1.0
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.life
+    # emits per frame
+    emission_rate = total_particles / life
 
-        # color of particles
-        self.start_color.r = 0.76
-        self.start_color.g = 0.25
-        self.start_color.b = 0.12
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.0
-        self.start_color_var.g = 0.0
-        self.start_color_var.b = 0.0
-        self.start_color_var.a = 0.0
-        self.end_color.r = 0.0
-        self.end_color.g = 0.0
-        self.end_color.b = 0.0
-        self.end_color.a = 1.0
-        self.end_color_var.r = 0.0
-        self.end_color_var.g = 0.0
-        self.end_color_var.b = 0.0
-        self.end_color_var.a = 0.0
+    # color of particles
+    start_color = Color(0.76, 0.25, 0.12, 1.0)
+    start_color_var = Color(0.0, 0.0, 0.0, 0.0)
+    end_color = Color(0.0, 0.0, 0.0, 1.0)
+    end_color_var = Color(0.0, 0.0, 0.0, 0.0)
 
-        # size, in pixels
-        self.size = 100.0
-        self.size_var = 10.0
+    # size, in pixels
+    size = 100.0
+    size_var = 10.0
 
 
 class Flower( ParticleSystem ):
 
-    def __init__( self ):
+    # total particles
+    total_particles = 500
 
-        super( Flower, self).__init__(500)
+    # duration
+    duration = -1
 
-        # duration
-        self.duration = -1
+    # gravity
+    gravity = Point2( 0, 0)
 
-        # gravity
-        self.gravity.x = 0.
-        self.gravity.y = 0.0
+    # angle
+    angle = 90.0
+    angle_var = 360.0
 
-        # angle
-        self.angle = 90.0
-        self.angle_var = 360.0
+    # speed of particles
+    speed = 80.0
+    speed_var = 10.0
 
-        # speed of particles
-        self.speed = 80.0
-        self.speed_var = 10.0
+    # radial
+    radial_accel = -60
+    radial_accel_var = 0
 
-        # radial
-        self.radial_accel = -60
-        self.radial_accel_var = 0
+    # tangential
+    tangential_accel = 15.0
+    tangential_accel_var = 0.0
 
-        # tangential
-        self.tangential_accel = 15.0
-        self.tangential_accel_var = 0.0
+    # emitter variable position
+    pos_var = Point2(0,0)
 
-        # emitter position
-        self.x = 320.0
-        self.y = 240.0
-        self.pos_var.x = 0
-        self.pos_var.y = 0
+    # life of particles
+    life = 4.0
+    life_var = 1.0
 
-        # life of particles
-        self.life = 4.0
-        self.life_var = 1.0
+    # emits per frame
+    emission_rate = total_particles / life
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.life
+    # color of particles
+    start_color = Color(0.5, 0.5, 0.5, 1.0)
+    start_color_var = Color(0.5, 0.5, 0.5, 0.0)
+    end_color = Color(0.0, 0.0, 0.0, 1.0)
+    end_color_var = Color(0.0, 0.0, 0.0, 0.0)
 
-        # color of particles
-        self.start_color.r = 0.5
-        self.start_color.g = 0.5
-        self.start_color.b = 0.5
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.5
-        self.start_color_var.g = 0.5
-        self.start_color_var.b = 0.5
-        self.start_color_var.a = 0.0
-        self.end_color.r = 0.0
-        self.end_color.g = 0.0
-        self.end_color.b = 0.0
-        self.end_color.a = 1.0
-        self.end_color_var.r = 0.0
-        self.end_color_var.g = 0.0
-        self.end_color_var.b = 0.0
-        self.end_color_var.a = 0.0
-
-        # size, in pixels
-        self.size = 30.0
-        self.size_var = 0.0
+    # size, in pixels
+    size = 30.0
+    size_var = 0.0
 
 class Sun( ParticleSystem ):
 
-    def __init__( self ):
-        super( Sun, self).__init__(350)
+    # total particles
+    total_particles = 350
 
-        # duration
-        self.duration = -1
+    # duration
+    duration = -1
 
-        # gravity
-        self.gravity.x = 0.0
-        self.gravity.y = 0.0
+    # gravity
+    gravity = Point2(0,0)
 
-        # angle
-        self.angle = 90.0
-        self.angle_var = 360.0
+    # angle
+    angle = 90.0
+    angle_var = 360.0
 
-        # speed of particles
-        self.speed = 20.0
-        self.speed_var = 5.0
+    # speed of particles
+    speed = 20.0
+    speed_var = 5.0
 
-        # radial
-        self.radial_accel = 0
-        self.radial_accel_var = 0
+    # radial
+    radial_accel = 0
+    radial_accel_var = 0
 
-        # tangential
-        self.tangential_accel = 0.0
-        self.tangential_accel_var = 0.0
+    # tangential
+    tangential_accel = 0.0
+    tangential_accel_var = 0.0
 
+    # emitter variable position
+    pos_var = Point2(0, 0)
 
-        # emitter position
-        self.x = 320.0
-        self.y = 240.0
-        self.pos_var.x = 0
-        self.pos_var.y = 0
+    # life of particles
+    life = 1.0
+    life_var = 0.5
 
-        # life of particles
-        self.life = 1.0
-        self.life_var = 0.5
+    # emits per frame
+    emission_rate = total_particles / life
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.life
+    # color of particles
+    start_color = Color(0.75, 0.25, 0.12, 1.0)
+    start_color_var = Color(0.0, 0.0, 0.0, 0.0)
+    end_color = Color(0.0, 0.0, 0.0, 0.0)
+    end_color_var = Color(0.0, 0.0, 0.0, 0.0)
 
-        # color of particles
-        self.start_color.r = 0.75
-        self.start_color.g = 0.25
-        self.start_color.b = 0.12
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.0
-        self.start_color_var.g = 0.0
-        self.start_color_var.b = 0.0
-        self.start_color_var.a = 0.0
-        self.end_color.r = 0.0
-        self.end_color.g = 0.0
-        self.end_color.b = 0.0
-        self.end_color.a = 1.0
-        self.end_color_var.r = 0.0
-        self.end_color_var.g = 0.0
-        self.end_color_var.b = 0.0
-        self.end_color_var.a = 0.0
-
-        # size, in pixels
-        self.size = 40.0
-        self.size_var = 00.0
+    # size, in pixels
+    size = 40.0
+    size_var = 00.0
 
 
 class Spiral( ParticleSystem ):
 
-    def __init__( self ):
-        super( Spiral, self).__init__(500)
+    # total paticles
+    total_particles = 500
 
-        # duration
-        self.duration = -1
+    # duration
+    duration = -1
 
-        # gravity
-        self.gravity.x = 0.0
-        self.gravity.y = 0.0
+    # gravity
+    gravity = Point2(0,0)
 
-        # angle
-        self.angle = 90.0
-        self.angle_var = 0.0
+    # angle
+    angle = 90.0
+    angle_var = 0.0
 
-        # speed of particles
-        self.speed = 150.0
-        self.speed_var = 0.0
+    # speed of particles
+    speed = 150.0
+    speed_var = 0.0
 
-        # radial
-        self.radial_accel = -380
-        self.radial_accel_var = 0
+    # radial
+    radial_accel = -380
+    radial_accel_var = 0
 
-        # tangential
-        self.tangential_accel = 45.0
-        self.tangential_accel_var = 0.0
+    # tangential
+    tangential_accel = 45.0
+    tangential_accel_var = 0.0
 
-        # emitter position
-        self.x = 320.0
-        self.y = 240.0
-        self.pos_var.x = 0
-        self.pos_var.y = 0
+    # emitter variable position
+    pos_var = Point2(0,0)
 
-        # life of particles
-        self.life = 12.0
-        self.life_var = 0.0
+    # life of particles
+    life = 12.0
+    life_var = 0.0
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.life
+    # emits per frame
+    emission_rate = total_particles / life
 
-        # color of particles
-        self.start_color.r = 0.5
-        self.start_color.g = 0.5
-        self.start_color.b = 0.5
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.5
-        self.start_color_var.g = 0.5
-        self.start_color_var.b = 0.5
-        self.start_color_var.a = 0.0
-        self.end_color.r = 0.5
-        self.end_color.g = 0.5
-        self.end_color.b = 0.5
-        self.end_color.a = 1.0
-        self.end_color_var.r = 0.5
-        self.end_color_var.g = 0.5
-        self.end_color_var.b = 0.5
-        self.end_color_var.a = 0.0
+    # color of particles
+    start_color = Color(0.5, 0.5, 0.5, 1.0)
+    start_color_var = Color(0.5, 0.5, 0.5, 0.0)
+    end_color = Color(0.5, 0.5, 0.5, 1.0)
+    end_color_var = Color(0.5, 0.5, 0.5, 0.0)
 
-        # size, in pixels
-        self.size = 20.0
-        self.size_var = 10.0
+    # size, in pixels
+    size = 20.0
+    size_var = 10.0
 
 
 class Meteor( ParticleSystem ):
 
-    def __init__( self ):
-        super( Meteor, self).__init__(150)
+    # total particles
+    total_particles = 150
 
-        # duration
-        self.duration = -1
+    # duration
+    duration = -1
 
-        # gravity
-        self.gravity.x = -200.0
-        self.gravity.y = 200.0
+    # gravity
+    gravity = Point2(-200,100)
 
-        # angle
-        self.angle = 90.0
-        self.angle_var = 360.0
+    # angle
+    angle = 90.0
+    angle_var = 360.0
 
-        # speed of particles
-        self.speed = 15.0
-        self.speed_var = 5.0
+    # speed of particles
+    speed = 15.0
+    speed_var = 5.0
 
-        # radial
-        self.radial_accel = 0
-        self.radial_accel_var = 0
+    # radial
+    radial_accel = 0
+    radial_accel_var = 0
 
-        # tangential
-        self.tangential_accel = 0.0
-        self.tangential_accel_var = 0.0
+    # tangential
+    tangential_accel = 0.0
+    tangential_accel_var = 0.0
 
+    # emitter variable position
+    pos_var = Point2(0,0)
 
-        # emitter position
-        self.x = 320.0
-        self.y = 240.0
-        self.pos_var.x = 0
-        self.pos_var.y = 0
+    # life of particles
+    life = 2.0
+    life_var = 1.0
 
-        # life of particles
-        self.life = 2.0
-        self.life_var = 1.0
+    # size, in pixels
+    size = 60.0
+    size_var = 10.0
 
-        # size, in pixels
-        self.size = 60.0
-        self.size_var = 10.0
+    # emits per frame
+    emission_rate = total_particles / life
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.life
-
-        # color of particles
-        self.start_color.r = 0.2
-        self.start_color.g = 0.7
-        self.start_color.b = 0.7
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.0
-        self.start_color_var.g = 0.0
-        self.start_color_var.b = 0.0
-        self.start_color_var.a = 0.2
-        self.end_color.r = 0.0
-        self.end_color.g = 0.0
-        self.end_color.b = 0.0
-        self.end_color.a = 1.0
-        self.end_color_var.r = 0.0
-        self.end_color_var.g = 0.0
-        self.end_color_var.b = 0.0
-        self.end_color_var.a = 0.0
+    # color of particles
+    start_color = Color(0.2, 0.7, 0.7, 1.0)
+    start_color_var = Color(0.0, 0.0, 0.0, 0.2)
+    end_color = Color(0.0, 0.0, 0.0, 1.0)
+    end_color_var = Color(0.0, 0.0, 0.0, 0.0)
 
 
 class Galaxy( ParticleSystem ):
 
-    def __init__( self ):
-        super( Galaxy, self).__init__(200)
+    # total particles
+    total_particles = 200
 
-        # duration
-        self.duration = -1
+    # duration
+    duration = -1
 
-        # gravity
-        self.gravity.x = 0.0
-        self.gravity.y = 0.0
+    # gravity
+    gravity = Point2(0,0)
 
-        # angle
-        self.angle = 90.0
-        self.angle_var = 360.0
+    # angle
+    angle = 90.0
+    angle_var = 360.0
 
-        # speed of particles
-        self.speed = 60.0
-        self.speed_var = 10.0
+    # speed of particles
+    speed = 60.0
+    speed_var = 10.0
 
-        # radial
-        self.radial_accel = -80.0
-        self.radial_accel_var = 0
+    # radial
+    radial_accel = -80.0
+    radial_accel_var = 0
 
-        # tangential
-        self.tangential_accel = 80.0
-        self.tangential_accel_var = 0.0
+    # tangential
+    tangential_accel = 80.0
+    tangential_accel_var = 0.0
 
+    # emitter variable position
+    pos_var = Point2(0,0)
 
-        # emitter position
-        self.x = 320.0
-        self.y = 240.0
-        self.pos_var.x = 0
-        self.pos_var.y = 0
+    # life of particles
+    life = 4.0
+    life_var = 1.0
 
-        # life of particles
-        self.life = 4.0
-        self.life_var = 1.0
+    # size, in pixels
+    size = 37.0
+    size_var = 10.0
 
-        # size, in pixels
-        self.size = 37.0
-        self.size_var = 10.0
+    # emits per frame
+    emission_rate = total_particles / life
 
-        # emits per frame
-        self.emission_rate = self.total_particles / self.life
-
-        # color of particles
-        self.start_color.r = 0.12
-        self.start_color.g = 0.25
-        self.start_color.b = 0.76
-        self.start_color.a = 1.0
-        self.start_color_var.r = 0.0
-        self.start_color_var.g = 0.0
-        self.start_color_var.b = 0.0
-        self.start_color_var.a = 0.0
-        self.end_color.r = 0.0
-        self.end_color.g = 0.0
-        self.end_color.b = 0.0
-        self.end_color.a = 1.0
-        self.end_color_var.r = 0.0
-        self.end_color_var.g = 0.0
-        self.end_color_var.b = 0.0
-        self.end_color_var.a = 0.0
+    # color of particles
+    start_color = Color(0.12, 0.25, 0.76, 1.0)
+    start_color_var = Color(0.0, 0.0, 0.0, 0.0)
+    end_color = Color(0.0, 0.0, 0.0, 0.0)
+    end_color_var = Color(0.0, 0.0, 0.0, 0.0)

@@ -63,62 +63,69 @@ class Color( object ):
 
 
 class ParticleSystem( CocosNode ):
-    def __init__(self, total_particles=3000, texture=None):
+    #: is the particle system active ?
+    active = True
+
+    #: duration in seconds of the system. -1 is infinity
+    duration = 0
+
+    #: time elapsed since the start of the system (in seconds)
+    elapsed = 0
+
+    #: Gravity of the particles
+    gravity = Point2(0.0, 0.0)
+
+    #: position is from "superclass" CocosNode
+    #: Position variance
+    pos_var = Point2(0.0, 0.0)
+
+    #: The angle (direction) of the particles measured in degrees
+    angle = 0.0
+    #: Angle variance measured in degrees;
+    angle_var = 0.0
+
+    #: The speed the particles will have.
+    speed = 0.0
+    #: The speed variance
+    speed_var = 0.0
+
+    #: Tangential acceleration
+    tangential_accel = 0.0
+    #: Tangential acceleration variance
+    tangential_accel_var = 0.0
+
+    #: Radial acceleration
+    radial_accel = 0.0
+    #: Radial acceleration variance
+    radial_accel_var = 0.0
+
+    #: Size of the particles
+    size = 0.0
+    #: Size variance
+    size_var = 0.0
+
+    #: Start color of the particles
+    start_color = Color(0.0,0.0,0.0,0.0)
+    #: Start color variance
+    start_color_var = Color(0.0,0.0,0.0,0.0)
+    #: End color of the particles
+    end_color = Color(0.0,0.0,0.0,0.0)
+    #: End color variance
+    end_color_var = Color(0.0,0.0,0.0,0.0)
+
+    #: Maximum particles
+    total_particles = 0
+
+    #: How many seconds will the particle live
+    life = 0
+    #: Life variance
+    life_var = 0
+
+    #:texture of the particles
+    texture = pyglet.resource.image('fire.jpg').texture
+
+    def __init__(self):
         super(ParticleSystem,self).__init__()
-
-        #: is the particle system active ?
-        self.active = True
-
-        #: duration in seconds of the system. -1 is infinity
-        self.duration = 0
-        #: time elapsed since the start of the system (in seconds)
-        self.elapsed = 0
-
-        #: Gravity of the particles
-        self.gravity = Point2(0.0, 0.0)
-
-        #: position is from "superclass" CocosNode
-        #: Position variance
-        self.pos_var = Point2(0.0, 0.0)
-
-        #: The angle (direction) of the particles measured in degrees
-        self.angle = 0.0
-        #: Angle variance measured in degrees;
-        self.angle_var = 0.0
-
-        #: The speed the particles will have.
-        self.speed = 0.0
-        #: The speed variance
-        self.speed_var = 0.0
-
-        #: Tangential acceleration
-        self.tangential_accel = 0.0
-        #: Tangential acceleration variance
-        self.tangential_accel_var = 0.0
-
-        #: Radial acceleration
-        self.radial_accel = 0.0
-        #: Radial acceleration variance
-        self.radial_accel_var = 0.0
-
-        #: Size of the particles
-        self.size = 0.0
-        #: Size variance
-        self.size_var = 0.0
-
-        #: Start color of the particles
-        self.start_color = Color(0.0,0.0,0.0,0.0)
-        #: Start color variance
-        self.start_color_var = Color(0.0,0.0,0.0,0.0)
-        #: End color of the particles
-        self.end_color = Color(0.0,0.0,0.0,0.0)
-        #: End color variance
-        self.end_color_var = Color(0.0,0.0,0.0,0.0)
-
-        #: Maximum particles
-        self.total_particles = total_particles
-        #: Count of particles
-        self.particle_count = 0
 
         # particles
         # position x 2
@@ -142,22 +149,10 @@ class ParticleSystem( CocosNode ):
         self.particle_size = numpy.zeros( (self.total_particles, 1), numpy.float32 )
 
         #: How many particles can be emitted per second
-        self.emission_rate = 0
         self.emit_counter = 0
         
-        #: How many seconds will the particle live
-        self.life = 0
-        #: Life variance
-        self.life_var = 0
-
-
-        # TEXTURE RELATED
-
-        #: texture id of the particle
-        if not texture:
-            texture = pyglet.resource.image('fire.jpg').texture
-
-        self.texture = texture
+        #: Count of particles
+        self.particle_count = 0
 
         self.schedule( self.step )
 
