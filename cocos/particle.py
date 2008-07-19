@@ -104,6 +104,11 @@ class ParticleSystem( CocosNode ):
     #: Size variance
     size_var = 0.0
 
+    #: How many seconds will the particle live
+    life = 0
+    #: Life variance
+    life_var = 0
+
     #: Start color of the particles
     start_color = Color(0.0,0.0,0.0,0.0)
     #: Start color variance
@@ -116,13 +121,14 @@ class ParticleSystem( CocosNode ):
     #: Maximum particles
     total_particles = 0
 
-    #: How many seconds will the particle live
-    life = 0
-    #: Life variance
-    life_var = 0
-
     #:texture of the particles
-    texture = pyglet.resource.image('fire.jpg').texture
+    texture = pyglet.resource.image('fire.png').texture
+
+    #:blend additive
+    blend_additive = False
+
+    #:color modulate
+    color_modulate = True
 
     def __init__(self):
         super(ParticleSystem,self).__init__()
@@ -183,12 +189,27 @@ class ParticleSystem( CocosNode ):
 
         glPushAttrib(GL_COLOR_BUFFER_BIT)
         glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        if self.blend_additive:
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        else:
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+#        mode = GLint()
+#        glTexEnviv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode )
+#
+#        if self.color_modulate:
+#            glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE )
+#        else:
+#            glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE )
+
 
         glDrawArrays(GL_POINTS, 0, self.total_particles);
 
         # un -blend
         glPopAttrib()
+
+#        # restore env mode
+#        glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode)
 
         # disable states
         glDisableClientState(GL_COLOR_ARRAY);
