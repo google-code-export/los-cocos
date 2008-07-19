@@ -32,7 +32,7 @@
 # ----------------------------------------------------------------------------
 '''Pre-defined Particle Systems'''
 
-__all__ = ['Fireworks', 'Spiral', 'Meteor', 'Sun', 'Fire', 'Galaxy', 'Flower', 'Explosion']
+__all__ = ['Fireworks', 'Spiral', 'Meteor', 'Sun', 'Fire', 'Galaxy', 'Flower', 'Explosion', 'Smoke']
 
 from particle import ParticleSystem, Color
 from euclid import Point2
@@ -80,6 +80,12 @@ class Fireworks( ParticleSystem ):
     size = 8.0
     size_var = 2.0
 
+    # blend additive
+    blend_additive = False
+
+    # color modulate
+    color_modulate = True
+
 
 class Explosion( ParticleSystem ):
 
@@ -124,6 +130,12 @@ class Explosion( ParticleSystem ):
     size = 15.0
     size_var = 10.0
 
+    # blend additive
+    blend_additive = False
+
+    # color modulate
+    color_modulate = True
+
 
 class Fire( ParticleSystem ):
 
@@ -138,22 +150,22 @@ class Fire( ParticleSystem ):
 
     # angle
     angle = 90.0
-    angle_var = 20.0
+    angle_var = 10.0
 
     # radial
     radial_accel = 0
     radial_accel_var = 0
 
     # speed of particles
-    speed = 70.0
-    speed_var = 40.0
+    speed = 60.0
+    speed_var = 20.0
 
     # emitter variable position
     pos_var = Point2(40, 20)
 
     # life of particles
-    life = 2.0
-    life_var = 1.0
+    life = 3.0
+    life_var = 0.25
 
     # emits per frame
     emission_rate = total_particles / life
@@ -167,6 +179,12 @@ class Fire( ParticleSystem ):
     # size, in pixels
     size = 100.0
     size_var = 10.0
+
+    # blend additive
+    blend_additive = True
+
+    # color modulate
+    color_modulate = True
 
 
 class Flower( ParticleSystem ):
@@ -216,6 +234,12 @@ class Flower( ParticleSystem ):
     size = 30.0
     size_var = 0.0
 
+    # blend additive
+    blend_additive = True
+
+    # color modulate
+    color_modulate = True
+
 class Sun( ParticleSystem ):
 
     # total particles
@@ -262,6 +286,12 @@ class Sun( ParticleSystem ):
     # size, in pixels
     size = 40.0
     size_var = 00.0
+
+    # blend additive
+    blend_additive = True
+
+    # color modulate
+    color_modulate = True
 
 
 class Spiral( ParticleSystem ):
@@ -311,6 +341,12 @@ class Spiral( ParticleSystem ):
     size = 20.0
     size_var = 10.0
 
+    # blend additive
+    blend_additive = False
+
+    # color modulate
+    color_modulate = True
+
 
 class Meteor( ParticleSystem ):
 
@@ -359,6 +395,12 @@ class Meteor( ParticleSystem ):
     end_color = Color(0.0, 0.0, 0.0, 1.0)
     end_color_var = Color(0.0, 0.0, 0.0, 0.0)
 
+    # blend additive
+    blend_additive = True
+
+    # color modulate
+    color_modulate = True
+
 
 class Galaxy( ParticleSystem ):
 
@@ -406,3 +448,62 @@ class Galaxy( ParticleSystem ):
     start_color_var = Color(0.0, 0.0, 0.0, 0.0)
     end_color = Color(0.0, 0.0, 0.0, 0.0)
     end_color_var = Color(0.0, 0.0, 0.0, 0.0)
+
+    # blend additive
+    blend_additive = True
+
+    # color modulate
+    color_modulate = True
+
+class Smoke( ParticleSystem ):
+
+    # total particles
+    total_particles = 200
+
+    # duration
+    duration = -1
+
+    # gravity
+    gravity = Point2(0,0)
+
+    # angle
+    angle = 90.0
+    angle_var = 5.0
+
+    # speed of particles
+    speed = 25.0
+    speed_var = 10.0
+
+    # radial
+    radial_accel = 0.0
+    radial_accel_var = 0
+
+    # tangential
+    tangential_accel = 0.0
+    tangential_accel_var = 0.0
+
+    # emitter variable position
+    pos_var = Point2(20,0)
+
+    # life of particles
+    life = 4.0
+    life_var = 1.0
+
+    # size, in pixels
+    size = 60.0
+    size_var = 10.0
+
+    # emits per frame
+    emission_rate = total_particles / life
+
+    # color of particles
+    start_color = Color(0.8, 0.8, 0.8, 1.0)
+    start_color_var = Color(0.02, 0.02, 0.02, 0.0)
+    end_color = Color(0.0, 0.0, 0.0, 0.0)
+    end_color_var = Color(0.0, 0.0, 0.0, 0.0)
+
+    # blend additive
+    blend_additive = False
+
+    # color modulate
+    color_modulate = True

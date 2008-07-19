@@ -102,6 +102,7 @@ tests = {
  6: ("Particles #6 - Flower", "", Flower),
  7: ("Particles #7 - Meteor", "", Meteor),
  8: ("Particles #8 - Explosion", "", Explosion),
+ 9: ("Particles #9 - Smoke", "", Smoke),
 }
 
 if __name__ == "__main__":
