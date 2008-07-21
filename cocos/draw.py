@@ -265,8 +265,6 @@ class Canvas(cocosnode.CocosNode):
 
             colors.extend( list(ctx.color)*((len(strip)-start_len)/2) )
             
-        print "s", len(strip), strip
-        print "t", len(texcoord), texcoord
         vertex_list = pyglet.graphics.vertex_list(len(strip)/2,
             ('v2i', strip),
             ('c4B', colors ),
