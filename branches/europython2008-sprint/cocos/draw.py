@@ -11,7 +11,7 @@ void main() {
     vec2 pos = gl_TexCoord[0].st;
     float res = pos.x*pos.x - pos.y;
     if (res<0.0) {
-        gl_FragColor = vec4(1.0,1.0,1.0,1.0);
+        gl_FragColor = gl_Color;
     } else {
         gl_FragColor = vec4(0.0,0.0,0.0,0.0);
     }
