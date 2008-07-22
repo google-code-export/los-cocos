@@ -24,12 +24,23 @@ class TestFigure(draw.Canvas):
         self.set_color( (255,255,0,50) )
         self.set_stroke_width( line_width )
         
-        self.set_join( draw.ROUND_JOIN )
-        self.move_to( (xs, ys) )
-        self.line_to( (xs*2,ys) )
-        self.line_to( (xs*2,ys*2) )
-        self.line_to( (xs*3,ys*2) )
+        self.set_join( draw.BEVEL_JOIN )
+        self.move_to( (xs+100, ys) )
+        self.line_to( (xs*2+100,ys) )
+        self.line_to( (xs*2+100,ys*2) )
+        self.line_to( (xs*3+100,ys*2) )
         
+        self.set_join( draw.MITER_JOIN )
+        self.move_to( (xs, ys+100) )
+        self.line_to( (xs*2,ys+100) )
+        self.line_to( (xs*2,ys*2+100) )
+        self.line_to( (xs*3,ys*2+100) )
+        
+        self.set_join( draw.ROUND_JOIN )
+        self.move_to( (xs-100, ys+200) )
+        self.line_to( (xs*2-100,ys+200) )
+        self.line_to( (xs*2-100,ys*2+200) )
+        self.line_to( (xs*3-100,ys*2+200) )
         
         
             
