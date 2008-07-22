@@ -72,7 +72,7 @@ class Segment:
         
     @property
     def direction(self):
-        return Vector2( *(self.start-self.end)).normalized()
+        return Vector2( *(self.end-self.start)).normalized()
         
     @property
     def line_width(self):
@@ -146,7 +146,7 @@ class Canvas(cocosnode.CocosNode):
         
         if cap_type == ROUND_CAP:
             s = Segment( line.start, 
-                        line.start + (line.direction) * line.width / 2,
+                        line.start + (-line.direction) * line.width / 2,
                         line.width
                         )
             strip.extend([int(x) for x in flatten(
@@ -161,7 +161,7 @@ class Canvas(cocosnode.CocosNode):
                     ])
         elif cap_type == SQUARE_CAP:
             segment = Segment( line.start, 
-                        line.start + (line.direction) * line.width / 2,
+                        line.start + (-line.direction) * line.width / 2,
                         line.width
                         )
             strip.extend([int(x) for x in segment.points])
@@ -209,49 +209,39 @@ class Canvas(cocosnode.CocosNode):
                         if inter:
                             prev._tl = inter
                             current._bl = inter
+                            bottom = prev.tr
+                            top = current.br
                         else:
                             inter = prev.right.intersect( current.right )
                             if inter:
                                 prev._tr = inter
                                 current._br = inter
+                                bottom = prev.tl
+                                top = current.bl
                         
                     
-                    a = """
                     # add elbow
-                    if ( i != 0 and inter1 ):
+                    if ( prev and inter ):
                             if ctx.join == BEVEL_JOIN:
                                 strip.extend( [ int(x) for x in
-                                    list(inter1) + list(first) + list(second)
+                                    list(inter) + list(bottom) + list(top)
                                 ])
-                            elif ctx.join == ROUND_JOIN:
-                                rotc = Point2(*line[i])
-                                two = first-rotc
-                                end = second-rotc
-                                deg = abs(math.acos(two.dot(end)))
-                                steps = 5
-                                rot = Matrix3.new_rotate( 
-                                    -direction * (deg / steps) 
-                                    )
-                                for s in range(steps-1):
-                                    one = two
-                                    two = rot * one
-                                    strip.extend( [ int(x) for x in
-                                        list(inter1) + 
-                                        list(rotc+one) + 
-                                        list(rotc+two)
-                                    ])
+                                texcoord += [ 0,1,0,1,0,1 ]
+                            elif ctx.join in (MITER_JOIN, ROUND_JOIN):
+                                far = Ray2(
+                                    Point2(*bottom), prev.direction
+                                    ).intersect(Ray2(
+                                    Point2(*top), -current.direction
+                                    ))
                                 strip.extend( [ int(x) for x in
-                                    list(inter1) + 
-                                    list(rotc+two) + 
-                                    list(rotc+end)
+                                    list(inter) + list(bottom) + list(top) +
+                                    list(bottom) + list(top) + list(far)
                                 ])
-                            elif ctx.join == MITER_JOIN:
-                                far = first+second-Point2(*line[i])
-                                strip.extend( [ int(x) for x in
-                                    list(inter1) + list(first) + list(far) +
-                                    list(inter1) + list(second) + list(far)
-                                ])
-                    """
+                                if ctx.join == ROUND_JOIN:
+                                    texcoord += [ 0,1,0,1,0,1, 0,0,1,1,0.5,0]
+                                elif ctx.join == MITER_JOIN:
+                                    texcoord += [ 0,1,0,1,0,1,0,1,0,1,0,1, ]
+
                     # rotate values
                     prev = current
                 
