@@ -21,6 +21,8 @@ class Shader(object):
     def __init__(self, source):
         self.source = source 
         self.shader_no = glCreateShader(self.shader_type)
+        if not self.shader_no:
+            raise Exception("could not create shader")
         prog = (c_char_p * 1)(source+chr(0))
         length = (c_int * 1)(0)
         glShaderSource(self.shader_no, 1,
@@ -28,6 +30,8 @@ class Shader(object):
                           cast(0, POINTER(c_int)))
         glCompileShader(self.shader_no)
         self.program_no = glCreateProgram()
+        if not self.program_no:
+            raise Exception("could not create program")
         glAttachShader(self.program_no, self.shader_no)
         glLinkProgram(self.program_no)
         
