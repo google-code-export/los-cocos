@@ -5,7 +5,6 @@ from euclid import *
 import math
 import copy
 
-import shader
 cuadric_t = '''
 void main() {
     vec2 pos = gl_TexCoord[0].st;
@@ -18,9 +17,33 @@ void main() {
 }
 '''
 
+class Shader(object):
+    def __init__(self, source):
+        self.source = source 
+        self.shader_no = glCreateShader(self.shader_type)
+        prog = (c_char_p * 1)(source+chr(0))
+        length = (c_int * 1)(0)
+        glShaderSource(self.shader_no, 1,
+                          cast(prog, POINTER(POINTER(c_char))),
+                          cast(0, POINTER(c_int)))
+        glCompileShader(self.shader_no)
+        self.program_no = glCreateProgram()
+        glAttachShader(self.program_no, self.shader_no)
+        glLinkProgram(self.program_no)
+        
+    def begin(self):
+        glUseProgram(self.program_no)
+    def end(self):
+        glUseProgram(0)
+    
 
-cuadric = shader.ShaderProgram()
-cuadric.setShader(shader.FragmentShader('cuadric_t', cuadric_t))  
+class VertexShader(Shader):
+    shader_type = GL_VERTEX_SHADER
+
+class FragmentShader(Shader):
+    shader_type = GL_FRAGMENT_SHADER
+    
+cuadric = FragmentShader(cuadric_t)
 
 def parameter(name):
     def setter(self, value):
@@ -135,9 +158,9 @@ class Canvas(cocosnode.CocosNode):
             self._dirty = False
         glPushMatrix()
         self.transform()
-        cuadric.install()
+        cuadric.begin()
         self._vertex_list.draw(GL_TRIANGLES)
-        cuadric.uninstall()
+        cuadric.end()
         glPopMatrix()
         
     def endcap(self, line, cap_type):
