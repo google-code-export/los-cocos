@@ -47,15 +47,19 @@ class VertexShader(Shader):
 class FragmentShader(Shader):
     shader_type = GL_FRAGMENT_SHADER
     
-cuadric = FragmentShader(cuadric_t)
+#cuadric = FragmentShader(cuadric_t)
 
-def parameter(name):
+def parameter(default=None):
+    o = object()
+    name = str(id(o))
+    
     def setter(self, value):
         self._dirty = True
         setattr(self, "_"+name, value)
         
     def getter(self):
-        return getattr(self, "_"+name)
+        return getattr(self, "_"+name, default)
+    
     
     return property(getter, setter)
     
@@ -68,6 +72,7 @@ class Context(object):
         self.stroke_width = 2
         self.cap = ROUND_CAP
         self.join = ROUND_JOIN
+        self.transform = Matrix3()
         
     def set_state(self):
         glPushAttrib(GL_CURRENT_BIT|GL_LINE_BIT)
@@ -78,7 +83,8 @@ class Context(object):
         glPopAttrib()
         
     def copy(self):
-        return copy.copy(self)
+        return copy.deepcopy(self)
+        
         
 def flatten(*args):
     ret = []
@@ -149,6 +155,9 @@ class Canvas(cocosnode.CocosNode):
         self._parts = []        
         self._vertex_list = None
         self._context = Context()
+        self._context_stack = []
+        self._texture = image = pyglet.resource.image('draw_texture.png').get_texture()
+        
         self._context_change = True
         self._position = 0,0
         
@@ -160,12 +169,25 @@ class Canvas(cocosnode.CocosNode):
             self.render()
             self.build_vbo()
             self._dirty = False
+            
+        # set
+        glEnable(self._texture.target)
+        glBindTexture(self._texture.target, self._texture.id)
+        glPushAttrib(GL_COLOR_BUFFER_BIT)
+        
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+
         glPushMatrix()
         self.transform()
-        cuadric.begin()
+        #cuadric.begin()
         self._vertex_list.draw(GL_TRIANGLES)
-        cuadric.end()
+        #cuadric.end()
+        
+        # unset
         glPopMatrix()
+        glPopAttrib()
+        glDisable(self._texture.target)
         
     def endcap(self, line, cap_type):
         strip = []
@@ -182,7 +204,7 @@ class Canvas(cocosnode.CocosNode):
                             s.bl, s.tl, s.end
                             )])
             texcoord.extend([
-                    0,1,0,1,0,1,
+                    0.1,0.9,0.1,0.5,0.5,0.9,
                     0,0,0.5,0,1,1,
                     0,0,0.5,0,1,1,
                     ])
@@ -192,7 +214,7 @@ class Canvas(cocosnode.CocosNode):
                         line.width
                         )
             strip.extend([int(x) for x in segment.points])
-            texcoord.extend( flatten(*[ (0,1) for x in range(len(segment.points)/2) ]) ) 
+            texcoord.extend( flatten(*[ (0.1,0.9,0.1,0.5,0.5,0.9) for x in range(len(segment.points)/6) ]) ) 
             
         return strip, texcoord
         
@@ -253,7 +275,7 @@ class Canvas(cocosnode.CocosNode):
                                 strip.extend( [ int(x) for x in
                                     list(inter) + list(bottom) + list(top)
                                 ])
-                                texcoord += [ 0,1,0,1,0,1 ]
+                                texcoord += [ 0.1,0.9,0.1,0.5,0.5,0.9 ]
                             elif ctx.join in (MITER_JOIN, ROUND_JOIN):
                                 far = Ray2(
                                     Point2(*bottom), prev.direction
@@ -265,9 +287,9 @@ class Canvas(cocosnode.CocosNode):
                                     list(bottom) + list(top) + list(far)
                                 ])
                                 if ctx.join == ROUND_JOIN:
-                                    texcoord += [ 0,1,0,1,0,1, 0,0,1,1,0.5,0]
+                                    texcoord += [ 0.1,0.9,0.1,0.5,0.5,0.9, 0,0,1,1,0.5,0]
                                 elif ctx.join == MITER_JOIN:
-                                    texcoord += [ 0,1,0,1,0,1,0,1,0,1,0,1, ]
+                                    texcoord += [ 0.1,0.9,0.1,0.5,0.5,0.9,0.1,0.9,0.1,0.5,0.5,0.9 ]
 
                     # rotate values
                     prev = current
@@ -275,8 +297,8 @@ class Canvas(cocosnode.CocosNode):
                 # add boxes for lines
                 for s in segments:
                     strip.extend( [ int(x) for x in s.points ] )
-                    texcoord += flatten(*[ (0,1)
-                                for x in range( len(s.points)/2) 
+                    texcoord += flatten(*[ (0.1,0.9,0.1,0.5,0.5,0.9)
+                                for x in range( len(s.points)/6) 
                             ])
                             
 
@@ -307,13 +329,19 @@ class Canvas(cocosnode.CocosNode):
     
     def set_endcap(self, cap):
         self._context.cap = cap
-        self._context_change = True        
+        self._context_change = True   
+        
     def set_join(self, join):
         self._context.join = join
         self._context_change = True 
         
+    def rotate(self, radians):
+        self._context.transform.rotate( radians )
+    def translate(self, vect):
+        self._context.transform.translate( *vect )
+        
     def move_to(self, position):
-        self._position = position
+        self._position = self._context.transform * Point2(*position)
         
     def line_to(self, end):
         if self._context_change:
@@ -324,18 +352,27 @@ class Canvas(cocosnode.CocosNode):
         else:
             context, parts = self._parts[-1]
 
+        end = self._context.transform * Point2(*end)
+        
         if parts[-1][-1] == self._position:
             parts[-1].append( end )
         else:
             parts.append( [self._position, end] )
             
         self._position = end
+        
+    def push(self):
+        self._context_stack.append( self._context.copy() )
+        
+    def pop(self):
+        self._context = self._context_stack.pop()
     
+        
 class Line(Canvas):
-    start = parameter("start")
-    end = parameter("end")
-    stroke_width = parameter("stroke_width")
-    color = parameter("color")
+    start = parameter()
+    end = parameter()
+    stroke_width = parameter()
+    color = parameter()
     
     def __init__(self, start, end, color, stroke_width=1):
         super(Line, self).__init__()

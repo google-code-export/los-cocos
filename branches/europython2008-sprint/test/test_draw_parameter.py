@@ -8,36 +8,39 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import cocos
 from cocos.director import director
 from cocos.sprite import Sprite
+from cocos.actions import Lerp, Reverse, Repeat
 from cocos import draw
-import pyglet
+import pyglet, math
 
 import random
 ri = random.randint
 
 class TestFigure(draw.Canvas):
+    line_width = draw.parameter(5)
+    
     def render(self):
         x,y = director.get_window_size()
-        ys = y/4
-        ye = ys*3
-        xs = x/4
-        line_width = 50
-        self.set_color( (255,0,0,125) )
+        ye = 15
+        xs = 15
+        line_width = self.line_width 
+        self.set_color( (255,255,0,125) )
         self.set_stroke_width( line_width )
-        
+        parts = 5
         # draw lines
         self.set_endcap( draw.ROUND_CAP )
-        self.move_to( (xs, ys) ); self.line_to( (xs,ye) )
-        self.set_endcap( draw.SQUARE_CAP )
-        self.move_to( (xs*2, ys) ); self.line_to( (xs*2,ye) )
-        self.set_endcap( draw.BUTT_CAP )
-        self.move_to( (xs*3, ys) ); self.line_to( (xs*3,ye) )
+        self.translate(( x/2, y/2 ))
+        for j in range(parts):
+            self.move_to( (0,0) )
+            self.rotate( 2*math.pi/ parts )
+            self.push()
+            for i in range(parts):    
+                self.line_to( (xs,ye) )
+                self.translate( (xs,ye) )
+                self.rotate( math.pi/ parts )
+            self.pop()
+            
+                        
         
-        # draw ruler
-        self.set_stroke_width( 1 )
-        self.set_color( (255,255,255,200) )
-        
-        self.move_to( (0, ye) ); self.line_to( (x,ye) )
-        self.move_to( (0, ye+line_width//2) ); self.line_to( (x,ye+line_width//2) )
         
         
         
@@ -46,9 +49,10 @@ class TestFigure(draw.Canvas):
 class TestLayer(cocos.layer.Layer):
     def __init__(self):
         super( TestLayer, self ).__init__()
-        
-        self.add( TestFigure() )        
-        self.schedule( lambda x: 0 )
+        f = TestFigure()
+        self.add( f )        
+        a = Lerp("line_width", 5, 55, 3)
+        f.do( Repeat( a + Reverse( a ) ) )
 
 if __name__ == "__main__":
     director.init()
