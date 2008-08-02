@@ -38,6 +38,16 @@ __version__ = "0.4.0-beta0"
 __author__ = "cocos2d team"
 version = __version__
 
+
+"""
+add the cocos resources path
+"""
+import os, pyglet
+
+pyglet.resource.path.append(os.path.join(os.path.dirname(__file__), "resources"))
+pyglet.resource.reindex()
+del os, pyglet
+
 import actions
 import director
 import layer
