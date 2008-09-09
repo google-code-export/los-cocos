@@ -1,5 +1,7 @@
 #summary Frequently Asked Questions
 
+For an updated FAQ, please go to http://cocos2d.org/doc/faq/
+
 = Frequently Asked Questions =
 
 == Trouble-shooting ==
