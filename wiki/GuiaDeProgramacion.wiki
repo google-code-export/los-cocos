@@ -58,7 +58,7 @@ Control de Flujo (Flow Control): manejo de una forma fácil el control de flujo 
 
 *Hola Mundo.*
 
-Vamos a comenzar con "Hello, World" . Este programa se abrirá una ventana con un texto en ella y esperar a ser cerrado. Usted puede encontrar el script completo en samples/hello_world.py.
+Vamos a comenzar con "Hello, World". Este programa se abrirá una ventana con un texto en ella y esperar a ser cerrado. Usted puede encontrar el script completo en samples/hello_world.py.
 
 http://lh6.google.com/rayentray/R9B_OWa0PGI/AAAAAAAAAXA/l4RnO2EBI4w/hello_world.py.png?imgmax=512
 
@@ -87,7 +87,7 @@ El  label se posisionara sobre el centro de la escena:
 {{{
 label.position = 320,240
 }}}
-El Label es una subclase de  CocosNode este puede ser añadido como hijo. Todos los objetos CocosNode saben como renderizarse a si mismo, realizar las acciones y transformaciones. Para agregar como una capa del hijo, utilice el método CocosNode.add:
+El Label es una subclase de CocosNode este puede ser añadido como hijo. Todos los objetos CocosNode saben como renderizarse a si mismo, realizar las acciones y transformaciones. Para agregar como una capa del hijo, utilice el método CocosNode.add:
 {{{
 self.add( label )
 }}}
@@ -128,7 +128,7 @@ si  usted va a usar varias acciones, puede importar todas las acciones disponibl
 {{{
 from cocos.actions import *
 }}}
-Aca esta una sublcalse ColorLayer  que tiene fondo de color. a  continuación hacemos una invocación a super () con color azul
+Aca esta una sublcalse ColorLayer que tiene fondo de color. a  continuación hacemos una invocación a super () con color azul
 {{{
 class HelloWorld(cocos.layer.ColorLayer):
     def __init__(self):
