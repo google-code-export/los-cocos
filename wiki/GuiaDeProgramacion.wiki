@@ -114,7 +114,90 @@ Un manera más corta para escribir los últimos 3 estados es la siguiente:
 }}}
 
 
+== Hello Actions ==
 
+http://cocos2d.org/doc/programming_guide/hello_world_actions.py.png 
+
+Este ejemplo es muy similar al ejemplo #1 con la diferencia que este nos introduce en el mundo de las acciones.  Una accion es como una orden. Usted le pude decir que ejecute una acción a  cualquier  objeto CocosNode. Usted puede buscar este  programa en archivo samples/hello_world_actions.py
+ 
+Al igual que el ejemplo anterior importamos el modulo de cocos2d:
+{{{
+import cocos
+}}}
+si  usted va a usar varias acciones, puede importar todas las acciones disponible en el namespace con la siguiente linea.
+{{{
+from cocos.actions import *
+}}}
+Aca esta una sublcalse ColorLayer  que tiene fondo de color. a  continuación hacemos una invocación a super () con color azul
+{{{
+class HelloWorld(cocos.layer.ColorLayer):
+    def __init__(self):
+        # blueish color
+        super( HelloWorld, self ).__init__( 64,64,224,255)
+}}}
+como en el ejemplo anterior vamos a crear y agregar un label: 
+{{{
+label = cocos.text.Label('Hello, World!',
+    font_name='Times New Roman',
+    font_size=32,
+    halign='center', valign='center')
+
+# set the label in the center of the screen
+label.position = 320,240
+self.add( label )
+
+}}}
+En este ejemplo también vamos a crear y agregar un sprite como hijo. En cocos2d los 
+{{{
+sprites son objetos Sprite.
+sprite = cocos.sprite.Sprite('grossini.png')
+}}} 
+Ponemos el sprite en el centro de la pantalla. La posision por defecto es (0,0):
+{{{
+sprite.position = 320,240
+}}}
+Hemos establecido el atributo escala en 3. Esto significa que nuestro  sprite será 3 veces más grande. La escala por defecto es 1.
+{{{
+sprite.scale = 3
+}}}
+Agrgamos al sprite como hijo pero  sobre
+Agregamos el  sprite como hijo, pero sobre el label  seteando el  z-value  en  1,  ya que el z-valor es 0:
+{{{
+self.add( sprite, z=1 )
+}}}
+
+Creamos una accion  ScaleBy. Se escala en 3 veces el objeto que la ejecuta, en 2 segundos:
+scale = ScaleBy(3, duration=2)
+Le decimos al lebel:
+       * escala 3 veces en 2 segundos
+       * entonces a reducir 3 veces en 2 segundos 
+       * y repetí estas dos acciones por siempre.
+
+Observe que el operador  '+' es la secuencia de acción:
+{{{
+label.do( Repeat( scale + Reverse( scale) ) )
+}}}
+Y le decimos el sprite a hacer las mismas acciones pero a partir de la "escala de nuevo la acción:
+{{{
+sprite.do( Repeat( Reverse(scale) + scale ) )
+}}}
+Luego inicializamos el director como en el ejemplo anterior.
+{{{
+cocos.director.director.init()
+hello_layer = HelloWorld ()
+}}}
+Y ... le decimos a la capa (sí, todos los objetos CocosNode puede ejecutar acciones) para ejecutar una acción RotateBy de 360 grados en 10 segundos:
+{{{
+hello_layer.do( RotateBy(360, duration=10) )
+}}}
+Por último, iniciar la ejecución:
+{{{
+# A scene that contains the layer hello_layer
+main_scene = cocos.scene.Scene (hello_layer)
+
+# And now, start the application, starting with main_scene
+cocos.director.director.run (main_scene)
+}}}
 
 
 = Details =
