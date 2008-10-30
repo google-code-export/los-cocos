@@ -1,0 +1,125 @@
+#summary One-sentence summary of this page.
+
+= Guia de programación  =
+
+Cocos2d es un framework para el desarrollo de juegos en 2D, presentaciones y otras aplicaciones graficas interactivas.
+
+Cocos2d simplifica el desarrollo de juegos en las siguientes áreas:
+
+Control de Flujo (Flow Control): manejo de una forma fácil el control de flujo entre las diferentes escenas.
+  * *Sprites*: Rápido y fácil.
+  * *Acciones* (Actions): Solo le decimos a los  sprites lo que quieremos que haga. Acciones como mover, rotar, escalar, etc
+  * *Efectos* (Effect): Efectos como waves (ondas), twirl (giros), lens(lentes) y muchos mas
+  * *Mapas de mosaicos* (Tiled maps): soportes a tiled maps rectangulares y a hexagonales 
+  * *Transiciones* (Transitions): Moverse entre escena y escena con estilo 
+  * *Menús*: Clases ya desarrolladas para la creación de menús.
+  * *Presentación de Texto* (Text rendering)
+  * *Documentación*: Guia de programación + Referencia de API + Lotes de pruebas sencillas que muestran cómo usarlo
+  * *Intérprete embebido de Python*: para debugging.
+  * *Licencia BSD*: Solo usar.
+  * *Basado en Pyglet*: No tiene dependencias externas.
+  * *Basado en OpenGL*: Aceleración de Hardward
+
+
+== Instalación ==
+
+   1.Instalar python 2.4 con ctypes o con python 2.5.
+   2.Instalar pyglet 1.1beta o superior desde pyglet's homepage . Si usted quiere usar pyglet 1.0, use cocos2d v0.1.x instead.
+   3.Por último, elegir una de las siguientes opciones:
+	
+       * Si usted quiere construir y empaquetar, use el setup.py que viene con la distribución e instale el paquete usando easy_install.
+
+       * Copia “cocos” a tu proyecto:
+        {{{  
+        $ cp -r cocos $PROJECT_HOME 
+        }}}
+
+       * Incluir en cocos en su  PYTHONPATH:
+	{{{  
+        $ export PYTHONPATH=$PYTHONPATH:/path/to/cocos 
+        }}}
+
+       * O insertar cocos en sys.path:
+          {{{
+          import sys
+          sys.path.insert(0, PATH_TO_COCOS))
+          }}}
+
+
+== Escribir una aplicación en cocos2d. ==
+
+	Los primeros pasos con una nueva biblioteca o framework puede ser intimidante, especialmente cuando se presenta con una gran cantidad de material de referencia para leer. En este capítulo se da una muy rápida introducción a cocos2d sin cubrir ninguno de los detalles.
+
+  * Hola Mundo.
+  * Hola Acciones
+  * Manejo de eventos.
+  * ¿Cuando a la siguiente? 
+
+
+*Hola Mundo.*
+
+Vamos a comenzar con "Hello, World" . Este programa se abrirá una ventana con un texto en ella y esperar a ser cerrado. Usted puede encontrar el script completo en samples/hello_world.py.
+
+http://lh6.google.com/rayentray/R9B_OWa0PGI/AAAAAAAAAXA/l4RnO2EBI4w/hello_world.py.png?imgmax=512
+
+
+Para empezar importamos el modulo de cocos 
+{{{
+import cocos
+}}}
+Creamos una clase que herede de Layer y definimos la logica del programa de la suigiente manera:
+{{{
+class HelloWorld(cocos.layer.Layer):
+}}}
+Siempre llamamos a super en el constructor:
+{{{
+def __init__(self):
+    super( HelloWorld, self ).__init__()
+}}}
+Para visualizar el texto, vamos a crear un label. Los argumentos se utilizan para fijar texto, el tipo de letra, la posición y la alineación del label:
+{{{
+label = cocos.text.Label('Hello, world',
+                          font_name='Times New Roman',
+                          font_size=32,
+                          anchor_x='center', anchor_y='center')
+}}}
+El  label se posisionara sobre el centro de la escena:
+{{{
+label.position = 320,240
+}}}
+El Label es una subclase de  CocosNode este puede ser añadido como hijo. Todos los objetos CocosNode saben como renderizarse a si mismo, realizar las acciones y transformaciones. Para agregar como una capa del hijo, utilice el método CocosNode.add:
+{{{
+self.add( label )
+}}}
+Luego definomos la classe  HelloWorld, necesitaremos inicializar y crear una ventana. Para ello inicializaremos un Director:
+{{{
+cocos.director.director.init()
+}}}
+a continuación  creamos una instancia de  HelloWorld:
+{{{
+hello_layer = HelloWorld ()
+}}}
+a continuación creamos una escena que contenga el layer HelloWorld  con un hijo:
+{{{
+main_scene = cocos.scene.Scene (hello_layer)
+}}}
+y para finalizar vamos a correr la escena:
+{{{
+cocos.director.director.run (main_scene)
+}}}
+
+Un manera más corta para escribir los últimos 3 estados es la siguiente:
+{{{
+#cocos.director.director.run( cocos.scene.Scene( HelloWorld() ) )
+}}}
+
+
+
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
