@@ -114,7 +114,7 @@ Un manera más corta para escribir los últimos 3 estados es la siguiente:
 }}}
 
 
-*Hello Actions*
+*Hola Acciones*
 
 http://cocos2d.org/doc/programming_guide/hello_world_actions.py.png 
 
