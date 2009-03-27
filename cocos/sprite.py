@@ -57,7 +57,10 @@ import pyglet
 from pyglet import image
 from pyglet.gl import *
 
+from collections import defaultdict
+
 __all__ = [ 'Sprite',                     # Sprite class
+            'NotifierSprite',             # Sprite class that notifies about attribute changes
             ]
 
 
@@ -193,3 +196,69 @@ class Sprite( BatchableNode, pyglet.sprite.Sprite):
         self._group.unset_state()
 
 Sprite.supported_classes = Sprite
+
+
+class NotifierSprite(Sprite):
+
+    def __init__(self, image, position=(0, 0), rotation=0, scale=1, opacity=255,
+                 color=(255, 255, 255), anchor=None):
+        self._observers = defaultdict(set)
+        self._initialized = False
+        super(NotifierSprite, self).__init__(
+            image, position, rotation, scale, opacity, color, anchor)
+        self._initialized = True
+
+    def register(self, observer, attribute):
+        self._observers[attribute].add(observer)
+
+    def unregister(self, observer, attribute):
+        self._observers[attribute].remove(observer)
+
+    def notifier_property(f):
+        prop_name = f.__name__
+        prop_attr = '_' + prop_name
+        def fget(self):
+            value = getattr(self, prop_attr)
+            return value
+        def fset(self, value):
+            setattr(self, prop_attr, value)
+            self._notify(prop_name)
+        return property(fget, fset)
+
+
+    # README: this is done in a special case, because we need 
+    # to override a property
+    def _set_position(self, position):
+        super(NotifierSprite, self)._set_position(position)
+        if self._initialized:
+            self._notify('position')
+    position = property(lambda self: (self.x, self.y), _set_position)
+
+    def _set_rotation(self, rotation):
+        super(NotifierSprite, self)._set_rotation(rotation)
+        if self._initialized:
+            self._notify('rotation')
+    rotation = property(lambda self: self._rotation, _set_rotation)
+
+    def _set_scale(self, scale):
+        super(NotifierSprite, self)._set_scale(scale)
+        if self._initialized:
+            self._notify('scale')
+    scale = property(lambda self: self._scale, _set_scale)
+
+    def _set_opacity(self, opacity):
+        super(NotifierSprite, self)._set_opacity(opacity)
+        if self._initialized:
+            self._notify('opacity')
+    opacity = property(lambda self: self._opacity, _set_opacity)
+
+    def _set_color(self, rgb):
+        super(NotifierSprite, self)._set_color(rgb)
+        if self._initialized:
+            self._notify('color')
+    color = property(lambda self: self._rgb, _set_color)
+
+    def _notify(self, attribute):
+        for observer in self._observers[attribute]:
+            observer.on_notify(self, attribute)
+

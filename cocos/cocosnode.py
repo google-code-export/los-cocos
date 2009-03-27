@@ -691,3 +691,14 @@ class CocosNode(object):
                 self.remove_action( action )
 
 
+    def absolute_position( self ):
+        '''return the world coordinates of this node'''
+        x = self.x
+        y = self.y
+        parent = self.parent
+        while parent:
+            x += parent.x
+            y += parent.y
+            parent = parent.parent
+
+        return (x,y)

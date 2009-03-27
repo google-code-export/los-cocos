@@ -458,6 +458,20 @@ class Director(event.EventDispatcher):
         self.dispatch_event("on_resize", width, height)
 
     def set_projection(self):
+        self.set_2d_projection()
+
+    def set_2d_projection(self):
+        '''Sets a 2D projection mantaining the aspect ratio of the original window size'''
+        width, height = self.get_window_size()
+        glLoadIdentity()
+        glViewport(0, 0, width, height)
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        glOrtho(0, width, 0, height, -100, 100)
+        glMatrixMode(GL_MODELVIEW)
+
+
+    def set_3d_projection(self):
         '''Sets a 3D projection mantaining the aspect ratio of the original window size'''
 
         width, height = self.window.width, self.window.height

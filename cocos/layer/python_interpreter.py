@@ -135,7 +135,8 @@ class PythonInterpreterLayer(ColorLayer):
             self._write('\n')
 
             line = self.document.text[self.start_of_line:]
-            if line.strip() == 'help()':
+            if line.strip() == 'help()' and \
+                    not 'help' in director.interpreter_locals:
                 line = 'print "help() not supported, sorry!"'
             self.current_input.append(line)
             self.history_pos = len(self.history)

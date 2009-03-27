@@ -116,7 +116,7 @@ class BatchableNode( cocosnode.CocosNode ):
         else:
             group = groups.get(z)
             if group is None:
-                group = pyglet.graphics.Group()
+                group = pyglet.graphics.OrderedGroup(z)
                 groups[z] = group
             self.group = group
         for childZ, child in self.children:
