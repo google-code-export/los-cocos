@@ -13,12 +13,16 @@ kick start doc for the cocos 3+ release
 = Proposed release date =
 April 2010. There is some flex both ways, but it will be a short term release.
 
+
 = We want your help =
 You like cocos and are willing to help ?
 There are multiple tasks, and not all requires expertise in cocos.
+
 Below are sketched some areas to work; anyone appeals to you?
 Work some, then post on the list.
+
 Cocos has been liberal to grant commit access in the past, so if need arises that probably can be arranged fast.
+
 
 = Available work areas =
 
@@ -34,6 +38,7 @@ details:
   * The releaser for pyglet 1.1.4 found some problems when building documentation, see http://article.gmane.org/gmane.comp.python.pyglet.user/3600
   * But someone in the list could build recently, see http://thread.gmane.org/gmane.comp.python.cocos2d.user/948/focus=950
 
+
 == Documentation completion ==
 
 need to know: from nothing to familiarity with cocos
@@ -45,6 +50,7 @@ wanted:
 details:
   * some entries in current documentation have 'to do content'
   * Features introduced after 0.3.0 can be missing (sprite animator? tilemaps?)
+
 
 == Unittesting ==
 
@@ -59,10 +65,11 @@ wanted:
 details:
  * at 0.3.0, no unittest
  * Richard Jones added some unittests for the map model associated with tilemaps
- * at r834 added utest directory with simple test case and pyglet mockup that allow to instantiate CocosNode and Action. The mockup was built in a TDD style, adding only the minimal to allow the test run, so will need to flesh up for other tests. 
+ * at r889 added utest directory with simple test case and pyglet mockup that allow to instantiate CocosNode and Action. The mockup was built in a TDD style, adding only the minimal to allow the test run, so will need to flesh up for other tests. 
  * pyglet has some code that can help, see the test subdir in svn pyglet ( interactive and automatic are mixed, need to identify the automatic ones that can help us )
  * setting up a full pyglet + openGL context is slow, and unneeded for most test; we need to build pyglet mockups light, with good descriptions.
  * It must be easy for the people to add a test case
+
 
 == Interactive tests ==
 (we are talking about the tests found in the svn trunk/test, also released in a package with the docs)
@@ -82,6 +89,7 @@ details:
   * If someone wants to setup an online table with 'test name', 'proposed string' for people to colaborate, it would help
   * Else a thread in the list can be initiated to post numbered test names list, people can tell 'I will do n to m' , 'Here are i to j'
   * Any takers ? 
+
 
 == Issue processing ==
 need to know: the cocos area relevant to the issue
