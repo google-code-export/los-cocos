@@ -85,6 +85,7 @@ details:
 
 == Issue processing ==
 need to know: the cocos area relevant to the issue
+
 wanted( for each issue):
   * is the issue understood ? Else work with reporter to clarify
   * the issue had been fixed in trunk ? update and close issue, add bugdemo in regresions
