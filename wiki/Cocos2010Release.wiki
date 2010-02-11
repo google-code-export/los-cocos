@@ -25,7 +25,9 @@ Cocos has been liberal to grant commit access in the past, so if need arises tha
 == Documentation builder ==
 
 need to know: python; some epydoc / docutils familiarity would help
+
 wanted: verify the documentation can be built (critical), builder to work also in windows (bonus)
+
 details:
   * The actual documentation builder was lifted from pyglet; it uses a combo of .sh scripts, .py code, a modified epydoc
   * Currently only works on *nix flavored OSes
@@ -35,6 +37,7 @@ details:
 == Documentation completion ==
 
 need to know: from nothing to familiarity with cocos
+
 wanted:
   * make a list with things missing in the 0.3.0 docs
   * produce the missing docstrings / text
@@ -46,6 +49,7 @@ details:
 == Unittesting ==
 
 need to known: unittesting, various degrees of cocos knowledge
+
 wanted:
  * simple(s) pyglet's mockup(s) that allow fast coco's objects instantiation
  * tests cases showing how to instantiate the different cocos objects
@@ -64,6 +68,7 @@ details:
 (we are talking about the tests found in the svn trunk/test, also released in a package with the docs)
 
 need to know: expected cocos behavior for entities used in the test
+
 wanted (for each test):
   * strings descriptions for each test detailing:
     * tell you what actions (keypresses,...) are expected from the user
