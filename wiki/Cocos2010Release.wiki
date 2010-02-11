@@ -1,0 +1,95 @@
+#cocos 2010 release.
+
+= Release goals =
+
+  * Fix trunk so all samples working with 0.3.0 works again
+  * Fix defects reported in the issue tracker
+  * Complete some more the documentation
+  * Begin adding unittests
+  * From users feedback identify areas that need changes
+  * Engage people for further developement
+
+
+= Proposed release date =
+April 2010. There is some flex both ways, but it will be a short term release.
+
+= We want your help =
+You like cocos and are willing to help ?
+There are multiple tasks, and not all requires expertise in cocos.
+Below are sketched some areas to work; anyone appeals to you?
+Work some, then post on the list.
+Cocos has been liberal to grant commit access in the past, so if need arises that probably can be arranged fast.
+
+= Available work areas =
+
+== Documentation builder ==
+
+need to know: python; some epydoc / docutils familiarity would help
+wanted: verify the documentation can be built (critical), builder to work also in windows (bonus)
+details:
+  * The actual documentation builder was lifted from pyglet; it uses a combo of .sh scripts, .py code, a modified epydoc
+  * Currently only works on *nix flavored OSes
+  * The releaser for pyglet 1.1.4 found some problems when building documentation, see http://article.gmane.org/gmane.comp.python.pyglet.user/3600
+  * But someone in the list could build recently, see http://thread.gmane.org/gmane.comp.python.cocos2d.user/948/focus=950
+
+== Documentation completion ==
+
+need to know: from nothing to familiarity with cocos
+wanted:
+  * make a list with things missing in the 0.3.0 docs
+  * produce the missing docstrings / text
+
+details:
+  * some entries in current documentation have 'to do content'
+  * Features introduced after 0.3.0 can be missing (sprite animator? tilemaps?)
+
+== Unittesting ==
+
+need to known: unittesting, various degrees of cocos knowledge
+wanted:
+ * simple(s) pyglet's mockup(s) that allow fast coco's objects instantiation
+ * tests cases showing how to instantiate the different cocos objects
+ * test cases asserting the basic behavoir expected from cocos objects
+ * identify areas where unittesting can be facilitated by changes in cocos code
+
+details:
+ * at 0.3.0, no unittest
+ * Richard Jones added some unittests for the map model associated with tilemaps
+ * at r834 added utest directory with simple test case and pyglet mockup that allow to instantiate CocosNode and Action. The mockup was built in a TDD style, adding only the minimal to allow the test run, so will need to flesh up for other tests. 
+ * pyglet has some code that can help, see the test subdir in svn pyglet ( interactive and automatic are mixed, need to identify the automatic ones that can help us )
+ * setting up a full pyglet + openGL context is slow, and unneeded for most test; we need to build pyglet mockups light, with good descriptions.
+ * It must be easy for the people to add a test case
+
+== Interactive tests ==
+(we are talking about the tests found in the svn trunk/test , also released in a package with the docs)
+need to know: expected cocos behavior for entities used in the test
+wanted (for each test):
+  * strings descriptions for each test detailing:
+    * tell you what actions (keypresses,...) are expected from the user
+    * tell you what it is testing
+    * tell you what you should see if it worked correctly
+  * report failures
+
+details:
+  * the tests are very short
+  * be sure that the string match what the code intends ( by example, some hardware will not render ok transitions using grids; if a person on that system describes what it sees, the string will be inaccurate )
+  * If someone wants to setup an online table with 'test name', 'proposed string' for people to colaborate, it would help
+  * Else a thread in the list can be initiated to post numbered test names list, people can tell 'I will do n to m' , 'Here are i to j'
+  * Any takers ? 
+
+== Issue processing ==
+need to know: the cocos area relevant to the issue
+wanted( for each issue):
+  * is the issue understood ? Else work with reporter to clarify
+  * the issue had been fixed in trunk ? update and close issue, add bugdemo in regresions
+  * for bug - flaws issues, there is a bugdemo ? Add one if not
+  * for bugs, it have been reproduced ? work on that
+  * for bugs, can you describe why the problem happens ?
+  * can you describe possible solutions ?
+  * can you propose a patch ?
+
+details:
+  * confirmation and making bugdemos don't require so much knowledge
+  * To grow a bugdemo, the test directory (found in svn or the cocs and samples packages) is a great resource: you begin with the samples most similar to the issue, then modify to show the problem.
+  * The issue tracker is good to look for know problems and to remind devs what needs to be done, but not so good for collaborative working toward solutions. If you want to work some issue, you can work some, post to the list the findings and request comments or help. It also allows to spot related problems or unwanted secondary effects in patchs.
+ 
