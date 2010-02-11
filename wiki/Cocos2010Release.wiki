@@ -1,4 +1,4 @@
-#cocos 2010 release.
+kick start doc for the cocos 3+ release
 
 = Release goals =
 
@@ -61,7 +61,8 @@ details:
  * It must be easy for the people to add a test case
 
 == Interactive tests ==
-(we are talking about the tests found in the svn trunk/test , also released in a package with the docs)
+(we are talking about the tests found in the svn trunk/test, also released in a package with the docs)
+
 need to know: expected cocos behavior for entities used in the test
 wanted (for each test):
   * strings descriptions for each test detailing:
