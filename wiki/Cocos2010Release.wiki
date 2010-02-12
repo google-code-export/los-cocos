@@ -13,6 +13,8 @@
 = Proposed release date =
 April 2010. There is some flex both ways, but it will be a short term release.
 
+Richard: PyWeek #10 is in late March - could we aim to have new Cocos out by mid March?
+
 
 = We want your help =
 You like cocos and are willing to help ?
