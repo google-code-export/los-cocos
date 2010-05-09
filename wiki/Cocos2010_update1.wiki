@@ -1,0 +1,40 @@
+#summary cocos 2010 release status update
+
+= Info blurbs =
+
+== pre pycamp (r881..r904) ==
+
+ * Issue tracker partially updated.
+ * Bug fixing.
+ * tiles subsystem updates both in code and docs, also unit tests added
+ * trunk\utest directory created to hold unit tests
+ * minimal pyglet mockup checked-in
+Pressure to release before pyweek grows.
+
+== cocos 3.1beta and pycamp (r905..r929) ==
+
+Between 5 to 8th March 2010 the PyCamp 2010 Veronica event took part, at Veronica, Argentina.
+PyCamp is a python developers event, and there were present a number of cocos's developers.
+Talks, discussions coding and commits ensued.
+Most people there wanted to release before pyweek.
+Changes that made to trunk, and then to the 3.1beta release (for details, look under the Working Areas section)
+
+ * *audio:* SDL support added (r907, r908, r912, r913, r923..r928) 
+ * *placement:* the interaction between anchors, cocosnode.transform, cocosnode.draw, cocosnode.visit changed (r905, r917,more?)
+ * *coordinates:* world coordinates added, world-to-local added (r914, 915, more?) 
+ * *sprites_:* changes in sprite anchors and related code (r917, more?)
+ * *recorder_:* video record your app as a series of .png files, at a desired framerate (r917 director.py, more?) 
+ * *axis aligned bounding box (AABB) for sprites:* (r909, r910)
+Also, more bug fixing.
+
+== pyweek 10 (r930..r934) ==
+
+The great pyweek 'make a game in a week' compo ran between March 28 and April 4 2010
+Slowdown in the commits is common around pyweek dates, they usually reduce to emergency bugfixig issues showing at pyweek.
+So, only fast and dirty bugfixes for some time.
+ 
+== post pyweek 10 (r935... ==
+
+ * *actions upgraded:* now Action with undefined duration are useful. Operators now accepts Action s instances. Lot of unit test for actions. Better docs, but need more.
+ * *pyglet_mockup:* upgraded a litle.
+More bugfixing
