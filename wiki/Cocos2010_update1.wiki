@@ -21,7 +21,7 @@ Changes that made to trunk, and then to the 3.1beta release (for details, look u
 
  * *audio:* SDL support added (r907, r908, r912, r913, r923..r928) 
  * *placement:* the interaction between anchors, cocosnode.transform, cocosnode.draw, cocosnode.visit changed (r905, r917,more?)
- * *coordinates:* world coordinates added, world-to-local added (r914, 915, more?) 
+ * *coordinates:* world coordinates added, world-to-local added (r914, r915, more?) 
  * *sprites_:* changes in sprite anchors and related code (r917, more?)
  * *recorder_:* video record your app as a series of .png files, at a desired framerate (r917 director.py, more?) 
  * *axis aligned bounding box (AABB) for sprites:* (r909, r910)
@@ -33,8 +33,21 @@ The great pyweek 'make a game in a week' compo ran between March 28 and April 4 
 Slowdown in the commits is common around pyweek dates, they usually reduce to emergency bugfixig issues showing at pyweek.
 So, only fast and dirty bugfixes for some time.
  
-== post pyweek 10 (r935... ==
+== post pyweek 10 (r935..r972) ==
 
  * *actions upgraded:* now Action with undefined duration are useful. Operators now accepts Action s instances. Lot of unit test for actions. Better docs, but need more.
- * *pyglet_mockup:* upgraded a litle.
+ * *pyglet_mockup:* upgraded a little.
+ * *SDL audio:* works in windows if pygame installed
+ * *Scrolling:* upgraded
 More bugfixing
+
+== pyweek 11 announced (r973...)
+
+Starts 2010/08/22 , 22 August 2010
+We should release before 22 July 2010
+
+ * *.*
+ * *.*
+
+
+ 
