@@ -41,7 +41,7 @@ So, only fast and dirty bugfixes for some time.
  * *Scrolling:* upgraded
 More bugfixing
 
-== pyweek 11 announced (r973...)
+== pyweek 11 announced (r973...) ==
 
 Starts 2010/08/22 , 22 August 2010
 We should release before 22 July 2010
