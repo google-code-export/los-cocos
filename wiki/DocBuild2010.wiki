@@ -27,11 +27,11 @@ google don't let me upload to the list archives at this time, uploaded to mediaf
 
 http://www.mediafire.com/?sharekey=c7281e98dae5f4f1d1014a7a667fa2b474dbb298b66d279c64328c9cace34742
 
+update: now google accepted the files, they show in the page
+http://groups.google.com/group/cocos-discuss/files
+but don't allow to download ATM. Maybe some time is needed to be effective.
+W'll see. 
+
  * doc builder toolkit, instructions in the readme: docgen_2010_06_30.zip
    
  * latest html doc build : cocos_docs_2010_06_30.zip
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
