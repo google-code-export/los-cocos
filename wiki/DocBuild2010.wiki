@@ -30,8 +30,19 @@ http://www.mediafire.com/?sharekey=c7281e98dae5f4f1d1014a7a667fa2b474dbb298b66d2
 update: now google accepted the files, they show in the page
 http://groups.google.com/group/cocos-discuss/files
 but don't allow to download ATM. Maybe some time is needed to be effective.
-W'll see. 
+W'll see.
+
+update: zip downloads are disabled in googlegroups, see
+
+http://groups.google.com/group/is-something-broken/browse_thread/thread/ee0bc4d6e3cd92da
+
+In that thread a workaround is sugested: 
+ * rename the files to txt, (done)
+ * dowload like right-click in the name, save as (change the .txt to .zip)
+ * I tested downloading the docs, it worked
 
  * doc builder toolkit, instructions in the readme: docgen_2010_06_30.zip
+   (due to workaround you will see .txt)
    
  * latest html doc build : cocos_docs_2010_06_30.zip
+   (due to the workaround you will see .txt)
