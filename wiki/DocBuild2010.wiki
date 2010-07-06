@@ -41,14 +41,15 @@ In that thread a workaround is sugested:
  * dowload like right-click in the name, save as (change the .txt to .zip)
  * I tested downloading the docs, it worked
 
-update: 2010 07 06
+update: 2010 07 06<br>
+update: fix bad filename in this page
 
        * fixed href s when class=="reference apilink", thanks Ivo for bug report
        * re-uploaded only the docs, later will update code
        * txt trick applies 
 
- * doc builder toolkit, instructions in the readme: docgen_2010_07_06.zip
+ * doc builder toolkit, instructions in the readme: docgen_2010_06_30.zip
    (due to workaround you will see .txt)
    
- * latest html doc build : cocos_docs_2010_06_30.zip
+ * latest html doc build : cocos_docs_2010_07_06.zip
    (due to the workaround you will see .txt)
