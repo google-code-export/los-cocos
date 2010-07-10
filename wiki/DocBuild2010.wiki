@@ -23,33 +23,15 @@ The new script works in windows, and _should_ work in linux / mac, (testing need
 
 = Links =
 
-google don't let me upload to the list archives at this time, uploaded to mediafire in the meantime
+You will find the docs and and doc builder in the download page for the project:
 
-http://www.mediafire.com/?sharekey=c7281e98dae5f4f1d1014a7a667fa2b474dbb298b66d279c64328c9cace34742
+ http://code.google.com/p/los-cocos/downloads/list
 
-update: now google accepted the files, they show in the page
-http://groups.google.com/group/cocos-discuss/files
-but don't allow to download ATM. Maybe some time is needed to be effective.
-W'll see.
-
-update: zip downloads are disabled in googlegroups, see
-
-http://groups.google.com/group/is-something-broken/browse_thread/thread/ee0bc4d6e3cd92da
-
-In that thread a workaround is sugested: 
- * rename the files to txt, (done)
- * dowload like right-click in the name, save as (change the .txt to .zip)
- * I tested downloading the docs, it worked
-
-update: 2010 07 06<br>
-update: fix bad filename in this page
-
-       * fixed href s when class=="reference apilink", thanks Ivo for bug report
-       * re-uploaded only the docs, later will update code
-       * txt trick applies 
-
- * doc builder toolkit, instructions in the readme: docgen_2010_06_30.zip
-   (due to workaround you will see .txt)
+ * doc builder toolkit, instructions in the readme: `docgen_*.zip`
    
- * latest html doc build : cocos_docs_2010_07_06.zip
-   (due to the workaround you will see .txt)
+ * latest html doc build : something with 'cocos' and 'doc' in the name, will be featured download
+
+= Changelog =
+
+	 * 2010 07 10 : option --proof for faster render the cocos docs.
+	 * 2010 07 06 : href class="reference apilink"  now renders ok when gendoc_html runs in a window OS machine.
