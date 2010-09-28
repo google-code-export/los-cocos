@@ -41,13 +41,25 @@ So, only fast and dirty bugfixes for some time.
  * *Scrolling:* upgraded
 More bugfixing
 
-== pyweek 11 announced (r973...) ==
+== pyweek 11 announced (r973...) cocos 0.4rc0 released (...r1036) ==
 
 Starts 2010/08/22 , 22 August 2010
 We should release before 22 July 2010
 
- * *.*
- * *.*
+ * *Scrolling:* upgraded
+ * *docs:* doc builder toolchain patched and upgraded
+ * *docs:* fix reST - epydoc format in docstrings and docs\*\*.txt
+ * *packaging:* setup.py and related text files updated
+ * More issue closing
+ * *rc0 released 2010 07 07*
 
+== final 0.4.0 release (r1037..r1052) ==
+
+After two months and around 1700 downloads for RC0, with only one issue about compatibility with python 2.4 (fixed), it was time to do the final release.
+ * cocos2d-0.4.0 released at googlecode
+ * cocos2d.org updated
+ * PyPI page updated 
+
+ 
 
  
