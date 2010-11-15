@@ -172,25 +172,56 @@ class Sprite( BatchableNode, pyglet.sprite.Sprite):
         y = v[1], v[3], v[5], v[7]
         return rect.Rect(min(x),min(y),max(x)-min(x),max(y)-min(y))
 
+    def _get_rotation( self ):
+        return self._rotation        
     def _set_rotation( self, a ):
-        pyglet.sprite.Sprite._set_rotation(self, a)
-        BatchableNode._set_rotation(self,a)
+        self._rotation = a
+        self.is_transform_dirty = True
+        self.is_inverse_transform_dirty = True
+        self._update_position()
+    rotation = property( _get_rotation, _set_rotation)
+        
 
+    def _get_scale( self ):
+        return self._scale
     def _set_scale( self, s ):
-        pyglet.sprite.Sprite._set_scale(self,s)
-        BatchableNode._set_scale(self,s)
+        self._scale = s
+        self.is_transform_dirty = True
+        self.is_inverse_transform_dirty = True
+        self._update_position()
+    scale = property( _get_scale, _set_scale)
 
+    def _get_position(self):
+        return (self._x, self._y)
     def _set_position( self, p ):
-        pyglet.sprite.Sprite.position = p
-        BatchableNode._set_position(self,p)
+        self._x = p[0]
+        self._y = p[1]
+        self.is_transform_dirty = True
+        self.is_inverse_transform_dirty = True
+        self._update_position()
+    position = property(_get_position, _set_position,
+                        doc='''The (x, y) coordinates of the object.
 
+    :type: (int, int)
+    ''')
+
+    def _get_x(self):
+        return self._x
     def _set_x(self, x ):
-        pyglet.sprite.Sprite._set_x( self, x )
-        BatchableNode._set_x( self, x)
+        self._x = x
+        self.is_transform_dirty = True
+        self.is_inverse_transform_dirty = True
+        self._update_position()
+    x = property(_get_x, _set_x, doc="The x coordinate of the object")
 
+    def _get_y(self):
+        return self._y
     def _set_y(self, y ):
-        pyglet.sprite.Sprite._set_y( self, y )
-        BatchableNode._set_y( self, y)
+        self._y = y
+        self.is_transform_dirty = True
+        self.is_inverse_transform_dirty = True
+        self._update_position()
+    y = property(_get_y, _set_y, doc="The y coordinate of the object")
 
     def contains(self, x, y):
         '''Test whether this (untransformed) Sprite contains the pixel coordinates

@@ -348,7 +348,7 @@ class CocosNode(object):
         self._x = x
         self.is_transform_dirty = True
         self.is_inverse_transform_dirty = True
-    x = property(_get_x, lambda self,x:self._set_x(x), doc="The x coordinate of the object")
+    x = property(_get_x, _set_x, doc="The x coordinate of the object")
 
     def _get_y(self):
         return self._y
@@ -356,16 +356,17 @@ class CocosNode(object):
         self._y = y
         self.is_transform_dirty = True
         self.is_inverse_transform_dirty = True
-    y = property(_get_y, lambda self,y:self._set_y(y), doc="The y coordinate of the object")
+    y = property(_get_y, _set_y, doc="The y coordinate of the object")
 
     def _get_position(self):
         return (self._x, self._y)
     def _set_position(self, (x,y)):
-        self.x, self.y = x,y
+        self._x = x
+        self._y = y
         self.is_transform_dirty = True
         self.is_inverse_transform_dirty = True
 
-    position = property(_get_position, lambda self,p:self._set_position(p),
+    position = property(_get_position, _set_position,
                         doc='''The (x, y) coordinates of the object.
 
     :type: (int, int)
@@ -379,7 +380,7 @@ class CocosNode(object):
         self.is_transform_dirty = True
         self.is_inverse_transform_dirty = True
 
-    scale = property( _get_scale, lambda self, scale: self._set_scale(scale))
+    scale = property( _get_scale, _set_scale)
 
     def _get_rotation( self ):
         return self._rotation
@@ -389,7 +390,7 @@ class CocosNode(object):
         self.is_transform_dirty = True
         self.is_inverse_transform_dirty = True
 
-    rotation = property( _get_rotation, lambda self, angle: self._set_rotation(angle))
+    rotation = property( _get_rotation, _set_rotation)
 
 
     def add(self, child, z=0, name=None ):
@@ -798,10 +799,10 @@ class CocosNode(object):
             matrix = euclid.Matrix3().identity()
 
             matrix.translate(self._x, self._y)
-            matrix.translate( self.transform_anchor_x, self.transform_anchor_y )
-            matrix.rotate( math.radians(-self.rotation) )
+            matrix.translate( self._transform_anchor_x, _self.transform_anchor_y )
+            matrix.rotate( math.radians(-self._rotation) )
             matrix.scale(self._scale, self._scale)
-            matrix.translate( -self.transform_anchor_x, -self.transform_anchor_y )
+            matrix.translate( -self._transform_anchor_x, -self._transform_anchor_y )
 
             
             self.is_transform_dirty = False 
