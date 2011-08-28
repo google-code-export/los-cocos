@@ -20,7 +20,7 @@ def make_cmd(path_to_cmd, paramlist):
     quoted_parts = [ quote(s) for s in paramlist ]
     cmd = ' '.join(quoted_parts)
     # assumes:
-    #   in windows: the *.py extension associates with (the desired) python.exe
+    #   in windows: the *.py extension associates with the desired python.exe
     #   in unix-like: the desired python is invoked with 'python script_name params'
     if sys.platform == 'win32':
         # needed in win xp sp3
@@ -34,7 +34,8 @@ def main():
     # write paths unix style but aply n() to them, slash conversion will be auto
     # spaces in paths are ok.
     
-    protoeditor_path = n('../protoeditor/e2_protoeditor.py')
+    # to run from the stock cocos src tarball/zip
+    protoeditor_path = n('../../tools/protoeditor/e2_protoeditor.py')
 
     params = [
         # gamedef filename
