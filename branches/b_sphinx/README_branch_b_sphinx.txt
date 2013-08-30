@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1254 edited conf.py for basic options
 r1253 tweak builders make.bat and Makefile
 r1252 after running sphinx-quistart snapshoting doc 
 r1251 doc\doc.css -> doc\doc.old.css
@@ -73,4 +74,36 @@ Commited r1252
 
 Commited r1253
 
-                                                        
+# Edit doc\conf.py for basic configuration
+
+    Agrego  ..\ al principio de sys.path para que cuando autodoc importe cocos
+    lo haga desde la WC.
+    
+    seteo sys.is_epydoc para tener visibilidad de ciertas cosas mas amigables
+    para documentar, tanto en pyglet como en cocos 
+    
+    agrego autosummary_generate = True
+    
+    agrego las extensions
+      'sphinx.ext.autosummary',
+      'sphinx.ext.inheritance_diagram'
+      
+    agrego dos params de extensiones que copie de pyglet
+            inheritance_graph_attrs = dict(rankdir="LR", size='""')
+            autodoc_member_order='groupwise'
+            
+    hago que la version de cocos se tome de cocos.version en vez de ponerla fija
+
+    Hago que como fecha ponga * para que diffs entre corridas tengan menos ruido;
+    es el setting today = ''
+    
+    Agrego _templates como patron a ignorar cuando recorre sourcedir
+
+    Siguiendo a pyglet seteo add_module_names = False (para no agregar el module
+    name a cosas como function)
+
+    keep_warnings = True (creo que hace que los warnings se vean en el html)
+
+    el titulo de la sidebar html_short_title = 'cocos'
+	
+Commited r1254
