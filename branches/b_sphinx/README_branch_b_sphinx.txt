@@ -23,3 +23,8 @@ r1248 Branch creation
 
 Dev notes:
 
+Make room for generating sphinx skeleton with conventional names without
+losing info
+
+doc\index.txt -> doc\index.old.txt
+
