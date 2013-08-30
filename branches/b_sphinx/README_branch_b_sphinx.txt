@@ -17,6 +17,8 @@ Goals and scope:
 	
 Changelog:
 
+r1259 updating dev notes    
+r1258 remove spurious copy of skeleton.txt
 r1257 tweaks for 1st build including api reference
 r1256 linking old documentation index, fixed most warnings
 r1255 fix most of Programming Guide warnings
@@ -114,7 +116,7 @@ Committed r1254
 # make.bat builds the docs 1st time.
   Fix all warnings related to Programming Guide except some for unreferenced
   content. (except I missed to update doc/programming_guide/skeleton.txt,
-  corrected at r1257)
+  corrected at r1257-r1258)
 
 Committed r1255
 
@@ -138,3 +140,9 @@ Committed r1256
 
 Committed  r1257
 
+# remove spurious copy of skeleton.txt"
+
+Commited r1258
+
+# update this file
+Committed  r1259
