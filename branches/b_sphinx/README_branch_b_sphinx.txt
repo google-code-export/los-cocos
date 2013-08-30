@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1253 tweak builders make.bat and Makefile
 r1252 after running sphinx-quistart snapshoting doc 
 r1251 doc\doc.css -> doc\doc.old.css
 r1250 doc\index -> doc\index.old.txt
@@ -55,3 +56,21 @@ probably should be deleted.
 Checking in the new files / dirs without modifications for reference
 Commited r1252
 
+# Tweak the builders make.bat and Makefile
+    1. dirty fix in make.bat, set the sphinx.build path. Reason: I have mulple
+    pythons, dont wan't to put python26\scripts in the path.
+    Better solution should come later.
+
+            if "%SPHINXBUILD%" == "" (
+                    set SPHINXBUILD=c:\python26\scripts\\sphinx-build
+		)
+
+    2. log build warnings in doc\warnings.log for debug , change in make.bat
+	%SPHINXBUILD% -w warnings.log -b html %ALLSPHINXOPTS% %BUILDDIR%/html
+
+    3. same as in 2. but for Makefile
+	$(SPHINXBUILD) -w warnings.log -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+
+Commited r1253
+
+                                                        
