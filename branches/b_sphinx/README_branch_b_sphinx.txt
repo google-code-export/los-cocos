@@ -17,14 +17,18 @@ Goals and scope:
 	
 Changelog:
 
+r1251 doc\doc.css -> doc\doc.old.css
+r1250 doc\index -> doc\index.old.txt
 r1249 Added dev notes
 r1248 Branch creation
 
 
 Dev notes:
 
-Make room for generating sphinx skeleton with conventional names without
+# Make room for generating sphinx skeleton with conventional names without
 losing info
 
 doc\index.txt -> doc\index.old.txt
+doc\doc.css -> doc\doc.old.css
+Commited r1250 & r1251
 
