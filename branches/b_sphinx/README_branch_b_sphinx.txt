@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1252 after running sphinx-quistart snapshoting doc 
 r1251 doc\doc.css -> doc\doc.old.css
 r1250 doc\index -> doc\index.old.txt
 r1249 Added dev notes
@@ -31,4 +32,26 @@ losing info
 doc\index.txt -> doc\index.old.txt
 doc\doc.css -> doc\doc.old.css
 Commited r1250 & r1251
+
+# run sphinx-quickstart
+    cd D:\cocos_pristine\b_sphinx\doc
+    c:\python26\scripts\sphinx-quickstart
+
+It added 4 files:
+    doc/Makefile
+    doc/conf.py
+    doc/index.txt
+    doc/make.bat
+And 3 empty directories:
+    doc/_build
+    doc/_static
+    doc/_templates
+
+No previous file modified.
+
+Surely the new index and the old one would need to be convined; doc.old.css
+probably should be deleted.
+
+Checking in the new files / dirs without modifications for reference
+Commited r1252
 
