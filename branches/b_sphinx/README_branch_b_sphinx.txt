@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1256 linking old documentation index, fixed most warnings
 r1255 fix most of Programming Guide warnings
 r1254 edited conf.py for basic options
 r1253 tweak builders make.bat and Makefile
@@ -115,4 +116,10 @@ Committed r1254
 
 Committed r1255
 
+# linking old documentation from the sphinx generated doc\index
+  Moved and adapted some info from index.old.txt to index.txt
+  index.old.txt no longer needed, deleted
+  Fixed all warnings except complains about a missing api/index
+
+Commited r1256
 
