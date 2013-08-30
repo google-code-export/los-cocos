@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1255 fix most of Programming Guide warnings
 r1254 edited conf.py for basic options
 r1253 tweak builders make.bat and Makefile
 r1252 after running sphinx-quistart snapshoting doc 
@@ -106,4 +107,12 @@ Commited r1253
 
     el titulo de la sidebar html_short_title = 'cocos'
 	
-Commited r1254
+Committed r1254
+
+# make.bat builds the docs 1st time.
+  Fix all warnings related to Programming Guide except some for unreferenced
+  content.
+
+Committed r1255
+
+
