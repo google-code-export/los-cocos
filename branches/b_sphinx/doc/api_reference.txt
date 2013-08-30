@@ -1,0 +1,35 @@
+API Reference
+=============
+
+.. autosummary::
+   :toctree: api/ 
+
+   cocos.actions
+   cocos.audio
+   cocos.batch
+   cocos.camera
+   cocos.cocosnode
+   cocos.collision_model
+   cocos.custom_clocks
+   cocos.director
+   cocos.draw
+   cocos.euclid
+   cocos.framegrabber
+   cocos.gl_framebuffer_object
+   cocos.grid
+   cocos.layer
+   cocos.menu
+   .. cocos.particle
+   .. cocos.particle_systems
+   cocos.path
+   cocos.rect
+   .. cocos.resources
+   cocos.scene
+   cocos.scenes
+   cocos.shader
+   cocos.skeleton
+   cocos.sprite
+   cocos.text
+   cocos.tiles
+   cocos.utils
+   cocos.wired
