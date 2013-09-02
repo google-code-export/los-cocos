@@ -17,10 +17,9 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
 
 # change some visibility in pyglet and cocos while building documentation
-sys.is_epydoc = True
 
 try:
     import pyglet
@@ -28,6 +27,7 @@ except:
     print "ERROR: pyglet not found"
     sys.exit(1)
     
+
 try:
     import cocos
 except:
@@ -36,6 +36,14 @@ except:
 
 import cocos
 print "Generating cocos %s Documentation" % (cocos.version)
+
+# workaround for raise GLException('No GL context; create a Window first') when
+# sphinx autodoc attemp to import cocos_particles
+print "\n***don't close the opened cocos windows untile document generation ends ***"
+from cocos.director import director
+director.init(300,100)
+sys.is_epydoc = True
+
 
 # -- General configuration -----------------------------------------------------
 

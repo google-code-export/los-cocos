@@ -25,7 +25,12 @@ Exception occurred:
 GLException: No GL context; create a Window first
 """
 
-1st thing to check: the machine running that build does not support GL point sprites, the crash reproduces in other machines ?
+1st thing to check: the machine running that build does not support GL point sprites, the crash reproduces in other machines ? - > no, a machine supporting point sprites gives same error.
+
+Fixed at r1263, a cocos window created in conf.py before any autodoc atempt.
+Probably pyglet should not see the epydoc flag, and cocos maybe should not see it until the window is created.   
+Want to cleanup a bit, making is_epydoc -> is_cocos_sphinx  
+
 
 #####
 

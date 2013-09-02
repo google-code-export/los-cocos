@@ -19,11 +19,11 @@ API Reference
    cocos.grid
    cocos.layer
    cocos.menu
-   .. cocos.particle
-   .. cocos.particle_systems
+   cocos.particle
+   cocos.particle_systems
    cocos.path
    cocos.rect
-   .. cocos.resources
+   cocos.resources
    cocos.scene
    cocos.scenes
    cocos.shader
