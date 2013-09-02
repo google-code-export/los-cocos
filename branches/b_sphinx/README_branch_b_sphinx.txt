@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1264 flag a sphinx run with sys.is_cocos_sphinx instead of sys.is_epydoc
 r1263 fix traceback when autodoc attempts to handle cocos_particle
 r1262 adds readme_issues_b_sphinx.txt to not forget pending issues
 r1261 updating dev noted
@@ -161,3 +162,9 @@ Committed r1261-r1262
 A cocos window is created in conf.py before any autodoc atempt.
 Probably pyglet should not see the epydoc flag, and cocos maybe should
 not see it until the window is created.
+Commited r1263
+
+# refactor flag a sphinx run with sys.is_cocos_sphinx instead of sys.is_epydoc
+This allows to use stock pyglet while autodoc, not the pyglet is_epydoc version.
+Also changed the point where the flag is set.
+Commited r1264

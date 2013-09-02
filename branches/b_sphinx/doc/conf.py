@@ -28,13 +28,13 @@ except:
     sys.exit(1)
     
 
+sys.is_cocos_sphinx = True
 try:
     import cocos
 except:
     print "ERROR: cocos not found"
     sys.exit(1)
 
-import cocos
 print "Generating cocos %s Documentation" % (cocos.version)
 
 # workaround for raise GLException('No GL context; create a Window first') when
@@ -42,7 +42,6 @@ print "Generating cocos %s Documentation" % (cocos.version)
 print "\n***don't close the opened cocos windows untile document generation ends ***"
 from cocos.director import director
 director.init(300,100)
-sys.is_epydoc = True
 
 
 # -- General configuration -----------------------------------------------------

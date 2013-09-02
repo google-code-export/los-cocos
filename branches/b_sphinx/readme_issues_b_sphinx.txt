@@ -13,26 +13,6 @@ It was changed to a hardcoded path invoke for convenience, before merging to tru
   
 #####
   
-#2 Get autodoc to work over cocos.particle and cocos.particle_system
-Seen in r1257
-
-The build crashed while trying to build cocos.particle and or cocos.particle_system.
-The related error message was:
-"""
-Exception occurred:
-  File "D:\hg_externals\pyglet_dev\pyglet\gl\lib.py", line 100, in errcheck
-    raise GLException('No GL context; create a Window first')
-GLException: No GL context; create a Window first
-"""
-
-1st thing to check: the machine running that build does not support GL point sprites, the crash reproduces in other machines ? - > no, a machine supporting point sprites gives same error.
-
-Fixed at r1263, a cocos window created in conf.py before any autodoc atempt.
-Probably pyglet should not see the epydoc flag, and cocos maybe should not see it until the window is created.   
-Want to cleanup a bit, making is_epydoc -> is_cocos_sphinx  
-
-
-#####
 
 #3 warning.log "<autodoc>:0: WARNING: Inline emphasis start-string without end-string."
 Seen in r1260.
@@ -55,3 +35,23 @@ Maybe related to #4 ?
 
 
 ######### below closed issues only, kept just in case (regressions) #########
+
+#2 Get autodoc to work over cocos.particle and cocos.particle_system
+Seen in r1257
+
+The build crashed while trying to build cocos.particle and or cocos.particle_system.
+The related error message was:
+"""
+Exception occurred:
+  File "D:\hg_externals\pyglet_dev\pyglet\gl\lib.py", line 100, in errcheck
+    raise GLException('No GL context; create a Window first')
+GLException: No GL context; create a Window first
+"""
+
+1st thing to check: the machine running that build does not support GL point sprites, the crash reproduces in other machines ? - > no, a machine supporting point sprites gives same error.
+
+Fixed at r1263, a cocos window created in conf.py before any autodoc atempt.
+A bit of cleanup at r1264
+closed
+
+#####
