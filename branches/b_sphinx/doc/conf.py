@@ -13,13 +13,11 @@
 
 import sys, os
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+# make the cocos in this Working Copy importable
 sys.path.insert(0, os.path.abspath('..'))
 
-# change some visibility in pyglet and cocos while building documentation
+# patched extensions base path.
+sys.path.insert(0, os.path.abspath('.'))
 
 try:
     import pyglet
@@ -43,6 +41,67 @@ print "\n***don't close the opened cocos windows untile document generation ends
 from cocos.director import director
 director.init(300,100)
 
+# -> from pyglet conf.py
+implementations = ["carbon", "cocoa", "win32", "xlib"]
+
+# Do not try to import these modules
+skip_modules = {
+    # root package
+    "cocos": {
+        "cocos.actions": [],
+        }
+    }
+
+# Skip members
+def skip_member(member, obj):
+    module = obj.__name__
+
+    if ".win32" in module: return True
+    if ".carbon" in module: return True
+    if ".cocoa" in module: return True
+    if ".xlib" in module: return True
+
+    if member.startswith("PFN"): return True
+
+    if module.startswith("pyglet.gl.glext_"): return True
+    if module.startswith("pyglet.gl.gl_ext_"): return True
+    if module.startswith("pyglet.gl.glxext_"): return True
+    if module.startswith("pyglet.image.codecs."): return True
+
+    if module=="pyglet.gl.gl" or module=="pyglet.gl.gl_info":
+        if member=="pointer": return True
+    else:
+        if member.upper().startswith("GL"):
+            if member.endswith("Info"): return False
+            if member.upper().startswith("GLU"):
+                if (".glu" in module):
+                    if member.startswith("GLU") and \
+                       not member.startswith("GLU_") : return True
+                    return False
+            if not member.startswith("gl_"): return True
+
+    if module in ["pyglet.gl.gl_info",
+                  "pyglet.gl.glu",
+                  "pyglet.gl.glu_info"]  \
+       or module.startswith("pyglet.image"):
+        if member in ["FormatError",
+                      "POINTER",
+                      "addressof",
+                      "alignment",
+                      "byref",
+                      "get_errno",
+                      "get_last_error",
+                      "pointer",
+                      "resize",
+                      "set_conversion_mode",
+                      "set_last_error",
+                      "set_errno",
+                      "sizeof"]:
+            return True
+
+    return False
+
+# <- from pyglet conf.py
 
 # -- General configuration -----------------------------------------------------
 
@@ -54,8 +113,9 @@ autosummary_generate = True
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.autosummary',
-              'sphinx.ext.inheritance_diagram',]
+              'ext.autosummary', # the pyglet one
+              'sphinx.ext.inheritance_diagram', # needs grapviz
+              ]
 
 inheritance_graph_attrs = dict(rankdir="LR", size='""')
 
@@ -119,7 +179,7 @@ add_module_names = False
 pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
-#modindex_common_prefix = []
+modindex_common_prefix = ['cocos.']
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 keep_warnings = True
@@ -141,7 +201,7 @@ html_theme = 'default'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+html_title = "cocos v%s documentation" % (cocos.version)
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 html_short_title = 'cocos'
@@ -176,13 +236,13 @@ html_static_path = ['_static']
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-#html_domain_indices = True
+html_domain_indices = True
 
 # If false, no index is generated.
-#html_use_index = True
+html_use_index = True
 
 # If true, the index is split into individual pages for each letter.
-#html_split_index = False
+html_split_index = True
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = True
@@ -281,3 +341,122 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+# -> from pyglet conf.py
+# pyglet documentation --------------------------------------------------
+
+import inspect
+import time
+import datetime
+
+# Search all submodules
+def _get_submodules(rootpath, skip):
+    """
+    Look for every file in the directory tree and return a dict
+    Hacked from sphinx.autodoc
+    """
+
+    INITPY = '__init__.py'
+
+    rootpath = os.path.normpath(os.path.abspath(rootpath))
+    if INITPY in os.listdir(rootpath):
+        root_package = rootpath.split(os.path.sep)[-1]
+        print "Searching modules in", rootpath
+    else:
+        print "No modules in", rootpath
+        return
+
+    def makename(package, module):
+        """Join package and module with a dot."""
+        if package:
+            name = package
+            if module:
+                name += '.' + module
+        else:
+            name = module
+        return name
+
+    tree = {}
+    saved = 0
+    found = 0
+    def save(module, submodule):
+        if skip.has_key(module):
+            if submodule in skip[module]:
+                return False
+        if not tree.has_key(module):
+            tree[module] = []
+        tree[module].append(submodule)
+        return True
+
+    for root, subs, files in os.walk(rootpath):
+        py_files = sorted([f for f in files if os.path.splitext(f)[1] == '.py'])
+
+        if INITPY in py_files:
+            subpackage = root[len(rootpath):].lstrip(os.path.sep).\
+                replace(os.path.sep, '.')
+            full = makename(root_package, subpackage)
+            part = full.rpartition('.')
+            base_package, submodule = part[0], part[2]
+            found += 1
+            if save(base_package, submodule): saved += 1
+
+            py_files.remove(INITPY)
+            for py_file in py_files:
+                found += 1
+                module = os.path.splitext(py_file)[0]
+                if save(full, module): saved += 1
+
+    for item in tree.keys():
+        tree[item].sort()
+    print "%s contains %i submodules, %i skipped" % \
+          (root_package, found, found-saved)
+    return tree
+
+for mod in skip_modules.keys():
+    sys.all_submodules = _get_submodules(os.path.join('..', mod),
+                                         skip_modules[mod])
+sys.skip_member = skip_member
+
+
+# Special treatment for Event classes
+from sphinx.ext.autodoc import MethodDocumenter, ModuleDocumenter
+
+class EventDocumenter(MethodDocumenter):
+    objtype = "event"
+    member_order = 45
+    priority = 5
+
+    @classmethod
+    def can_document_member(cls, member, membername, isattr, parent):
+        if member.__doc__ is not None:
+            if ":event:" in member.__doc__:
+                return inspect.isroutine(member) and \
+                       not isinstance(parent, ModuleDocumenter)
+        return False
+
+def setup(app):
+    app.add_autodocumenter(EventDocumenter)
+
+
+# collects some build info for a page that talks about documentation
+# ATM that page is not built in cocos, will be added later 
+with open('internal/blacklist.rst', 'w') as f:
+    if skip_modules:
+        pack = skip_modules["cocos"]
+        modules = pack.keys()
+        modules.sort()
+        for mod in modules:
+            pack[mod].sort()
+            for sub in pack[mod]:
+                f.write("* ``"+mod+"."+sub+"``\n")
+
+now = datetime.datetime.fromtimestamp(time.time())
+with open('internal/build.rst', 'w') as f:
+    f.write(".. list-table::\n")
+    f.write("   :widths: 50 50\n")
+    f.write("\n")
+    for var, val in (("Date", now.strftime("%Y/%m/%d %H:%M:%S")),
+                     ("cocos version", cocos.version)):
+        f.write("   * - "+var+"\n     - "+val+"\n")
+
+

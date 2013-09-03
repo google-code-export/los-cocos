@@ -1,8 +1,17 @@
 API Reference
 =============
 
+2D game and multimedia framework
+
+Subpackages & modules
+---------------------
+
+.. currentmodule: cocos
+
 .. autosummary::
-   :toctree: api/ 
+   :toctree: api/
+   :template: module.rst
+   
 
    cocos.actions
    cocos.audio
@@ -23,7 +32,7 @@ API Reference
    cocos.particle_systems
    cocos.path
    cocos.rect
-   cocos.resources
+   .. cocos.resources
    cocos.scene
    cocos.scenes
    cocos.shader
@@ -33,3 +42,9 @@ API Reference
    cocos.tiles
    cocos.utils
    cocos.wired
+
+Options & versions
+------------------
+
+.. automodule:: cocos
+   :members:

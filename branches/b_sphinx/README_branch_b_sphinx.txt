@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1266 adopting most of pyglet sphinx customizations
 r1265 fix warning api_reference not in any toctree
 r1264 flag a sphinx run with sys.is_cocos_sphinx instead of sys.is_epydoc
 r1263 fix traceback when autodoc attempts to handle cocos_particle
@@ -173,4 +174,13 @@ Commited r1264
 # fix warning api_reference not in any toctree
 Replaced a direct link in doc/index to document api_reference with a toctree
 Committed r1265
+
+# the big problem with the r1265 build is that all info for direct modules of
+cocos ends in the same page.
+The current ( f8da1dcafc85 ) pyglet documentation toolchain don't have that
+defect, so I copied from there and adapted.
+It uses a custom autosummary (seen in doc/ext), custom templates (the ones in
+doc/_templates) and some custom code in conf.py
+Committed r1266
+
 
