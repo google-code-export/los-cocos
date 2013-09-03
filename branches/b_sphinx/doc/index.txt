@@ -37,7 +37,9 @@ Programming Guide:
 API Reference:
 ==============
 
-:doc:`Subpakages and Modules <api_reference>`
+.. toctree::
+
+   api_reference
 
 
 Frequently Asked Questions:

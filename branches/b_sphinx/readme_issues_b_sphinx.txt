@@ -19,15 +19,7 @@ Seen in r1260.
 
 #####
 
-#4 warning.log "D:\cocos_pristine\b_sphinx\doc\api_reference.txt:: WARNING: document isn't included in any toctree"
-Seen in r1260
 
-Mmmh, yes. That document is linked directly from doc\index.
-The content is also reachable by the links 'Index' and 'Module index' in the home page.
-Should I be worried about that ?
-
-#5 The pages pointed by the links 'Index' and 'Module index' in the home page shows all entries under the letter 'C'
-Maybe related to #4 ?
 
 
 
@@ -55,3 +47,12 @@ A bit of cleanup at r1264
 closed
 
 #####
+
+#4 warning.log "D:\cocos_pristine\b_sphinx\doc\api_reference.txt:: WARNING: document isn't included in any toctree"
+Seen in r1260
+
+fixed r1265
+closed
+
+#####
+
