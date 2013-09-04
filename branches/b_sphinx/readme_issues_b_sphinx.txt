@@ -12,12 +12,29 @@ It was changed to a hardcoded path invoke for convenience, before merging to tru
   make a note about using an unversioned mak.bat which sets SPHINXBUILD as a convenience for developing
   
 #####
-  
 
-#3 warning.log "<autodoc>:0: WARNING: Inline emphasis start-string without end-string."
-Seen in r1260.
+#5 In individual module pages too much symbols in section Define.
+Seen in all revisions , by example r1268
 
-#####
+from mod import a, b, c -> a, b, c seen in defines
+from mod import * -> all of symbols seen
+import mod -> mod seen in defines (ex: math in cocos.euclid)
+
+Some come from unnecesary 'from mod import *' (esp. mod==pyglet.gl), the real fix would be eliminate those star imports
+
+Other star imports are probably more justified, like 'from base_actions import *' in cocos.actions subpackages
+
+I was under the impresion that autodoc did respect the __all__ in the module (thus only including symbols in the all), but that is not the case here. Look at cocos.actions.camera_actions by example. Is something broken ? Some configuration must be set ? Some option is implicitly disabling that feature ?
+Yes, http://sphinx-doc.org/ext/autodoc.html tells
+"""
+.. automodule:: noodle
+   :members:
+
+will document all module members (recursively)
+
+For modules, __all__ will be respected when looking for members; the order of the members will also be the order in __all__.
+"""
+
 
 
 
@@ -44,6 +61,13 @@ GLException: No GL context; create a Window first
 
 Fixed at r1263, a cocos window created in conf.py before any autodoc atempt.
 A bit of cleanup at r1264
+closed
+
+#####
+  
+#3 warning.log "<autodoc>:0: WARNING: Inline emphasis start-string without end-string."
+Seen in r1260.
+Disapeared as a side effect of other changes, noticed fixed at r1268 but the fix could have come from other intermediate revisions
 closed
 
 #####

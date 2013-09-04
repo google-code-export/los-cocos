@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1269 minor api_reference tweak
 r1268 fix warnings about .pointer , ultimatelly from ctypes
 r1267 fixed a lot of warnings coming from anchor's properties 
 r1266 adopting most of pyglet sphinx customizations
