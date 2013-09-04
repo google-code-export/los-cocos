@@ -49,12 +49,24 @@ skip_modules = {
     # root package
     "cocos": {
         "cocos.actions": [],
+        "cocos.audio.SDL": ["darwin", "sound"],
         }
     }
 
 # Skip members
 def skip_member(member, obj):
+    # returns True to skip, False to retain
     module = obj.__name__
+
+    if module.startswith("cocos"):
+        if (module.startswith('cocos.audio') and
+            member.endswith('pointer')):
+            # probably from the 'from ctypes import *'
+             return True
+        elif (module.startswith('cocos.shader') and
+            member.endswith('pointer')):
+            # probably from the 'from ctypes import *'
+             return True
 
     if ".win32" in module: return True
     if ".carbon" in module: return True

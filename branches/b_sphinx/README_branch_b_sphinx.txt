@@ -17,6 +17,7 @@ Goals and scope:
 	
 Changelog:
 
+r1268 fix warnings about .pointer , ultimatelly from ctypes
 r1267 fixed a lot of warnings coming from anchor's properties 
 r1266 adopting most of pyglet sphinx customizations
 r1265 fix warning api_reference not in any toctree
@@ -187,4 +188,8 @@ Committed r1266
 # fixed a lot of warnings coming from anchor's properties
 Committed r1267
 
+# fix warnings about .pointer
+All from modules doing 'from ctypes import *'
+Now 0 warnings from the build.
+Committed r1268
 
