@@ -33,5 +33,6 @@ You will find the docs and and doc builder in the download page for the project:
 
 = Changelog =
 
-	 * 2010 07 10 : option --proof for faster render the cocos docs.
-	 * 2010 07 06 : href class="reference apilink"  now renders ok when gendoc_html runs in a window OS machine.
+    * 2010 07 10 : option --proof for faster render the cocos docs.
+    * 2010 07 06 : href class="reference apilink"  now renders ok when gendoc_html runs in a window OS machine.
+    * 2014 03 24 : for cocos release 0.6.0 the doc subsystem was changed to a sphinx based one, so the solution in this page is decommissioned. 
