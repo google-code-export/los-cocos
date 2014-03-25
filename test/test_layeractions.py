@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -21,7 +19,7 @@ def main():
     translate_layer = cocos.layer.Layer()
     x, y = director.get_window_size()
     translate_layer.add( bg_layer )
-    translate_layer.do( MoveBy( (x//2, y//2), 5) )
+    translate_layer.do( MoveBy( (x/2, y/2), 5) )
     main_scene = cocos.scene.Scene (translate_layer)
     director.run (main_scene)
 

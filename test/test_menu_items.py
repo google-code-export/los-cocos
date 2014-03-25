@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -17,6 +15,8 @@ from cocos.director import *
 from cocos.menu import *
 from cocos.scene import *
 from cocos.layer import *
+
+from operator import setslice
 
 def printf(*args):
     sys.stdout.write(''.join([str(x) for x in args])+'\n')
@@ -46,22 +46,22 @@ class MainMenu(Menu):
         pyglet.app.exit()
 
     def on_multiple_callback(self, idx ):
-        print('multiple item callback', idx)
+        print 'multiple item callback', idx
 
     def on_toggle_callback(self, b ):
-        print('toggle item callback', b)
+        print 'toggle item callback', b
 
     def on_callback(self ):
-        print('item callback')
+        print 'item callback'
 
     def on_entry_callback (self, value):
-        print('entry item callback', value)
+        print 'entry item callback', value
 
     def on_image_callback (self):
-        print('image item callback')
+        print 'image item callback'
 
     def on_color_callback(self, value):
-        print('color item callback:', value)
+        print 'color item callback:', value
 
 def main():
 

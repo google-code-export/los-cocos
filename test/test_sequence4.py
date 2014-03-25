@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -22,9 +20,9 @@ class TestLayer(cocos.layer.Layer):
 
         x,y = director.get_window_size()
 
-        self.sprite = Sprite( 'grossini.png', (0,y//2)  )
+        self.sprite = Sprite( 'grossini.png', (0,y/2)  )
         self.add( self.sprite )
-        seq = MoveBy( (x//2, 0) )
+        seq = MoveBy( (x/2, 0) )
         self.sprite.do( seq + Reverse(seq) )
 
 description  = """
@@ -33,7 +31,7 @@ then returns to the initial position.
 """
 
 def main():
-    print(description)
+    print description
     director.init()
     test_layer = TestLayer ()
     main_scene = cocos.scene.Scene (test_layer)

@@ -8,7 +8,7 @@ __version__ = '$Id: $'
 
 from ctypes import *
 
-from . import dll
+import dll
 
 class SDL_Exception(Exception):
     '''Exception raised for all SDL errors.  

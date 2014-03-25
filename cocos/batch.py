@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -41,11 +40,10 @@ Batches allow you to optimize the number of gl calls using pyglets batch
 
 """
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
-from cocos.cocosnode import CocosNode
+import cocosnode
+from batch import *
 
 import pyglet
 from pyglet.graphics import OrderedGroup
@@ -61,7 +59,7 @@ def ensure_batcheable(node):
     for c in  node.get_children():
         ensure_batcheable(c)
 
-class BatchNode( CocosNode ):
+class BatchNode( cocosnode.CocosNode ):
     def __init__(self):
         super(BatchNode, self).__init__()
         self.batch = pyglet.graphics.Batch()
@@ -92,7 +90,7 @@ class BatchNode( CocosNode ):
     def draw(self):
         pass # All drawing done in visit!
 
-class BatchableNode( CocosNode ):
+class BatchableNode( cocosnode.CocosNode ):
     def add(self, child, z=0, name=None):
         batchnode = self.get_ancestor(BatchNode)
         if not batchnode:

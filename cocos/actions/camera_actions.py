@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -37,13 +36,11 @@
 Actions that moves the OpenGL camera.
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 from cocos.director import director
 from cocos.euclid import *
-from .base_actions import *
+from base_actions import *
 
 import math
 
@@ -153,7 +150,7 @@ class OrbitCamera( Camera3DAction ):
         if r == 0:
             r = 0.000000001
 
-        angle_z = math.acos( eye.z / r )
+        angle_z = math.acos( eye.z / float(r) )
         if eye.x < 0:
             angle_x = math.pi - math.asin( eye.y / s )
         else:

@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -32,13 +30,12 @@ class TestLayer(cocos.layer.Layer):
 
         self.sprite1 = Sprite('grossini.png', anchor=(0, 0))
         self.sprite_rect = None 
-        self.add(self.sprite1, z=2)
+        self.add(self.sprite1, z=1)
         self.sprite1.position = x // 3, y // 2
         self.show_rect()
         self.do(
             Delay(2) + CallFunc(self.mov) +
             Delay(2) + CallFunc(self.zoom) +
-            Delay(2) + CallFunc(self.scalex) +
             Delay(2) + CallFunc(self.rot)
             )
         self.mouse_mark = cocos.layer.ColorLayer(0, 0, 255, 255, 20, 20)
@@ -64,10 +61,6 @@ class TestLayer(cocos.layer.Layer):
 
     def zoom(self):
         self.sprite1.scale = 2
-        self.show_rect()
-
-    def scalex(self):
-        self.sprite1.scale_x = 0.5
         self.show_rect()
 
     def on_mouse_press(self, x, y, buttons, modifiers):
@@ -97,10 +90,9 @@ To work as expected these conditions must be meet:
 
 This scripts shows a sprite and a white rectangle depicting sprite.get_rect(),
     It starts at one position
-    After 2 seconds sprite moves to another position
-    After 2 seconds sprite scales 2x in both axis
-    After 2 seconds sprite scales 0.5 in the x axis
-    After 2 seconds sprite rotates 90 degress
+    After 3 seconds sprite moves to another position
+    After 3 seconds sprite scales 2x
+    After 3 seconds sprite rotates 90 degress
 
 get_rect() gives a tight fit when changing position or scale, but not when a
 rotation is applied.
@@ -108,13 +100,13 @@ Clicking or draging into the get_rect() changes the colored square that follows
 the mouse to red; when outside the get_rect() it turns blue. 
 
 For other variants on collision or mouse hit see
-    test/test_sprite_aabb.py,
-    samples/balldrive_toy_game
-    samples/mouse_elastic_box_selection.py
+    test\test_sprite_aabb.py,
+    samples\balldrive_toy_game
+    samples\mouse_elastic_box_selection.py
 """
 
 def main():
-    print(description)
+    print description
     director.init()
     test_layer = TestLayer ()
     main_scene = cocos.scene.Scene (test_layer)

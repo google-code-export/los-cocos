@@ -1,6 +1,4 @@
-"""tests tools\\uniform_snippet.py , use py.test to run"""
-from __future__ import division, print_function, unicode_literals
-import six
+"""tests tools\uniform_snippet.py , use py.test to run"""
 
 # make the test find the script in tools directory
 import sys, os
@@ -27,7 +25,7 @@ def test_start_1st_line_match():
 
     start_line = get_start_line(it, target)
     assert start_line == 0
-    assert six.next(it) == (1, lines[1])
+    assert it.next() == (1, lines[1])
 
 
 def test_start_last_line_match():
@@ -46,7 +44,7 @@ def test_start_last_line_match():
     # here next should raise StoptIteration
     StopIteration_raised = False
     try:
-        six.next(it)
+        it.next()
     except StopIteration:
         StopIteration_raised = True
     assert StopIteration_raised
@@ -64,7 +62,7 @@ def test_start_inner_line_match():
 
     start_line = get_start_line(it, target)
     assert start_line == 1
-    assert six.next(it) == (2, lines[2])
+    assert it.next() == (2, lines[2])
 
 def test_start_no_match():
     target = 'classBackgroundLayer('
@@ -81,7 +79,7 @@ def test_start_no_match():
     # here next should raise StoptIteration
     StopIteration_raised = False
     try:
-        six.next(it)
+        it.next()
     except StopIteration:
         StopIteration_raised = True
     assert StopIteration_raised
@@ -191,14 +189,14 @@ def test_endplus_hitting_EOF():
 ##    line_0 = '#line 0'
 ##    line_last = '#line last'
 ##    text_0 = line_0 + '\n' + reference + line_last
-##    print(text_0)
+##    print text_0
 ##    SnipetCompliance.set_target(reference, 'classBackgroundLayer(')
 ##    worker = SnipetCompliance('', text_0)
 ##    worker.is_compliant()
-##    print('\n>>>')
-##    print('matched:')
-##    print(worker.matched())
-##    print('<<<\n')
+##    print '\n>>>'
+##    print 'matched:'
+##    print worker.matched()
+##    print '<<<\n'
 ##
 ##    worker.enforce_compliance()
 ##    print '\n>>>'
@@ -214,48 +212,48 @@ def test_endplus_hitting_EOF():
 ##    line_0 = '#line 0'
 ##    line_last = '#line last'
 ##    text_0 = line_0 + '\n' + reference + line_last
-##    print(text_0)
+##    print text_0
 ##    SnipetCompliance.set_target(reference, 'classBackgroundLayer(')
 ##    worker = SnipetCompliance('', text_0)
 ##    worker.is_compliant()
 ##    assert worker.compliant
 ##    worker.enforce_compliance()
 ##    assert text_0 == worker.text
-####    print('\n>>>')
-####    print('matched:')
-####    print(worker.matched())
-####    print('<<<\n')
+####    print '\n>>>'
+####    print 'matched:'
+####    print worker.matched()
+####    print '<<<\n'
 ####
 ####    worker.enforce_compliance()
-####    print('\n>>>')
-####    print('matched:')
-####    print(worker.matched())
-####    print('<<<\n')
+####    print '\n>>>'
+####    print 'matched:'
+####    print worker.matched()
+####    print '<<<\n'
 ####
-####    print('fixed text:')
-####    print(worker.text)
+####    print 'fixed text:'
+####    print worker.text
 ##    
 ##def test_trailing_text_compliant():
 ##    line_0 = '#line 0'
 ##    text_0 = line_0 + '\n' + reference
-##    print(text_0)
+##    print text_0
 ##    SnipetCompliance.set_target(reference, 'classBackgroundLayer(')
 ##    worker = SnipetCompliance('', text_0)
 ##    worker.is_compliant()
 ##    assert text_0 == worker.text
 ##    assert worker.compliant
-####    print('\n>>>')
-####    print('matched:')
-####    print(worker.matched())
-####    print('<<<\n')
+####    print '\n>>>'
+####    print 'matched:'
+####    print worker.matched()
+####    print '<<<\n'
 ####
 ####    worker.enforce_compliance()
-####    print('\n>>>')
-####    print('matched:')
-####    print(worker.matched())
-####    print('<<<\n')
+####    print '\n>>>'
+####    print 'matched:'
+####    print worker.matched()
+####    print '<<<\n'
 ####
-####    print('fixed text:')
-####    print(worker.text)
+####    print 'fixed text:'
+####    print worker.text
 ##test_midle_text_compliant
 ##test_trailing_text_compliant()

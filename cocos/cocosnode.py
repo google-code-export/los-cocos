@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -36,9 +35,6 @@
 CocosNode: the basic element of cocos2d
 """
 
-from __future__ import division, print_function, unicode_literals
-from six import string_types
-
 __docformat__ = 'restructuredtext'
 
 import bisect, copy
@@ -46,9 +42,9 @@ import bisect, copy
 import pyglet
 from pyglet.gl import *
 
-from cocos.director import director
-from cocos.camera import Camera
-from cocos import euclid
+from director import director
+from camera import Camera
+import euclid
 
 import math
 import weakref
@@ -374,8 +370,9 @@ class CocosNode(object):
 
     def _get_position(self):
         return (self._x, self._y)
-    def _set_position(self, pos):
-        self._x, self._y = pos
+    def _set_position(self, (x,y)):
+        self._x = x
+        self._y = y
         self.is_transform_dirty = True
         self.is_inverse_transform_dirty = True
 
@@ -453,19 +450,7 @@ class CocosNode(object):
         child.parent = self
 
         elem = z, child
-
-        # inlined and customized bisect.insort_right, the stock one fails in py3
-        lo = 0
-        hi = len(self.children)
-        a = self.children
-        while lo < hi:
-            mid = (lo+hi)//2
-            if z < a[mid][0]: hi = mid
-            else: lo = mid+1
-        self.children.insert(lo, elem)
-
-
-
+        bisect.insort( self.children,  elem )
         if self.is_running:
             child.on_enter()
         return self
@@ -490,7 +475,7 @@ class CocosNode(object):
                 name of the reference to be removed
                 or object to be removed
         """
-        if isinstance(obj, string_types):
+        if isinstance(obj, str):
             if obj in self.children_names:
                 child = self.children_names.pop( obj )
                 self._remove( child )

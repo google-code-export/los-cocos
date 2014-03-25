@@ -5,9 +5,6 @@
 Appropriated from pygame.macosx
 '''
 
-from __future__ import division, print_function, unicode_literals
-import six
-
 __docformat__ = 'restructuredtext'
 __version__ = '$Id: $'
 
@@ -102,52 +99,52 @@ INPSN = 'n^{ProcessSerialNumber=LL}'
 
 FUNCTIONS=[
     # These two are public API
-    ( 'GetCurrentProcess', S(OSErr, OUTPSN) ),
-    ( 'SetFrontProcess', S(OSErr, INPSN) ),
+    ( u'GetCurrentProcess', S(OSErr, OUTPSN) ),
+    ( u'SetFrontProcess', S(OSErr, INPSN) ),
     # This is undocumented SPI
-    ( 'CPSSetProcessName', S(OSErr, INPSN, objc._C_CHARPTR) ),
-    ( 'CPSEnableForegroundOperation', S(OSErr, INPSN) ),
+    ( u'CPSSetProcessName', S(OSErr, INPSN, objc._C_CHARPTR) ),
+    ( u'CPSEnableForegroundOperation', S(OSErr, INPSN) ),
 ]
 
 def WMEnable(name=None):
     if name is None:
         name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-    if isinstance(name, six.unicode):
+    if isinstance(name, unicode):
         name = name.encode('utf-8')
     if not hasattr(objc, 'loadBundleFunctions'):
         return False
     bndl = NSBundle.bundleWithPath_(objc.pathForFramework('/System/Library/Frameworks/ApplicationServices.framework'))
     if bndl is None:
-        print('ApplicationServices missing', file=sys.stderr)
+        print >>sys.stderr, 'ApplicationServices missing'
         return False
     d = {}
     app = NSApplication.sharedApplication()
     objc.loadBundleFunctions(bndl, d, FUNCTIONS)
     for (fn, sig) in FUNCTIONS:
         if fn not in d:
-            print('Missing', fn, file=sys.stderr)
+            print >>sys.stderr, 'Missing', fn
             return False
     err, psn = d['GetCurrentProcess']()
     if err:
-        print('GetCurrentProcess', (err, psn), file=sys.stderr)
+        print >>sys.stderr, 'GetCurrentProcess', (err, psn)
         return False
     err = d['CPSSetProcessName'](psn, name)
     if err:
-        print('CPSSetProcessName', (err, psn), file=sys.stderr)
+        print >>sys.stderr, 'CPSSetProcessName', (err, psn)
         return False
     err = d['CPSEnableForegroundOperation'](psn)
     if err:
-        print('CPSEnableForegroundOperation', (err, psn))
+        print >>sys.stderr, 'CPSEnableForegroundOperation', (err, psn)
         return False
     err = d['SetFrontProcess'](psn)
     if err:
-        print('SetFrontProcess', (err, psn))
+        print >>sys.stderr, 'SetFrontProcess', (err, psn)
         return False
     return True
 
 def init():
     if not (MacOS.WMAvailable() or WMEnable()):
-        raise ImportError("Can not access the window manager.  Use py2app or execute with the pythonw script.")
+        raise ImportError, "Can not access the window manager.  Use py2app or execute with the pythonw script."
     if not NSApp():
         # running outside of a bundle
         install()

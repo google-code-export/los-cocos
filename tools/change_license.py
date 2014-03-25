@@ -8,15 +8,15 @@ Be sure to check the hardcoded old_license, new_license, exclude are
 the one intended.
 use svn status to confirm what changed.
 """
-from __future__ import division, print_function, unicode_literals
 
 import optparse
 import os
 import sys
 
+
 old_license = """# ----------------------------------------------------------------------------
 # cocos2d
-# Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
+# Copyright (c) 2008-2011 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
 # All rights reserved.
 #
@@ -48,12 +48,10 @@ old_license = """# -------------------------------------------------------------
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------"""
 
-
 new_license = """# ----------------------------------------------------------------------------
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -150,11 +148,11 @@ if __name__ == '__main__':
         sys.exit(0)
 
     mode = options.mode
-    print('mode:', mode)
+    print 'mode:', mode
 
     assert mode in headers
 
-    print(headers[mode])
+    print headers[mode]
     change_files = (mode == 'change')
     if change_files:
         mode = 'list-matching-old'
@@ -165,7 +163,6 @@ if __name__ == '__main__':
     report_match = not ('non' in mode)
 
     for path in args:
-        print('args:', args)
         if os.path.isdir(path):
             for root, dirnames, filenames in os.walk(path):
                 for dirname in dirnames:
@@ -176,9 +173,9 @@ if __name__ == '__main__':
                         filename not in exclude):
                         process_file(os.path.join(root, filename))
         else:
-            if (path.endswith('.py') and 
-                path not in exclude):
+            if (filename.endswith('.py') and 
+                filename not in exclude):
                 process_file(path)
 
     for name in reported:
-        print(name)
+        print name

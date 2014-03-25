@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -19,8 +17,8 @@ class TestLayer(cocos.layer.Layer):
 
     def _step( self, dt ):
         super(TestLayer,self)._step(dt)
-        print('shall not happen')
-        print(self.rotation)
+        print 'shall not happen'
+        print self.rotation
 
 description = """
 If a node is not in the active scene, will not perfom any action.
@@ -28,7 +26,6 @@ No output should be seen on console.
 """
 
 def main():
-    print(description)
     director.init()
     test_layer = TestLayer ()
     # note test_layer is NOT in the scene

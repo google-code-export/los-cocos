@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -34,8 +33,6 @@
 # ----------------------------------------------------------------------------
 '''Particle system engine'''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 import random
@@ -46,8 +43,8 @@ import copy
 import numpy
 import ctypes
 
-from cocos.cocosnode import CocosNode
-from cocos.euclid import Point2
+from cocosnode import CocosNode
+from euclid import Point2
 from cocos.director import director
 
 # for dev and diagnostic, None means real automatic, True / False means
@@ -489,7 +486,7 @@ class ParticleSystem( CocosNode ):
         tex_coords_for_quad = numpy.array([[0.0, 1.0], [0.0, 0.0], [1.0, 0.0], [1.0, 1.0]], numpy.float32)
         self.tex_coords = numpy.zeros((self.total_particles * 4, 2), numpy.float32)
         all_tex_coords = self.tex_coords
-        for i in range(0,len(self.vertexs),4):
+        for i in xrange(0,len(self.vertexs),4):
             all_tex_coords[i : i + 4 ] = tex_coords_for_quad
         self.per_vertex_colors = numpy.zeros( (self.total_particles * 4, 4), numpy.float32)
         self.delta_pos_to_vertex = numpy.zeros((4, 2), numpy.float32)
@@ -509,17 +506,17 @@ class ParticleSystem( CocosNode ):
         glEnable(GL_TEXTURE_2D)
         glBindTexture(GL_TEXTURE_2D, self.texture.id )
 
-        glEnableClientState(GL_VERTEX_ARRAY)
+	glEnableClientState(GL_VERTEX_ARRAY)
         vertexs_ptr = PointerToNumpy(self.vertexs)
-        glVertexPointer(2, GL_FLOAT, 0, vertexs_ptr)
+	glVertexPointer(2, GL_FLOAT, 0, vertexs_ptr)
 
-        glEnableClientState(GL_COLOR_ARRAY)
+	glEnableClientState(GL_COLOR_ARRAY)
         color_ptr = PointerToNumpy(self.per_vertex_colors)
-        #glColorPointer(4, GL_UNSIGNED_BYTE, 0, color_ptr)
+	#glColorPointer(4, GL_UNSIGNED_BYTE, 0, color_ptr)
         glColorPointer(4, GL_FLOAT, 0, color_ptr)
         
-        glEnableClientState( GL_TEXTURE_COORD_ARRAY )
-        tex_coord_ptr = PointerToNumpy(self.tex_coords)
+	glEnableClientState( GL_TEXTURE_COORD_ARRAY )
+	tex_coord_ptr = PointerToNumpy(self.tex_coords)
         glTexCoordPointer(2, GL_FLOAT, 0, tex_coord_ptr)
 
         glPushAttrib(GL_COLOR_BUFFER_BIT)
@@ -529,8 +526,8 @@ class ParticleSystem( CocosNode ):
         else:
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        glDrawArrays(GL_QUADS, 0, len(self.vertexs))
-    
+	glDrawArrays(GL_QUADS, 0, len(self.vertexs))
+	
         # un -blend
         glPopAttrib()
 

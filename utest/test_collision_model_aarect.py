@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # collision_model tests
 
 # aarects1 test
@@ -20,9 +18,9 @@ def create_obj_with_aarect(name, center, rx, ry):
 def pprint_container(heading, container):
     sl = [s.name for s in container]
     sl.sort()
-    print(heading)
+    print heading
     for s in sl:
-        print("\t%s"%s)
+        print "\t%s"%s
 
 # see aarect1_data.png for visualization, was ploted with func
 # plot_aarect_data1
@@ -52,7 +50,7 @@ def aarect_data1(offset):
         ring = set()
         rx_2 = rx*child_scale
         ry_2 = ry*child_scale
-        for i in range(0, 4):
+        for i in xrange(0, 4):
             rf_x , rf_y = refpoints[i]
             dx , dy = deltas[i]
             v = eu.Vector2(rf_x * rx, rf_y * ry)
@@ -66,7 +64,7 @@ def aarect_data1(offset):
             ring.add(aarect)
 
         # distance realized by lower right corner
-        for i in range(4, 8):
+        for i in xrange(4, 8):
             rf_x , rf_y = refpoints[i] 
             dx , dy = deltas[i]
             v = eu.Vector2(rf_x * rx_1, rf_y * ry_1)
@@ -79,7 +77,7 @@ def aarect_data1(offset):
             ring.add(aarect)
 
         # distance realized by upper right corner
-        for i in range(8, 12):
+        for i in xrange(8, 12):
             rf_x , rf_y = refpoints[i] 
             dx , dy = deltas[i]
             v = eu.Vector2(rf_x * rx_1, rf_y * ry_1)
@@ -92,7 +90,7 @@ def aarect_data1(offset):
             ring.add(aarect)
 
         # distance realized by upper left corner
-        for i in range(12, 16):
+        for i in xrange(12, 16):
             rf_x , rf_y = refpoints[i] 
             dx , dy = deltas[i]
             v = eu.Vector2(rf_x * rx_1, rf_y * ry_1)

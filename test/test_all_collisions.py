@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # a test scene used to help develop collision code for cocos.
 
 # This code is so you can run the samples without installing the package
@@ -67,11 +65,11 @@ class Actor(cocos.sprite.Sprite):
         if desired_width is None:
             desired_width = self.image.width
         desired_width = float(desired_width)
-        self.scale =  desired_width / self.width
+        self.scale =  float(desired_width) / self.width
         if rx is None:
             rx = 0.8 * desired_width / 2.0
         if ry is None:
-            ry = 0.8 * self.image.height / self.image.width * desired_width / 2.0
+            ry = 0.8 * self.image.height / self.image.width * desired_width /2.0
         #self.cshape = cm.AARectShape(eu.Vector2(0.0, 0.0), rx, ry)
         self.cshape = cm.CircleShape(eu.Vector2(0.0, 0.0), rx)#, ry)
 
@@ -194,9 +192,9 @@ class City(cocos.layer.Layer):
         self.schedule(self.update)
 
     def add_squares(self):
-        for iy in range(squares_per_side):
+        for iy in xrange(squares_per_side):
             y = half_street_width + iy*crossing_point_separation
-            for ix in range(squares_per_side):
+            for ix in xrange(squares_per_side):
                 square = cocos.layer.ColorLayer(*square_color,width=square_width,
                                     height=square_width)
                 x = half_street_width + ix*crossing_point_separation
@@ -243,14 +241,7 @@ class City(cocos.layer.Layer):
             if other.state != 'burning':
                 other.e_burn()
 
-description = """
-Example for the collision module.
-It should be seen like a top view of city streets with green circles
-traveling the streets. When a circle colides with other, it should turn red.
-"""
-
 def main():
-    print(description)
     director.init(width=view_width, height=view_height)
     scene = cocos.scene.Scene()
     city = City()

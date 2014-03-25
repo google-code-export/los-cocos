@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -44,15 +43,14 @@ Events are propagated to layers (from front to back) until some layer catches
 the event and accepts it.
 """
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 import pyglet
 from pyglet.gl import *
 
 from cocos.director import *
-from .base_layers import Layer
+from base_layers import Layer
+import cocos.cocosnode
 
 __all__ = ['ColorLayer']
 

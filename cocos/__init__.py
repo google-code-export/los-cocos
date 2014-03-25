@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -55,11 +54,9 @@ Main Features
 http://cocos2d.org
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
-__version__ = "0.6.0"
+__version__ = "0.5.5"
 __author__ = "cocos2d team"
 version = __version__
 
@@ -89,20 +86,20 @@ if sys.platform == 'win32':
         sdl_lib_path = None
 
 def import_all():
-    import cocos.actions
-    import cocos.director
-    import cocos.layer
-    import cocos.menu
-    import cocos.sprite
-    import cocos.path
-    import cocos.scene
-    import cocos.grid
-    import cocos.text
-    import cocos.camera
-    import cocos.draw
-    import cocos.skeleton
-    import cocos.rect
-    import cocos.tiles
+    import actions
+    import director
+    import layer
+    import menu
+    import sprite
+    import path
+    import scene
+    import grid
+    import text
+    import camera
+    import draw
+    import skeleton
+    import rect
+    import tiles
 
 if not unittesting:
     import_all()

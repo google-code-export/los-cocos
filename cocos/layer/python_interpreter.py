@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -39,8 +38,6 @@
 #
 #
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 import sys
@@ -54,8 +51,8 @@ from pyglet.text import caret, document, layout
 
 import cocos
 from cocos.director import director
-from .base_layers import Layer
-from .util_layers import ColorLayer
+from base_layers import Layer
+from util_layers import ColorLayer
 
 __all__ = ['PythonInterpreterLayer']
 

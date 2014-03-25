@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 
 import sys
@@ -29,7 +27,7 @@ class TestLayer(cocos.layer.ColorLayer):
 
         # get the sizes
         sprite = Sprite('fire.png')
-        w, h =  sprite.width//2, sprite.height//2
+        w, h =  sprite.width/2, sprite.height/2
 
         # thes are the center of the sprites, where to click
         self.positions = [
@@ -77,7 +75,6 @@ resize done (including fullscreen, done with ctrl + F)
 """
 
 def main():
-    print(description)
     director.init(width=sw, height=sh, resizable=True)
     test_layer = TestLayer()
     main_scene = cocos.scene.Scene(test_layer)

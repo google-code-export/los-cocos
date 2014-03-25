@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -33,8 +32,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 '''Transitions between Scenes'''
-
-from __future__ import division, print_function, unicode_literals
 
 __docformat__ = 'restructuredtext'
 
@@ -392,7 +389,7 @@ class ShuffleTransition(TransitionScene):
         super(ShuffleTransition, self ).__init__( *args, **kwargs)
 
         width, height = director.get_window_size()
-        aspect = width / height
+        aspect = width / float(height)
         x,y = int(12*aspect), 12
 
         shuffle = ShuffleTiles( grid=(x,y), duration=self.duration/2.0, seed=15 )
@@ -472,7 +469,7 @@ class FadeTRTransition(TransitionScene):
         super(FadeTRTransition, self ).__init__( *args, **kwargs)
 
         width, height = director.get_window_size()
-        aspect = width / height
+        aspect = width / float(height)
         x,y = int(12*aspect), 12
 
         a = self.get_action(x,y)
@@ -515,7 +512,7 @@ class TurnOffTilesTransition(TransitionScene):
         super(TurnOffTilesTransition, self ).__init__( *args, **kwargs)
 
         width, height = director.get_window_size()
-        aspect = width / height
+        aspect = width / float(height)
         x,y = int(12*aspect), 12
 
         a = TurnOffTiles( grid=(x,y), duration=self.duration )
@@ -622,7 +619,7 @@ class ZoomTransition(TransitionScene):
         actual_width, actual_height = director.get_window_size()
 
         out = Sprite(image)
-        out.position = actual_width // 2, actual_height // 2
-        out.scale = max(actual_width / width, actual_height / height)
+        out.position = actual_width / 2, actual_height / 2
+        out.scale = max(actual_width / float(width), actual_height / float(height))
 
         return out

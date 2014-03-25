@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,10 +31,6 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
-from __future__ import division, print_function, unicode_literals
-import six
-from . import compat
-
 from ctypes import *
 
 from pyglet.gl import *
@@ -67,7 +62,6 @@ class Shader(object):
     s_tag = 0
 
     def __init__(self, name, prog):
-        prog = compat.asciibytes(prog)
         self.name = name
         self.prog = prog
         self.shader = 0
@@ -158,7 +152,7 @@ class Shader(object):
         if self.shader == 0:
             raise GLSLException('faled to create shader object')
 
-        all_source = [b'\n'.join(self._source())]
+        all_source = ['\n'.join(self._source())]
         prog = (c_char_p * len(all_source))(*all_source)
         length = (c_int * len(all_source))(-1)
         glShaderSourceARB(self.shader,
@@ -272,7 +266,6 @@ class ShaderProgram(object):
         glUseProgramObjectARB(0)
 
     def uniformLoc(self, var):
-        var = compat.asciibytes(var)
         try:
             return self.__class__._uloc_[var]
         except:

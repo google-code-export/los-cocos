@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -40,19 +39,20 @@ Functionality other that the one common to all cococsnodes, except 'opacity', is
 provided by the member 'element' , which is the underlying pyglet object.
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
-from cocos.director import director
-from cocos.cocosnode import CocosNode
+from director import director
+import cocosnode
+from batch import *
 
 import pyglet
 from pyglet.graphics import OrderedGroup
 from pyglet import image
 from pyglet.gl import *
 
-class TextElement(CocosNode):
+from batch import *
+
+class TextElement(cocosnode.CocosNode):
     """
     Base class for all cocos text
 

@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -16,4 +14,4 @@ circulo= Bezier( (7,7), (0,1), (630, 237), (630,-234) )
 
 
 if __name__ == '__main__':
-    print('this file is part of demo_sprites.py')
+    print 'this file is part of demo_sprites.py'

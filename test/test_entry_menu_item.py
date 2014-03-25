@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 
 import sys
@@ -29,7 +27,7 @@ class MainMenu(Menu):
         self.create_menu( l )
 
     def on_name( self, value ):
-        print(value)
+        print value
 
     def on_quit( self ):
         pyglet.app.exit()

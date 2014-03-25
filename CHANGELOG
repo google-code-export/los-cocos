@@ -1,12 +1,4 @@
-v0.6.0 - March 24, 2014
-  - removed tiles.ScrollingManager / tiles.ScrollableLayer, they were deprecated
-    compatibility shims of same classes in cocos.layer
-  - added support for gzip compression in .tmx maps, thanks fred@reichbier.de
-    for initial patch, #185
-  - fix Sprite.get_rect() forgetting about .scale_x and .scale_y 
-  - from r1282 cocos needs python 2.6 or 2.7, and the 'six' package
-  ===========================================================================
-  - r1281 is the last revision completely compatible with python 2.4 and 2.5
+v0.5.7 - ??
   - EntryMenuItem, callback called before updating the view
   - documentation subsystem changed to sphinx, #206, ended r1278
   - fix particles scaling, #204, thanks hello3171@gmail.com for bugreport
@@ -25,7 +17,7 @@ v0.6.0 - March 24, 2014
   - MapLayer, added tile properties to cell debug view
   - fix RectMap.get_in_region returns too many cells (thanks Gerardo Marset for 
     bug report, analysis and patch) - #191
-  - fix Mac crash due to non matching SDL dlls when not using SDL audio (patch by  Juan J. Martínez, thanks) #190
+  - fix Mac crash due to nonmatching SDL dlls when not using SDL audio (patch by  Juan J. Martínez, thanks) #190
 
 v0.5.5 - August 12, 2012
   - fix issue 168, now particle textures are propper (this can change visual size for particlers in old code)

@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -61,9 +60,6 @@ Typically the sprite would be controlled by the user, so something like::
 
 '''
 
-from __future__ import division, print_function, unicode_literals
-
-
 __docformat__ = 'restructuredtext'
 
 __all__ = [
@@ -72,7 +68,7 @@ __all__ = [
 
 import math
 
-from .base_actions import Action
+from base_actions import Action
 
 class Move(Action):
     """Move the target based on parameters on the target.

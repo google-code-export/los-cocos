@@ -1,4 +1,4 @@
-from __future__ import division, print_function, unicode_literals
+from __future__ import division
 
 import sys
 msg = """
@@ -9,7 +9,7 @@ Instructions about how to install in the same page.
 try:
     import remembercases
 except ImportError:
-    print(msg)
+    print msg
     sys.exit(1)
 
 import os
@@ -25,55 +25,38 @@ def new(db_fname, testbed, stats_fname, candidates, limit, samples_dir):
     db = dbm.db_load(db_fname, default_testbed=testbed)
     # test stats_fname writable
     with open(stats_fname, 'wb') as f:
-        f.write("hello".encode('utf-8'))
+        f.write("hello")
     res = hl.measure_repeteability(db, candidates, limit, samples_dir)
     #overal_md5, elapsed, rounds, stats_by_script_name, stats_by_snapshot_name  = res
     session = db_fname, testbed, samples_dir, res
     with open(stats_fname, 'wb') as f:
-        pickle.dump(session, f, 2)
+        pickle.dump(session, f)
         
-def load_stats(stats_fname):
-    with open(stats_fname, 'rb') as f:
-        session = pickle.load(f)
-    db_fname, testbed, samples_dir, res = session
-    overal_md5, elapsed, rounds, stats_by_script_name, stats_by_snapshot_name  = res
-    return (db_fname, testbed, samples_dir,
-            overal_md5, elapsed, rounds,
-            stats_by_script_name, stats_by_snapshot_name
-            )
-            
-def more_rounds(stats_fname, limit, debug=False):
+def more_rounds(stats_fname, limit, recover=True):
     """
     Adds more rounds to the stats pointed by stats_fname
     limit : int or float
         int means rounds to run
         float means minutes to run, will be exceded to complete the last run
-        debug : for debugging the merge part; normal use is False, meaning
+        recover : for debugging the merge part; normal use is False, meaning
         the new rounds will be done, False means it will try to use the temp
-        file generated in a previous more_rounds run
+        file with appropiate name with additional stats
     """
-    (db_fname, testbed, samples_dir,
-     overal_md5, elapsed, rounds,
-     stats_by_script_name, stats_by_snapshot_name
-    ) = load_stats(stats_fname)
+    with open(stats_fname, 'rb') as f:
+        session = pickle.load(f)
+    db_fname, testbed, samples_dir, res = session
+    overal_md5, elapsed, rounds, stats_by_script_name, stats_by_snapshot_name  = res
 
     candidates = [name for name in stats_by_script_name]
     tmp_stats = stats_fname + '.tmp'
-    if debug:
-        # use the temp generated in a previous run; typical use is
-        # for debug the merge code
-        pass
-    else:
+    if not recover:
         new(db_fname, testbed, tmp_stats, candidates, limit, samples_dir)
 
     # combine both stats
-    (db_fname_2, testbed_2, samples_dir_2,
-     overal_md5_2, elapsed_2, rounds_2,
-     stats_by_script_name_2, stats_by_snapshot_name_2
-    ) = load_stats(tmp_stats)
-    
-    # for paranoid debbuging we should check no mismatch in the spec of both
-    # runs, like db_fanme == db_fname2, etc but we will spare that
+    with open(tmp_stats, 'rb') as f:
+        session = pickle.load(f)
+    res_2 = session[3]
+    _, elapsed_2, rounds_2, stats_by_script_name_2, stats_by_snapshot_name_2  = res_2
 
     elapsed += elapsed_2
 
@@ -172,9 +155,6 @@ def rpt_compact(elapsed, rounds, res_expand, verbose=False):
     qrepeteables = set([ k for k in stats if k not in repeteables ])
     text_parts.append("Scripts not perfectly repeteables: ( %d / %d)"%
                                                 (len(qrepeteables), num_scripts))
-    for name in sorted(qrepeteables):
-        text_parts.append('\t%s'%name)
-
     if verbose:
         pass
 
@@ -182,22 +162,23 @@ def rpt_compact(elapsed, rounds, res_expand, verbose=False):
     return text
 
 def report(stats_fname, rpt_function):
-    (db_fname, testbed, samples_dir,
-     overal_md5, elapsed, rounds,
-     stats_by_script_name, stats_by_snapshot_name
-    ) = load_stats(stats_fname)
+    # load
+    with open(stats_fname, 'rb') as f:
+        session = pickle.load(f)
+    db_fname, testbed, samples_dir, res = session
+    _, elapsed, rounds, stats_by_script_name, stats_by_snapshot_name  = res
 
     db = dbm.db_load(db_fname, default_testbed=testbed)
 
     res_expand = expand_stats(db, rounds, stats_by_script_name, stats_by_snapshot_name)
-    text = rpt_function(elapsed, rounds, res_expand, verbose=False)
+    text = rpt_compact(elapsed, rounds, res_expand, verbose=False)
     return text
 
 # test main
 # set hardcoded params
 
 db_fname = 'initial.dat' # must exist as a result of running recon.py
-testbed = 'cpu intel E7400, gpu ati 6570 with Catalyst 11-5 drivers, win xp sp3'
+testbed = 'ati 6320'
 stats_fname = 'rep_stats.pkl' 
 samples_dir = '../../test/saux'
 
@@ -207,17 +188,15 @@ samples_dir = '../../test/saux'
 # different limit when adding rounds 
 #candidates = ['test/test_accel_amplitude.py', 'test/test_base.py']
 candidates = None # means all tests
-# debug
-#candidates = ['test/test_target.py', 'test/test_sprite_aabb.py']
 
-clean = True # True starts a new stats serie
-debug_merge = False # Normal is False, use True to debug combinning stats
+clean = False # True starts a new stats serie
+recover = False # Normal is False, used to debug combinning stats
 #limit = 2 #int means rounds
-limit = 20.0 #float means minutes; will be exceeded to complete last round
+limit = 60.0 #float means minutes; will be exceeded to complete last round
 
 if clean:
     new(db_fname, testbed, stats_fname, candidates, limit, samples_dir)
 else:
-    more_rounds(stats_fname, limit, debug=debug_merge)
+    more_rounds(stats_fname, limit, recover=recover)
 
-print(report(stats_fname, rpt_compact))
+print report(stats_fname, rpt_compact)

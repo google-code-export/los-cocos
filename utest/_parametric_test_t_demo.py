@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # example running test with diferent parameters.
 # here we use py.test to run the test
 # references:

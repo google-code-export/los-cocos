@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -33,8 +32,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
 '''Pause scene'''
-
-from __future__ import division, print_function, unicode_literals
 
 __docformat__ = 'restructuredtext'
 
@@ -90,8 +87,8 @@ class PauseLayer(Layer):
         ft = pyglet.font.load('Arial', 36)
         self.text = pyglet.font.Text(ft, 
             'PAUSED', halign=pyglet.font.Text.CENTER)
-        self.text.x = x // 2
-        self.text.y = y // 2
+        self.text.x = x/2
+        self.text.y = y/2
         
     def draw(self):
         self.text.draw()

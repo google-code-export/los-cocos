@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -24,7 +22,7 @@ def main():
     sub.transform_anchor = (0, 0)    
     sub.scale = 0.5
 
-    sub.do( MoveBy( (x//2, y//2), 2) )
+    sub.do( MoveBy( (x/2, y/2), 2) )
     sub.do( ScaleBy( 0.5, 2) )
     main_scene = cocos.scene.Scene (sub)
     director.run (main_scene)

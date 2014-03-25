@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -64,9 +63,6 @@ And now tell the sprite to execute it::
     sprite.do( move )
 '''
 
-from __future__ import division, print_function, unicode_literals
-from six import string_types
-
 __docformat__ = 'restructuredtext'
 import math
 
@@ -74,10 +70,11 @@ import pyglet
 from pyglet import image
 from pyglet.gl import *
 
-from cocos.batch import BatchableNode
-from cocos.rect import Rect
-from cocos import euclid
+import cocosnode
+from batch import *
+import rect
 
+import euclid
 import math
 
 __all__ = [ 'Sprite',                     # Sprite class
@@ -117,7 +114,7 @@ class Sprite( BatchableNode, pyglet.sprite.Sprite):
                     (x,y)-point from where the image will be positions, rotated and scaled in pixels. For example (image.width/2, image.height/2) is the center (default).
         '''
 
-        if isinstance(image, string_types):
+        if isinstance(image, str):
             image = pyglet.resource.image(image)
 
         self.transform_anchor_x = 0
@@ -136,10 +133,10 @@ class Sprite( BatchableNode, pyglet.sprite.Sprite):
 
         if anchor is None:
             if isinstance(self.image, pyglet.image.Animation):
-                anchor = (image.frames[0].image.width // 2,
-                    image.frames[0].image.height // 2)
+                anchor = (image.frames[0].image.width / 2,
+                    image.frames[0].image.height / 2)
             else:
-                anchor = image.width // 2, image.height // 2
+                anchor = image.width / 2, image.height / 2
 
 
         self.image_anchor = anchor
@@ -193,7 +190,7 @@ class Sprite( BatchableNode, pyglet.sprite.Sprite):
         x, y = self.position
         x -= self.image_anchor_x
         y -= self.image_anchor_y
-        return Rect(x, y, self.width, self.height)
+        return rect.Rect(x, y, self.width, self.height)
 
     def get_AABB(self):
         '''Returns a local-coordinates Axis aligned Bounding Box
@@ -203,7 +200,7 @@ class Sprite( BatchableNode, pyglet.sprite.Sprite):
         v = self._vertex_list.vertices
         x = v[0], v[2], v[4], v[6]
         y = v[1], v[3], v[5], v[7]
-        return Rect(min(x),min(y),max(x)-min(x),max(y)-min(y))
+        return rect.Rect(min(x),min(y),max(x)-min(x),max(y)-min(y))
 
     def _set_rotation( self, a ):
         BatchableNode._set_rotation(self,a)
@@ -220,26 +217,6 @@ class Sprite( BatchableNode, pyglet.sprite.Sprite):
     def _set_scale_y( self, s ):
         BatchableNode._set_scale_y(self,s)
         self._update_position()
-
-    def _get_width(self):
-        return int(self._texture.width * self._scale * self._scale_x)
-    width = property(_get_width,
-                     doc='''Scaled width of the sprite.
-
-    Read-only.  Invariant under rotation.
-
-    :type: int
-    ''')
-    
-    def _get_height(self):
-        return int(self._texture.height * self._scale * self._scale_y)
-    height = property(_get_height,
-                      doc='''Scaled height of the sprite.
-
-    Read-only.  Invariant under rotation.
-
-    :type: int
-    ''')
 
     def _set_position( self, p ):
         BatchableNode._set_position(self,p)

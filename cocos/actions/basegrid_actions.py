@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -58,8 +57,6 @@ To understand visually the difference between these 2 kinds of grids, try these 
   - run ``test/test_shaky3d.py`` to see the `Grid3DAction` counterpart
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 from pyglet.gl import *
@@ -67,7 +64,7 @@ from pyglet.gl import *
 from cocos.grid import Grid3D, TiledGrid3D
 from cocos.director import director
 from cocos.euclid import *
-from .base_actions import *
+from base_actions import *
 
 __all__ = [ 'GridException',            # Grid Exceptions
             'GridBaseAction',               # Base classes

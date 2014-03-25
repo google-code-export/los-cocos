@@ -11,13 +11,11 @@ documentation.
 
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 from xml.dom.minidom import getDOMImplementation
 
 def build_tileset_xml(image_name, image, tw, th):
-    h_tiles = image.width // tw
-    v_tiles = image.height // th
+    h_tiles = image.width / tw
+    v_tiles = image.height / th
     
     dom = getDOMImplementation()
 
@@ -59,8 +57,8 @@ if __name__ == "__main__":
     import pyglet
     
     def exit(msg=None):
-        if msg: print(msg)
-        print("Usage: %s <image_name> <tile_width> <tile_height> [<output.xml>]" % sys.argv[0])
+        if msg: print msg
+        print "Usage: %s <image_name> <tile_width> <tile_height> [<output.xml>]" % sys.argv[0]
         sys.exit(1)
     
     if len(sys.argv) < 4:
@@ -77,17 +75,12 @@ if __name__ == "__main__":
     except IOError:
         exit("Invalid image file '%s'" % image_name)
         
-    if len(sys.argv) < 5:
-        fname = 'output.xml'
-    else:
-        fname = sys.argv[4]
-
     try:
-        output = open(fname, 'w')
+        output = file(sys.argv[4], 'w')
     except IndexError:
         output = None
         
     doc = build_tileset_xml(image_name, image, tile_w, tile_h)
-    print(doc.toprettyxml(), file=output)
-    output.close()
+    print >>output, doc.toprettyxml()
+    output.close()   
     

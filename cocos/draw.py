@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,13 +31,10 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
-
-from __future__ import division, print_function, unicode_literals
-
-from cocos.cocosnode import CocosNode
+import cocosnode
 import pyglet
 from pyglet.gl import *
-from cocos.euclid import *
+from euclid import *
 import math
 import copy
 
@@ -184,7 +180,7 @@ class Segment:
     def reversed(self):
         return Segment(self.end, self.start, self.width)
 
-class Canvas(CocosNode):
+class Canvas(cocosnode.CocosNode):
     def __init__(self):
         super(Canvas, self).__init__()
         self._dirty = True
@@ -252,7 +248,7 @@ class Canvas(CocosNode):
                         line.width
                         )
             strip.extend([int(x) for x in segment.points])
-            texcoord.extend( flatten(*[ (0.1,0.9,0.1,0.5,0.5,0.9) for x in range(len(segment.points)//6) ]) )
+            texcoord.extend( flatten(*[ (0.1,0.9,0.1,0.5,0.5,0.9) for x in range(len(segment.points)/6) ]) )
 
         return strip, texcoord
 
@@ -339,13 +335,13 @@ class Canvas(CocosNode):
                 for s in segments:
                     strip.extend( [ int(x) for x in s.points ] )
                     texcoord += flatten(*[ (0.1,0.9,0.1,0.5,0.5,0.9)
-                                for x in range( len(s.points)//6)
+                                for x in range( len(s.points)/6)
                             ])
 
 
-            colors.extend( list(ctx.color)*((len(strip)-start_len)//2) )
+            colors.extend( list(ctx.color)*((len(strip)-start_len)/2) )
 
-        vertex_list = pyglet.graphics.vertex_list(len(strip)//2,
+        vertex_list = pyglet.graphics.vertex_list(len(strip)/2,
             ('v2i', strip),
             ('c4B', colors ),
             ('t2f', texcoord),

@@ -1,18 +1,15 @@
-from __future__ import division, print_function, unicode_literals
-
+from __future__ import division
 import sys
 import os
 import re
 import copy
 import time
 import hashlib
-import pprint
+
 import remembercases.db as dbm
 import remembercases.doers as doers
 import remembercases.snapshot_taker as st
 import remembercases.proxy as proxy
-
-from cocos import compat
 
 #>>> helpers to define script props by matching strings in the script's text
 
@@ -340,7 +337,7 @@ def update_snapshots(db, filename_persist, target_scripts, snapshots_dir):
                 err += '\nNot all snapshots captured - missing snapshots:\n'
                 err += '\n'.join(missing)
             snapshots_diagnostic = err
-            print('err:', err)
+            print 'err:', err
         db.set_prop_value(script, 'snapshots_diagnostic', snapshots_diagnostic)
 
 
@@ -536,16 +533,13 @@ def snapshots_compare(db, fn_snapshots_dist, threshold, candidates, max_tries,
         old_testbed = db.set_default_testbed('tmp')
         update_snapshots(db, None, unequals, samples_dir)
         for name in unequals:
-            match = db.get_prop_value(name, 'snapshots_success')
-            if match:
+            if db.get_prop_value(name, 'snapshots_success'):
                 for snap in db.get_prop_value(name, 'expected_snapshots'):
                     snap_ref = os.path.join(reference_dir, snap)
                     snap_tmp = os.path.join(samples_abspath, snap)
                     if fn_snapshots_dist(snap_ref, snap_tmp) > threshold:
-                        match = False
                         break
-            if match:
-                equals.add(name)
+                    equals.add(name)
         db.del_testbed('tmp')
         db.set_default_testbed(old_testbed)
         unequals -= equals
@@ -589,10 +583,7 @@ def measure_repeteability(db, candidates, limit, samples_dir, required_md5=None)
     stats_by_snapshot_name = dict( [ (snap, {}) for snap in snapshots])
 
     stats_by_script_name = dict( [(name, { 'timeouts':0, 'errs':0 })
-                        for name in scripts if f(name, 'expected_snapshots')])
-
-    # get rid of scripts that don't expect snapshots
-    scripts = [name for name in stats_by_script_name]
+                        for name in scripts if f(name, 'expected_snapshots')]) 
 
     # build a hash to limit mismatchs when combining runs. Caveat: if files
     # edited and testinfo not updated mismatch happens.
@@ -600,7 +591,7 @@ def measure_repeteability(db, candidates, limit, samples_dir, required_md5=None)
     # combination.    
     hasher = hashlib.md5()
     for name in stats_by_script_name:
-        hasher.update(compat.asciibytes(db.get_prop_value(name, 'md5_at_testinfo')))
+        hasher.update(db.get_prop_value(name, 'md5_at_testinfo'))
     overall_md5 = hasher.hexdigest()
     if required_md5:
         assert required_md5==overall_md5
@@ -621,7 +612,6 @@ def measure_repeteability(db, candidates, limit, samples_dir, required_md5=None)
         f_continue = lambda: rounds < limit
     else:
         raise ValueError
-
 
     while f_continue():
         for name in scripts:

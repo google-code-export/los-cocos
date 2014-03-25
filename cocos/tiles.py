@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -38,9 +37,6 @@ This module provides an API for loading, saving and rendering a map
 constructed of image tiles.
 '''
 
-from __future__ import division, print_function, unicode_literals
-import six
-
 __docformat__ = 'restructuredtext'
 __version__ = '$Id: resource.py 1078 2007-08-01 03:43:38Z r1chardj0n3s $'
 
@@ -48,7 +44,10 @@ import os
 from math import ceil, sqrt, floor
 import struct
 import weakref
-from xml.etree import ElementTree
+try:
+    from xml.etree import ElementTree
+except ImportError:
+    import elementtree.ElementTree as ElementTree
 
 import pyglet
 from pyglet import gl
@@ -57,7 +56,21 @@ import cocos
 from cocos.director import director
 from cocos.rect import Rect
 
-unicode = six.text_type
+# Implement these classes for backwards compatibility; some older code
+# expects ScrollableLayer and ScrollingManager to be in the tiles module.
+from cocos import layer
+class ScrollableLayer(layer.ScrollableLayer):
+    def __init__(self, parallax=1):
+        import warnings
+        warnings.warn('ScrollableLayer been has moved to cocos.layer',
+            DeprecationWarning, stacklevel=2)
+        super(ScrollableLayer, self).__init__(parallax=parallax)
+class ScrollingManager(layer.ScrollingManager):
+    def __init__(self, viewport=None):
+        import warnings
+        warnings.warn('ScrollingManager been has moved to cocos.layer',
+            DeprecationWarning, stacklevel=2)
+        super(ScrollingManager, self).__init__(viewport=viewport)
 
 
 class ResourceError(Exception):
@@ -185,9 +198,6 @@ def load(filename):
     # make sure we can find files relative to this one
     dirname = os.path.dirname(filename)
     if dirname and dirname not in pyglet.resource.path:
-        if os.sep == '\\':
-            # pyglet resource does not accept '\' in relative paths 
-            dirname = dirname.replace(os.sep, '/')
         pyglet.resource.path.append(dirname)
         pyglet.resource.reindex()
 
@@ -215,34 +225,6 @@ def load_tiles(filename):
             root.name)
     resource.handle(root)
     return resource
-
-def decode_base64(s):
-    "returns a bytes object"
-    if six.PY2:
-        return s.decode('base64')
-    else:
-        import base64
-        b = s.encode('utf-8')
-        return base64.b64decode(b)
-
-def decompress_zlib(in_bytes):
-    """decompress the input array of bytes to an array of bytes using zlib"""
-    if six.PY2:
-        out_bytes = in_bytes.decode('zlib')
-    else:
-        import zlib
-        out_bytes = zlib.decompress(in_bytes)
-    return out_bytes
-    
-def decompress_gzip(in_bytes):
-    """decompress the input array of bytes to an array of bytes using gzip"""
-    import gzip
-    inp = six.BytesIO(in_bytes)
-    f = gzip.GzipFile(fileobj=inp)
-    out_bytes = f.read()
-    f.close()
-    inp.close()
-    return out_bytes
 
 def load_tmx(filename):
     '''Load some tile mapping resources from a TMX file.
@@ -305,18 +287,9 @@ def load_tmx(filename):
         if data is None:
             raise ValueError('layer %s does not contain <data>' % layer.name)
 
-        compression = data.attrib.get('compression')
         data = data.text.strip()
-        data = decode_base64(data)
-        if compression is not None:
-            if compression == 'zlib':
-                data = decompress_zlib(data)
-            elif compression == 'gzip':
-                data = decompress_gzip(data)
-            else:
-                raise ResourceError('Unknown compression method: %r' % compression)
-
-        data = struct.unpack(str('<%di' % (len(data)//4)), data)
+        data = data.decode('base64').decode('zlib')
+        data = struct.unpack('<%di' % (len(data)/4,), data)
         assert len(data) == width * height
 
         cells = [[None] * height for x in range(width)]
@@ -444,12 +417,12 @@ def imageatlas_factory(resource, tag):
 
     for child in tag:
         if child.tag != 'image':
-            raise ValueError('invalid child')
+            raise ValueError, 'invalid child'
 
         if child.get('size'):
             width, height = map(int, child.get('size').split('x'))
         elif d_width is None:
-            raise ValueError('atlas or subimage must specify size')
+            raise ValueError, 'atlas or subimage must specify size'
         else:
             width, height = d_width, d_height
 
@@ -540,8 +513,8 @@ class TileSet(dict):
     @classmethod
     def from_atlas(cls, name, firstgid, file, tile_width, tile_height):
         image = pyglet.image.load(file)
-        rows = image.height // tile_height
-        columns = image.width // tile_width
+        rows = image.height / tile_height
+        columns = image.width / tile_width
         image_grid = pyglet.image.ImageGrid(image, rows, columns)
         atlas = pyglet.image.TextureGrid(image_grid)
         id = firstgid
@@ -629,7 +602,7 @@ def hex_width(height):
     return int(height / sqrt(3) * 2)
 
 
-class MapLayer(cocos.layer.ScrollableLayer):
+class MapLayer(layer.ScrollableLayer):
     '''Base class for Maps.
 
     Maps are comprised of tiles and can figure out which tiles are required to
@@ -1236,7 +1209,7 @@ class HexMap(RegularTesselationMap):
         cj = int( floor( 1.0 * ty / height) )
         cy = ty - height * cj
 
-        if (cx <= abs(radius / 2.0 - radius * cy / height)):
+        if (cx <= abs(radius / 2.0 - radius * cy / (1.0*height))):
             cj = cj + (ci % 2) - (1 if (cy < height / 2.0) else 0)
             ci = ci - 1
         return ci, cj
@@ -1285,7 +1258,7 @@ class HexMap(RegularTesselationMap):
             else:
                 return self.get_cell(cell.i + 1, cell.j - 1)
         else:
-            raise ValueError('Unknown direction %r'%direction)
+            raise ValueError, 'Unknown direction %r'%direction
 
     def get_neighbors(self, cell):
         '''Get all neighbor cells for the nominated cell.
@@ -1375,7 +1348,7 @@ class HexCell(Cell):
         Cell.__init__(self, i, j, width, height, properties, tile)
 
     def get_origin(self):
-        x = self.i * (self.width // 2 + self.width // 4)
+        x = self.i * (self.width / 2 + self.width // 4)
         y = self.j * self.height
         if self.i % 2:
             y += self.height // 2

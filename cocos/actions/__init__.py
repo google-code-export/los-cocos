@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,15 +31,12 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
-
-from __future__ import division, print_function, unicode_literals
-
-from .base_actions import *
-from .interval_actions import *
-from .instant_actions import *
-from .basegrid_actions import *
-from .quadmoveby_actions import *
-from .tiledgrid_actions import *
-from .grid3d_actions import *
-from .camera_actions import *
-from .move_actions import *
+from base_actions import *
+from interval_actions import *
+from instant_actions import *
+from basegrid_actions import *
+from quadmoveby_actions import *
+from tiledgrid_actions import *
+from grid3d_actions import *
+from camera_actions import *
+from move_actions import *

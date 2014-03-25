@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 """Check changes in autotest snapshots
 
 Output:
@@ -20,8 +18,7 @@ import helpers as hl
 # filename to persist the db
 filename_persist = 'initial.dat'
 # change the string to identify about which machine is the info collected 
-#testbed = 'ati 6570'
-testbed = 'cpu intel E7400, gpu ati 6570 with Catalyst 11-5 drivers, win xp sp3'
+testbed = 'ati 6570'
 ### dir used to calculate canonical paths
 ##basepath = '../..'
 ### dir where update_snapshots will store snapshots
@@ -34,7 +31,7 @@ samples_dir = '../../test/saux'
 # snapshots comparison parameters
 fn_snapshots_dist = imc.distance_01
 threshold = 0
-tries = 5
+tries = 3
 
 ### issue 164
 ##text = """
@@ -110,15 +107,6 @@ text = """
         test/test_subscene_events.py
        """
 
-text =  """
-        test/test_action_non_interval.py
-        test/test_animation.py
-        test/test_rect.py
-        test/test_scrolling_manager_without_tiles.py
-        test/test_scrolling_manager_without_tiles_autoscale.py
-        test/test_tiles_autotest.py
-        test/test_tmx_autotest.py
-        """
 
 # sanity checks
 diagnostic = ''
@@ -126,8 +114,6 @@ if not os.path.exists(snapshots_reference_dir):
     diagnostic = "Snapshots references dir not found:%s"%snapshots_reference_dir
 
 db = dbm.db_load(filename_persist, default_testbed=testbed)
-##knowns, unknowns = db.entities(fn_allow=hl.fn_allow_testrun_pass, candidates=None)
-
 candidates = doers.scripts_names_from_text(text, end_mark=':')
 knowns, unknowns = db.entities(fn_allow=None, candidates=candidates)
 if unknowns:
@@ -140,7 +126,7 @@ if diagnostic:
 
 # payload
 equals, unequals, untested = hl.snapshots_compare(db, fn_snapshots_dist,
-                                                  threshold, knowns, tries,
+                                                  threshold, candidates, tries,
                                                   snapshots_reference_dir,
                                                   samples_dir)
 # output

@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # important: set cocos_utest=1 in the environment before run.
 # that simplifies the pyglet mockup needed
 # remember to erase or set to zero for normal runs
@@ -37,7 +35,7 @@ class UAction(ac.Action):
         global rec, next_done
         rec.append((self.name, 'step', dt))
         if int(self.name) & next_done:
-            print('setting %s _done to True'%self.name)
+            print 'setting %s _done to True'%self.name
             self._done = True
 
     def stop(self):

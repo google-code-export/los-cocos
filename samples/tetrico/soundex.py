@@ -2,8 +2,6 @@
 # original file from http://www.partiallydisassembled.net/make_me/
 # modified later for this game
 #
-from __future__ import division, print_function, unicode_literals
-
 from constants import MUSIC, SOUND
 import pyglet
 

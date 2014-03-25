@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,9 +31,6 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
-
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 class Rect(object):
@@ -95,10 +91,6 @@ class Rect(object):
         '''
         return (self.x == other.x and self.y == other.y and
             self.width == other.width and  self.height == other.height)
-
-    # py3 compatiblity: obj that defines __eq__ needs to define __hash__ to be
-    # hashable, and we need that class RectCell(Rect, Cell) be hashable 
-    __hash__ = object.__hash__
 
     def __ne__(self, other):
         '''Compare the two rects.
@@ -244,38 +236,38 @@ class Rect(object):
     right = property(get_right, set_right)
 
     def get_center(self):
-        return (self.x + self.width//2, self.y + self.height//2)
+        return (self.x + self.width/2, self.y + self.height/2)
     def set_center(self, center):
         x, y = center
-        self.position = (x - self.width//2, y - self.height//2.0)
+        self.position = (x - self.width/2, y - self.height/2)
     center = property(get_center, set_center)
 
     def get_midtop(self):
-        return (self.x + self.width//2, self.y + self.height)
+        return (self.x + self.width/2, self.y + self.height)
     def set_midtop(self, midtop):
         x, y = midtop
-        self.position = (x - self.width//2, y - self.height)
+        self.position = (x - self.width/2, y - self.height)
     midtop = property(get_midtop, set_midtop)
 
     def get_midbottom(self):
-        return (self.x + self.width//2, self.y)
+        return (self.x + self.width/2, self.y)
     def set_midbottom(self, midbottom):
         x, y = midbottom
-        self.position = (x - self.width//2, y)
+        self.position = (x - self.width/2, y)
     midbottom = property(get_midbottom, set_midbottom)
 
     def get_midleft(self):
-        return (self.x, self.y + self.height//2)
+        return (self.x, self.y + self.height/2)
     def set_midleft(self, midleft):
         x, y = midleft
-        self.position = (x, y - self.height//2)
+        self.position = (x, y - self.height/2)
     midleft = property(get_midleft, set_midleft)
 
     def get_midright(self):
-        return (self.x + self.width, self.y + self.height//2)
+        return (self.x + self.width, self.y + self.height/2)
     def set_midright(self, midright):
         x, y = midright
-        self.position = (x - self.width, y - self.height//2)
+        self.position = (x - self.width, y - self.height/2)
     midright = property(get_midright, set_midright)
  
     def get_topleft(self):

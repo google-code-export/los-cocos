@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 #
 # HiScore
 #
@@ -40,9 +38,9 @@ class HiScoreData( object ):
             for i in self.hi_scores:
                 f.write('%d,%s,%d\n' % ( i[0],i[1],i[2] ) )
             f.close()
-        except Exception as e:
-            print('Could not save hi scores')
-            print(e)
+        except Exception, e:
+            print 'Could not save hi scores'
+            print e
 
     def add( self, score, name, lvl):
         # safe replacement

@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -34,12 +33,10 @@
 # ----------------------------------------------------------------------------
 '''Pre-defined Particle Systems'''
 
-from __future__ import division, print_function, unicode_literals
-
 __all__ = ['Fireworks', 'Spiral', 'Meteor', 'Sun', 'Fire', 'Galaxy', 'Flower', 'Explosion', 'Smoke']
 
-from cocos.particle import ParticleSystem, Color
-from cocos.euclid import Point2
+from particle import ParticleSystem, Color
+from euclid import Point2
 
 class Fireworks( ParticleSystem ):
 

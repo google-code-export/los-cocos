@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,18 +31,15 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
-
-from __future__ import division, print_function, unicode_literals
-
 __all__ = ['SDL', 'pygame']
 
 import cocos
 _working = True
 
 try:
-    import cocos.audio.pygame.mixer
-except ImportError as error:
-    # set to 0 to debug import errors, for release must be 1
+    import pygame.mixer
+except ImportError, error:
+    # set to 0 to debug import errors
     if 1:
         _working = False
     else:
@@ -58,3 +54,4 @@ def initialize(arguments={}):
     if _working:
         pygame.mixer.init(**arguments)
         music.set_control('pygame')
+

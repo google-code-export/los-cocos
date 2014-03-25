@@ -1,28 +1,15 @@
 # -*- coding: utf-8 -*-
 """setup -- setuptools setup file for cocos2d.
 
-Supports the usual 'setup.py install' for cocos.
-
-As a release builder:
-
-   last used: release 0.6.0, built from py2.6 + setuptools 3.3
-
-   example operation for generating release without handling the docs:
-       svn checkout http://los-cocos.googlecode.com/svn/trunk/ cocos_trunk
-       cd cocos_trunk
-       svn export . ../cocos_export
-       cd ..\cocos_export
-       py -2.6 setup.py sdist >../sdist.log
-       [ the generated package will be in cocos_export/dist ]
-
-       Look at tools/building_release_notes.txt for more info about building
-       release.
+$Author: eykd $
+$Rev: 1016 $
+$Date: 2011-08-14 23:00:00 -0300 (Wed, 14 August 2011) $
 """
 
 __author__ = "cocos2d team"
 __author_email__ = "lucio.torre@gmail.com"
-__version__ = "0.6.0"
-__date__ = "2014 03 24"
+__version__ = "0.5.5"
+__date__ = "2012 08 12"
 
 try:
     import setuptools
@@ -44,6 +31,7 @@ setup(
     description = "a 2D framework for games and multimedia",
     long_description=long_description,
     url = "http://cocos2d.org",
+    download_url = "http://code.google.com/p/los-cocos/downloads/list",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: MacOS X",
@@ -55,17 +43,16 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",
         "Operating System :: POSIX :: Linux",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python",
         ("Topic :: Software Development :: Libraries :: Python Modules"),
         ("Topic :: Games/Entertainment"),
         ],
  
-    packages = ['cocos'],
-    package_data={'cocos': ['resources/*.*']},
+    packages = find_packages(),
+    package_data={'cocos': ['resources/*']},
 
-    install_requires=['six', 'pyglet>=1.2alpha1',],
-    dependency_links=['hg+https://code.google.com/p/pyglet@c7f948a848cb#egg=pyglet-1.2alpha1',],
+    install_requires=['pyglet>=1.1.4',],
+    dependency_links=['http://code.google.com/p/pyglet/downloads/list',],
 
     include_package_data = True,
     zip_safe = False,

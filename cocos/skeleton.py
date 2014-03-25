@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,14 +31,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
-
-from __future__ import division, print_function, unicode_literals
-
 import math
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
+import cPickle
 
 import cocos
 from cocos import euclid
@@ -216,8 +209,8 @@ class Skeleton(object):
         return sk
 
     def save(self, name):
-        f = open(name, "wb")
-        pickle.dump(self, f)
+        f = open(name, "w")
+        cPickle.dump(self, f)
         f.close()
 
     def move(self, dx, dy):
@@ -316,7 +309,7 @@ class Bone(object):
         return bone
 
     def dump(self, depth=0):
-        print("-"*depth, self)
+        print "-"*depth, self
         for c in self.children:
             c.dump(depth+1)
 

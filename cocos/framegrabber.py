@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -38,13 +37,11 @@ It is mostly used for internal implementation of cocos, you normally shouldn't
 need it. If you are curious, check implementation of effects to see an example.
 """
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
-from cocos.gl_framebuffer_object import FramebufferObject
+from gl_framebuffer_object import FramebufferObject
 from pyglet.gl import *
-from cocos.director import director
+from director import director
 from pyglet import image
 import pyglet
 

@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -67,12 +66,10 @@ Two methods are available for setting the map focus:
   x and y values.
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 from cocos.director import director
-from .base_layers import Layer
+from cocos.layer.base_layers import Layer
 import pyglet
 from pyglet.gl import *
 
@@ -207,8 +204,8 @@ class ScrollingManager(Layer):
                                      self.view_w, self.view_h)
             else:
                 w, h = director.get_window_size()
-                sx = director._usable_width / w
-                sy = director._usable_height / h
+                sx = director._usable_width/float(w)
+                sy = director._usable_height/float(h)
                 self._scissor_flat = (int(self.view_x * sx), int(self.view_y * sy),
                                      int(self.view_w * sx), int(self.view_h * sy))
         elif self.autoscale:
@@ -255,8 +252,8 @@ class ScrollingManager(Layer):
 
         # normalise x,y coord
         ww, wh = director.get_window_size()
-        sx = x / self.view_w
-        sy = y / self.view_h
+        sx = x / float(self.view_w)
+        sy = y / float(self.view_h)
 
         # get the map-space dimensions
         vx, vy = self.childs_ox, self.childs_oy

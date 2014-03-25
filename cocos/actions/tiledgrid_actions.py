@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -34,14 +33,11 @@
 # ----------------------------------------------------------------------------
 '''Implementation of TiledGrid3DAction actions
 '''
-
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 import random
 from cocos.euclid import *
-from .basegrid_actions import *
+from basegrid_actions import *
 from cocos.director import director
 
 rr = random.randrange
@@ -90,10 +86,10 @@ class ShakyTiles3D( TiledGrid3DAction ):
         self.randrange = randrange
 
     def update( self, t ):
-        for i in range(0, self.grid.x):
-            for j in range(0, self.grid.y):
+        for i in xrange(0, self.grid.x):
+            for j in xrange(0, self.grid.y):
                     coords = self.get_original_tile(i,j)   
-                    for k in range(0,len(coords),3):
+                    for k in xrange(0,len(coords),3):
                         x = rr(-self.randrange, self.randrange+1)
                         y = rr(-self.randrange, self.randrange+1)
                         z = rr(-self.randrange, self.randrange+1)
@@ -125,10 +121,10 @@ class ShatteredTiles3D( TiledGrid3DAction ):
 
     def update( self, t ):
         if not self._once:
-            for i in range(0, self.grid.x):
-                for j in range(0, self.grid.y):
+            for i in xrange(0, self.grid.x):
+                for j in xrange(0, self.grid.y):
                     coords = self.get_original_tile(i,j)   
-                    for k in range(0,len(coords),3):
+                    for k in xrange(0,len(coords),3):
                         x = rr(-self.randrange, self.randrange+1)
                         y = rr(-self.randrange, self.randrange+1)
                         z = rr(-self.randrange, self.randrange+1)
@@ -168,11 +164,11 @@ class ShuffleTiles( TiledGrid3DAction ):
 
         # random positions
         self.nr_of_tiles = self.grid.x * self.grid.y
-        self.tiles_order = list(range(self.nr_of_tiles))
+        self.tiles_order = range(self.nr_of_tiles )
         random.shuffle( self.tiles_order )
 
-        for i in range(self.grid.x):
-            for j in range(self.grid.y):
+        for i in xrange(self.grid.x):
+            for j in xrange(self.grid.y):
                 self.tiles[(i,j)] = Tile( position = Point2(i,j), 
                                           start_position = Point2(i,j), 
                                           delta= self._get_delta(i,j) )
@@ -181,14 +177,14 @@ class ShuffleTiles( TiledGrid3DAction ):
         t = self.tiles[(i,j)]
         coords = self.get_original_tile(i,j)
 
-        for k in range(0,len(coords),3):                      
+        for k in xrange(0,len(coords),3):                      
             coords[k] += int( t.position.x * self.target.grid.x_step )
             coords[k+1] += int( t.position.y * self.target.grid.y_step )
         self.set_tile(i,j,coords)
         
     def update(self, t ):
-        for i in range(0, self.grid.x):
-            for j in range(0, self.grid.y):
+        for i in xrange(0, self.grid.x):
+            for j in xrange(0, self.grid.y):
                 self.tiles[(i,j)].position = self.tiles[(i,j)].delta * t
                 self.place_tile(i,j)
                 
@@ -210,8 +206,8 @@ class FadeOutTRTiles( TiledGrid3DAction ):
     def update( self, t ):
                 
         # direction right - up
-        for i in range(self.grid.x):
-            for j in range(self.grid.y):
+        for i in xrange(self.grid.x):
+            for j in xrange(self.grid.y):
                 distance = self.test_func(i,j,t)
                 if distance == 0:
                     self.turn_off_tile(i,j)
@@ -225,7 +221,7 @@ class FadeOutTRTiles( TiledGrid3DAction ):
 
     def transform_tile(self, x, y, t ):
         coords = self.get_original_tile(x,y)
-        for c in range( len(coords) ):
+        for c in xrange( len(coords) ):
 
             # x
             if c == 0*3 or c == 3*3:
@@ -249,7 +245,7 @@ class FadeOutTRTiles( TiledGrid3DAction ):
         x,y = self.grid * t
         if x+y==0:
             return 1 
-        return pow( (i+j) / (x+y), 6 )
+        return pow( (i+j) / float(x+y), 6 )
 
 class FadeOutBLTiles( FadeOutTRTiles):
     '''Fades out each tile following an Bottom-Left path until all the tiles are faded out.
@@ -263,7 +259,7 @@ class FadeOutBLTiles( FadeOutTRTiles):
         x,y = self.grid * (1-t)
         if i+j==0:
             return 1 
-        return pow( (x+y) / (i+j), 6)
+        return pow( (x+y) / float(i+j), 6)
 
 class FadeOutUpTiles( FadeOutTRTiles):
     '''Fades out each tile following an upwards path until all the tiles are faded out.
@@ -277,11 +273,11 @@ class FadeOutUpTiles( FadeOutTRTiles):
         x,y = self.grid * t
         if y==0:
             return 1 
-        return pow( (j) / y, 6 )
+        return pow( (j) / float(y), 6 )
 
     def transform_tile(self, x, y, t ):
         coords = self.get_original_tile(x,y)
-        for c in range( len(coords) ):
+        for c in xrange( len(coords) ):
 
             # y
             if c == 0*3+1 or c == 1*3+1:
@@ -303,7 +299,7 @@ class FadeOutDownTiles( FadeOutUpTiles):
         x,y = self.grid * (1-t)
         if j==0:
             return 1 
-        return pow( (y) / j, 6 )
+        return pow( (y) / float(j), 6 )
 
 
 class TurnOffTiles( TiledGrid3DAction ):
@@ -325,12 +321,12 @@ class TurnOffTiles( TiledGrid3DAction ):
             random.seed( self.seed )
 
         self.nr_of_tiles = self.grid.x * self.grid.y
-        self.tiles_order = list(range(self.nr_of_tiles))
+        self.tiles_order = range(self.nr_of_tiles )
         random.shuffle( self.tiles_order )
         
     def update( self, t ):
         l = int( t * self.nr_of_tiles )
-        for i in range( self.nr_of_tiles):
+        for i in xrange( self.nr_of_tiles):
             t = self.tiles_order[i]
             if i < l:
                 self.turn_off_tile(t)
@@ -375,8 +371,8 @@ class WavesTiles3D( TiledGrid3DAction ):
         self.amplitude=amplitude
 
     def update( self, t ):
-        for i in range(0, self.grid.x):
-            for j in range(0, self.grid.y):
+        for i in xrange(0, self.grid.x):
+            for j in xrange(0, self.grid.y):
                 coords = self.get_original_tile(i,j)
 
                 x = coords[0]
@@ -384,7 +380,7 @@ class WavesTiles3D( TiledGrid3DAction ):
 
                 z = (math.sin(t*math.pi*self.waves*2 + (y+x) * .01) * self.amplitude * self.amplitude_rate )
 
-                for k in range( 0,len(coords),3 ):
+                for k in xrange( 0,len(coords),3 ):
                     coords[k+2] += z
 
                 self.set_tile( i,j, coords )
@@ -422,11 +418,11 @@ class JumpTiles3D( TiledGrid3DAction ):
         sinz = (math.sin(t*math.pi*self.jumps*2 + (0) * .01) * self.amplitude * self.amplitude_rate )
         sinz2= (math.sin(math.pi+t*math.pi*self.jumps*2 + (0) * .01) * self.amplitude * self.amplitude_rate )
 
-        for i in range(0, self.grid.x):
-            for j in range(0, self.grid.y):
+        for i in xrange(0, self.grid.x):
+            for j in xrange(0, self.grid.y):
                 coords = self.get_original_tile(i,j)
 
-                for k in range( 0,len(coords),3 ):
+                for k in xrange( 0,len(coords),3 ):
                     if (i+j) % 2 == 0:
                         coords[k+2] += sinz
                     else:
@@ -465,10 +461,10 @@ class SplitRows( TiledGrid3DAction ):
 
         x,y = director.get_window_size()
 
-        for j in range(0, self.grid.y):
+        for j in xrange(0, self.grid.y):
             coords = self.get_original_tile(0,j)
 
-            for c in range(0, len(coords), 3):
+            for c in xrange(0, len(coords), 3):
                 direction = 1
                 if j % 2 == 0:
                     direction = -1
@@ -507,10 +503,10 @@ class SplitCols( TiledGrid3DAction ):
 
         x,y = director.get_window_size()
 
-        for i in range(0, self.grid.x):
+        for i in xrange(0, self.grid.x):
             coords = self.get_original_tile(i,0)
 
-            for c in range(0, len(coords), 3):
+            for c in xrange(0, len(coords), 3):
                 direction = 1
                 if i % 2 == 0:
                     direction = -1

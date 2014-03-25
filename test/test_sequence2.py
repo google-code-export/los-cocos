@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -22,18 +20,12 @@ class TestLayer(cocos.layer.Layer):
 
         x,y = director.get_window_size()
 
-        self.sprite = Sprite( 'grossini.png', (0,y//2)  )
+        self.sprite = Sprite( 'grossini.png', (0,y/2)  )
         self.add( self.sprite )
-        self.sprite.do( MoveBy( (x//2, 0) ) + Place( (x//2, y//3) ) + MoveBy( (x//2, 0) ) )
-
-description = """
-sprite moves from left border to midscreen,
-teleports down,
-moves to right border
-"""
+        self.sprite.do( MoveBy( (x/2, 0) ) + Place( (x/2, y/3) ) + MoveBy( (x/2, 0) ) )
 
 def main():
-    print(description)
+    print "sprite moves from left border to midscreen,\nteleports down,\nmoves to right border"
     director.init()
     test_layer = TestLayer ()
     main_scene = cocos.scene.Scene (test_layer)

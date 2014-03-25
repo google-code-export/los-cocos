@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -396,8 +395,6 @@ If fastness is greather than the chasee fastness this action will certainly
 terminate, but we dont know how much time when the action starts.
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 import copy
@@ -650,7 +647,7 @@ class Loop_Instant_Action(InstantAction):
         self.times = times
 
     def start(self):
-        for i in range(self.times):
+        for i in xrange(self.times):
             cpy = copy.deepcopy(self.one)
             cpy.start()
 

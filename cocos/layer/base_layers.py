@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -44,8 +43,6 @@ Events are propagated to layers (from front to back) until some layer catches
 the event and accepts it.
 """
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 from cocos.director import *
@@ -65,8 +62,8 @@ class Layer(cocosnode.CocosNode, scene.EventHandlerMixin):
         super( Layer, self ).__init__()
         self.scheduled_layer = False
         x,y = director.get_window_size()
-        self.transform_anchor_x = x // 2
-        self.transform_anchor_y = y // 2
+        self.transform_anchor_x = x/2
+        self.transform_anchor_y = y/2
 
     def push_all_handlers(self):
         """ registers itself to receive director.window events and propagates

@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,12 +31,10 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # ----------------------------------------------------------------------------
-from __future__ import division, print_function, unicode_literals
-
 from pyglet.gl import *
 from pyglet import window, image
 
-from cocos.shader import ShaderProgram, VertexShader, FragmentShader
+import shader
 
 __all__ = ['wired']
 
@@ -60,9 +57,9 @@ void main()
 
 
 def load_shader():
-    s = ShaderProgram()
-#    s.setShader(VertexShader('test_v', test_v))
-    s.setShader(FragmentShader('test_f', test_f))
+    s = shader.ShaderProgram()
+#    s.setShader(shader.VertexShader('test_v', test_v))
+    s.setShader(shader.FragmentShader('test_f', test_f))
     return s
 
 wired = load_shader()

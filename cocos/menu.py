@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -51,9 +50,6 @@ To use a menu in your code, just subclass `Menu` and add the menu to an `Scene` 
 another `Layer`.
 """
 
-from __future__ import division, print_function, unicode_literals
-from six import string_types
-
 __docformat__ = 'restructuredtext'
 
 import pyglet
@@ -62,12 +58,12 @@ from pyglet.window import key
 from pyglet.gl import *
 import pyglet.graphics
 
-from cocos.layer import *
-from cocos.director import *
-from cocos.cocosnode import *
-from cocos.actions import *
-from cocos.sprite import Sprite
-from cocos import rect
+from layer import *
+from director import *
+from cocosnode import *
+from actions import *
+from sprite import Sprite
+import rect
 
 __all__ = [ 'Menu',                                         # menu class
 
@@ -522,7 +518,7 @@ class MenuItem (BaseMenuItem):
 class ImageMenuItem (BaseMenuItem):
     """ A menu item that shows a selectable Image """
     def __init__ (self, image, callback_func, *args, **kwargs):
-        if isinstance(image, string_types):
+        if isinstance(image, str):
             image = pyglet.resource.image(image)
         self.image = image
         super (ImageMenuItem, self).__init__(callback_func, *args, **kwargs)
@@ -753,8 +749,8 @@ class ColorMenuItem( MenuItem ):
             item = self.item
 
         x1 = int(item._get_left() + item.labelWidth * 1.05)
-        y1 = int(item.y - item.content_height // 2)
-        y2 = int(item.y + item.content_height // 3)
+        y1 = int(item.y - item.content_height / 2)
+        y2 = int(item.y + item.content_height / 3)
         x2 = int(x1 + (y2 - y1) * 2)
         pyglet.graphics.draw(4, pyglet.graphics.GL_QUADS,
                              ('v2f', (x1, y1, x1, y2, x2, y2, x2, y1)),
@@ -766,7 +762,7 @@ def shake():
     '''Predefined action that performs a slight rotation and then goes back to the original rotation
     position.
     '''
-    angle = 5
+    angle = 05
     duration = 0.05
 
     rot = Accelerate(RotateBy( angle, duration ), 2)

@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -9,10 +7,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 testinfo = "s, t 0.3, s, t 0.6, s, t 1, s, q"
 tags = "skeleton, BitmapSkin, Animate"
 
-try:
-    import cPickle as pickle
-except Exception:
-    import pickle
+import cPickle
 
 import cocos
 from cocos.director import director
@@ -33,8 +28,8 @@ class TestLayer(cocos.layer.Layer):
                                         sample_skin.skin)
         self.add( self.skin )
         x, y = director.get_window_size()
-        self.skin.position = x//2, y//2
-        anim = pickle.load(open("SAMPLE.anim", "rb"))
+        self.skin.position = x/2, y/2
+        anim = cPickle.load(open("SAMPLE.anim"))
         self.skin.do( cocos.actions.Repeat( skeleton.Animate(anim) ) )
 
 def main():

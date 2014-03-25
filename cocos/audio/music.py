@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -39,7 +38,7 @@ Scene class
 
 from cocos import audio
 try:
-    import cocos.audio.pygame.music
+    import pygame.music
 except ImportError:
     audio._working = False
 

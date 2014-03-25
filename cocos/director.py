@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -115,8 +114,6 @@ The director also has some useful attributes:
 
 '''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
 import sys
@@ -145,7 +142,7 @@ class DefaultHandler( object ):
             return True
 
         elif symbol == pyglet.window.key.P and (modifiers & pyglet.window.key.MOD_ACCEL):
-            import cocos.scenes.pause as pause
+            import scenes.pause as pause
             pause_sc = pause.get_pause_scene()
             if pause:
                 director.push( pause_sc )

@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -27,7 +25,7 @@ class Dummy:
     rotation = 0
 
     def __setattr__(self, attr, value):
-        print("set", attr, "to", value)
+        print "set", attr, "to", value
 
 class TestLayer(cocos.layer.Layer):
     def __init__(self):
@@ -36,7 +34,7 @@ class TestLayer(cocos.layer.Layer):
         x,y = director.get_window_size()
 
         self.sprite = Sprite('grossini.png')
-        self.sprite.position = x//2, y//2
+        self.sprite.position = x/2, y/2
         self.add( self.sprite  )
 
         self.sprite.do( Rotate(90, 3), Dummy() )
@@ -52,11 +50,12 @@ Variants of this could come handy for debugging, testing.
 """
 
 def main():
-    print(description)
+    print description
     director.init()
     test_layer = TestLayer ()
     main_scene = cocos.scene.Scene (test_layer)
     director.run (main_scene)
+    print description
 
 if __name__ == '__main__':
     main()

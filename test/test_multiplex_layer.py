@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -64,7 +62,7 @@ Activate 'Options' to switch to the 'options' layer.
 """
 
 def main():
-    print(description)
+    print description
     director.init( resizable=True)
     scene =Scene(
             MultiplexLayer( MainMenu(), OptionMenu() )

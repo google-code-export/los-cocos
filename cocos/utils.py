@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -43,10 +42,8 @@ utils
 This module provides classes or functions that were useful to us while doing games.
 """
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
-
+from cocos.layer import *
 from cocos.scene import Scene
 from cocos.director import director
 

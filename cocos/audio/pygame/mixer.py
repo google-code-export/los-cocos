@@ -60,11 +60,8 @@ _request_buffer = 1024
 
 _channels = {}
 
-try:
-    import queue
-except ImportError:
-    import Queue as queue
-event_queue = queue.Queue(256)
+import Queue
+event_queue = Queue.Queue(256)
 
 def __PYGAMEinit__(frequency=None, size=None, stereo=None, buffer=None):
     if frequency is None:
@@ -237,7 +234,7 @@ def get_init():
 
 def _mixer_init_check():
     if not SDL_WasInit(SDL_INIT_AUDIO):
-        raise base.error('mixer system not initialized')
+        raise base.error, 'mixer system not initialized'
 
 def stop():
     '''Stop playback of all sound channels.
@@ -293,7 +290,7 @@ def set_num_channels(channels):
     _mixer_init_check()
     Mix_AllocateChannels(channels)
 
-    for i in list(_channels.keys()[:]):
+    for i in _channels.keys()[:]:
         if i >= channels:
             del channels[i]
 
@@ -385,7 +382,7 @@ class Sound(object):
         WAV.
 
         :Parameters:
-            `file` : string encoded in ascii or file-like object
+            `file` : str or file-like object
                 The filename or file to load.
             `_chunk` : None
                 Internal use only.
@@ -538,7 +535,7 @@ class Channel(object):
         _mixer_init_check()
 
         if id < 0 or id >= Mix_GroupCount(-1):
-            raise IndexError('invalid channel index')
+            raise IndexError, 'invalid channel index'
 
         if id in _channels:
             return _channels[id]

@@ -1,5 +1,3 @@
-from __future__ import division, print_function, unicode_literals
-
 # This code is so you can run the samples without installing the package
 import sys
 import os
@@ -25,7 +23,7 @@ class TestNoBatch(cocos.layer.Layer):
         self.add( self.batch )
         for i in range(216):
             sprite = Sprite('grossini.png')
-            sprite.position = (i//12)*30, (i%12)*25
+            sprite.position = (i/12)*30, (i%12)*25
             self.batch.add( sprite )
         self.batch.do(MoveBy((100, 100), 10))
 
@@ -38,7 +36,7 @@ class TestBatch(cocos.layer.Layer):
         self.add(self.batchnode)
         for i in range(216):
             sprite = Sprite('grossini.png')
-            sprite.position = (i//12)*30, (i%12)*25
+            sprite.position = (i/12)*30, (i%12)*25
             self.batchnode.add(sprite)
         self.batchnode.do(MoveBy((100, 100), 10))
 

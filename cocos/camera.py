@@ -2,7 +2,6 @@
 # cocos2d
 # Copyright (c) 2008-2012 Daniel Moisset, Ricardo Quesada, Rayentray Tappa,
 # Lucio Torre
-# Copyright (c) 2009-2014  Richard Jones, Claudio Canepa
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -34,12 +33,10 @@
 # ----------------------------------------------------------------------------
 '''Camera object'''
 
-from __future__ import division, print_function, unicode_literals
-
 __docformat__ = 'restructuredtext'
 
-from cocos.director import director
-from cocos.euclid import Point3
+from director import director
+from euclid import Point3
 from pyglet.gl import *
 
 __all__ = ['Camera']

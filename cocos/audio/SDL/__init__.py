@@ -27,13 +27,13 @@ __version__ = '$Id: $'
 import ctypes
 import sys
 
-from . import dll as SDL_dll
-from .audio import *
-from .constants import *
-from .endian import *
-from .error import *
-from .rwops import *
-from .timer import *
+import dll as SDL_dll
+from audio import *
+from constants import *
+from endian import *
+from error import *
+from rwops import *
+from timer import *
 
 # SDL.h
 
