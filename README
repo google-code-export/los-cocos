@@ -2,6 +2,14 @@
 cocos2d
 =======
 
+Development moved to Github
+===========================
+
+new code repository and issue tracker: https://github.com/cocos2d/cocos2d-python
+mailing list remains the same, http://groups.google.com/group/cocos-discuss
+
+
+
 | A framework for building 2D games, demos, and other graphical/interactive applications.
 | Draws using OpenGL, which is hardware accelerated.
 | It provides some conventions and classes to help you structure a "scene based application".
